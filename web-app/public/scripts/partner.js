@@ -104,7 +104,7 @@ $('.create-watch').click(function() {
     let formColor = $('.color-id input').val();
 
     //create json data
-    let inputData = '{' + '"watchId" : "' + formWatchId + '", ' + '"model" : "' + formModel + '", ' + '"color" : "' + formColor + '"}';
+    let inputData = '{' + '"watchId" : "' + formWatchId + '", ' + '"model" : "' + formModel + '", ' + '"color" : "' + formColor + '", ' + '"owner" : "' + "rolex" + '"}';
     console.log(inputData);
 
     //make ajax call

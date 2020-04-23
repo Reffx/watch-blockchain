@@ -585,7 +585,9 @@ module.exports = {
 
             // Submit the specified transaction.
             // createCar transaction - requires 5 argument, ex: ('createCar', 'CAR12', 'Honda', 'Accord', 'Black', 'Tom')
-            await contract.submitTransaction('createWatch', key, model, color, cardId);
+            const createWatchResponse = await contract.submitTransaction('createWatch', key, model, color, cardId);
+            console.log('createWatchResponse: ');
+            console.log(JSON.parse(createWatchResponse.toString()));
             console.log('Transaction has been submitted');
 
             // Disconnect from the gateway.

@@ -91,7 +91,7 @@ class CustomerLoyalty extends Contract {
 
         for (let transaction of transactions) {
             if (userType === 'member') {
-                if (transaction.member === useownerrId) {
+                if (transaction.member === userId) {
                     userTransactions.push(transaction);
                 }
             } else if (userType === 'partner') {
