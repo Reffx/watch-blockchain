@@ -12,3 +12,5 @@ composer-logs
 
 *.bna
 *.card
+
+/web-app/wallet
