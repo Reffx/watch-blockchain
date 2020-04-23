@@ -91,4 +91,54 @@ $('.sign-in-partner').click(function() {
         }
     });
 
+    
+
+});
+
+//check user input and call server
+$('.create-watch').click(function() {
+
+    //get user input data
+    let formWatchId = $('.watchid-id input').val();
+    let formModel = $('.model-id input').val();
+    let formColor = $('.color-id input').val();
+
+    //create json data
+    let inputData = '{' + '"watchId" : "' + formWatchId + '", ' + '"model" : "' + formModel + '", ' + '"color" : "' + formColor + '"}';
+    console.log(inputData);
+
+    //make ajax call
+    $.ajax({
+        type: 'POST',
+        url: apiUrl + 'createWatch',
+        data: inputData,
+        dataType: 'json',
+        contentType: 'application/json',
+        beforeSend: function() {
+            //display loading
+            document.getElementById('loader').style.display = 'block';
+        },
+        success: function(data) {
+
+            document.getElementById('loader').style.display = 'none';
+
+            //check data for error
+            if (data.error) {
+                alert(data.error);
+                return;
+            } else {
+                //update member page and notify successful transaction
+                createWatch();
+                alert('Transaction successful');
+            }
+
+
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            alert('Error: Try again');
+            console.log(errorThrown);
+            console.log(textStatus);
+            console.log(jqXHR);
+        }
+    });
 });

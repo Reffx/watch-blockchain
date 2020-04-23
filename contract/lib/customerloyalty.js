@@ -91,7 +91,7 @@ class CustomerLoyalty extends Contract {
 
         for (let transaction of transactions) {
             if (userType === 'member') {
-                if (transaction.member === userId) {
+                if (transaction.member === useownerrId) {
                     userTransactions.push(transaction);
                 }
             } else if (userType === 'partner') {
@@ -132,6 +132,68 @@ class CustomerLoyalty extends Contract {
         let jsonData = JSON.parse(data.toString());
         return JSON.stringify(jsonData);
     }
+
+    async createWatch(ctx, watchId, model, color, owner) {
+        console.info('============= START : Create Watch ===========');
+
+        const watch = {
+            color,
+            docType: 'watch',
+            model,
+            owner,
+        };
+
+        await ctx.stub.putState(watchId, Buffer.from(JSON.stringify(watch)));
+        console.info('============= END : Create Watch ===========');
+    }
+
+    async changeWatchOwner(ctx, watchId, newOwner) {
+        console.info('============= START : changeWatchOwner ===========');
+
+        const watchAsBytes = await ctx.stub.getState(watchId); // get the watch from chaincode state
+        if (!watchAsBytes || watchAsBytes.length === 0) {
+            throw new Error(`${watchId} does not exist`);
+        }
+        const watch = JSON.parse(watchAsBytes.toString());
+        watch.owner = newOwner;
+
+        await ctx.stub.putState(watchId, Buffer.from(JSON.stringify(watch)));
+        console.info('============= END : changeWatchOwner ===========');
+    }
+
+    async queryAllWatches(ctx) {
+        const startKey = 'WATCH0';
+        const endKey = 'WATCH999';
+
+        const iterator = await ctx.stub.getStateByRange(startKey, endKey);
+
+        const allResults = [];
+        // eslint-disable-next-line no-constant-condition
+        while (true) {
+            const res = await iterator.next();
+
+            if (res.value && res.value.value.toString()) {
+                console.log(res.value.value.toString('utf8'));
+
+                const Key = res.value.key;
+                let Record;
+                try {
+                    Record = JSON.parse(res.value.value.toString('utf8'));
+                } catch (err) {
+                    console.log(err);
+                    Record = res.value.value.toString('utf8');
+                }
+                allResults.push({ Key, Record });
+            }
+            if (res.done) {
+                console.log('end of data');
+                await iterator.close();
+                console.info(allResults);
+                return JSON.stringify(allResults);
+            }
+        }
+    }
+
 
 }
 

@@ -377,6 +377,22 @@ app.post('/api/partnerData', function(req, res) {
 
 });
 
+app.post('/api/createWatch', (req, res) => {
+    console.log(req.body);
+            let newKey = 'Watch';
+            network.createWatch(newKey, req.body.model, req.body.color, req.body.owner)
+                .then((response) => {
+                    res.send(response);
+        });
+});
+
+app.post('/api/changeWatchOwner', (req, res) => {
+    network.changeWatchOwner(req.body.key, req.body.newOwner)
+        .then((response) => {
+            res.send(response);
+        });
+});
+
 //declare port
 let port = process.env.PORT || 8000;
 if (process.env.VCAP_APPLICATION) {
