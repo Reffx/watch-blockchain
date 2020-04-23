@@ -4,6 +4,7 @@ const { Contract } = require('fabric-contract-api');
 const allPartnersKey = 'all-partners';
 const earnPointsTransactionsKey = 'earn-points-transactions';
 const usePointsTransactionsKey = 'use-points-transactions';
+const showWatchesTransactionKey = 'show-watches-transactions';
 
 class CustomerLoyalty extends Contract {
 
@@ -15,6 +16,7 @@ class CustomerLoyalty extends Contract {
         await ctx.stub.putState(allPartnersKey, Buffer.from(JSON.stringify([])));
         await ctx.stub.putState(earnPointsTransactionsKey, Buffer.from(JSON.stringify([])));
         await ctx.stub.putState(usePointsTransactionsKey, Buffer.from(JSON.stringify([])));
+        await ctx.stub.putState(showWatchesTransactionKey, Buffer.from(JSON.stringify([])));
 
         console.info('============= END : Initialize Ledger ===========');
     }
@@ -85,6 +87,8 @@ class CustomerLoyalty extends Contract {
 
     // Get earn points transactions of the particular member or partner
     async EarnPointsTransactionsInfo(ctx, userType, userId) {
+        console.info('============= START : EarnPointsTransactionsInfo ===========');
+
         let transactions = await ctx.stub.getState(earnPointsTransactionsKey);
         transactions = JSON.parse(transactions);
         let userTransactions = [];
@@ -101,6 +105,7 @@ class CustomerLoyalty extends Contract {
             }
         }
 
+        console.info('============= END : EarnPointsTransactionsInfo ===========');
         return JSON.stringify(userTransactions);
     }
 
@@ -133,18 +138,20 @@ class CustomerLoyalty extends Contract {
         return JSON.stringify(jsonData);
     }
 
-    async createWatch(ctx, watchId, model, color, owner) {
+    async CreateWatch(ctx, watchInformation) {
         console.info('============= START : Create Watch ===========');
+        watchInformation = JSON.parse(watchInformation);
+        //let usePointsTransactions = await ctx.stub.getState(showWatchesTransactionKey);
+        watchInformation.timestamp = new Date((ctx.stub.txTimestamp.seconds.low*1000)).toGMTString();
+        watchInformation.transactionId = ctx.stub.txId;
 
-        const watch = {
-            color,
-            docType: 'watch',
-            model,
-            owner,
-        };
+        let watchTransactions = await ctx.stub.getState(showWatchesTransactionKey);
+        watchTransactions = JSON.parse(watchTransactions);
+        watchTransactions.push(watchInformation);
+        await ctx.stub.putState(showWatchesTransactionKey, Buffer.from(JSON.stringify(watchTransactions)));
 
-        await ctx.stub.putState(watchId, Buffer.from(JSON.stringify(watch)));
         console.info('============= END : Create Watch ===========');
+        return JSON.stringify(watchInformation);
     }
 
     async changeWatchOwner(ctx, watchId, newOwner) {
@@ -161,37 +168,29 @@ class CustomerLoyalty extends Contract {
         console.info('============= END : changeWatchOwner ===========');
     }
 
-    async queryAllWatches(ctx) {
-        const startKey = 'WATCH0';
-        const endKey = 'WATCH999';
+    async queryAllWatches(ctx, userType, userId) {
+        let transactions = await ctx.stub.getState(showWatchesTransactionKey);
+        transactions = JSON.parse(transactions);
+        let userTransactions = [];
 
-        const iterator = await ctx.stub.getStateByRange(startKey, endKey);
-
-        const allResults = [];
-        // eslint-disable-next-line no-constant-condition
-        while (true) {
-            const res = await iterator.next();
-
-            if (res.value && res.value.value.toString()) {
-                console.log(res.value.value.toString('utf8'));
-
-                const Key = res.value.key;
-                let Record;
-                try {
-                    Record = JSON.parse(res.value.value.toString('utf8'));
-                } catch (err) {
-                    console.log(err);
-                    Record = res.value.value.toString('utf8');
-                }
-                allResults.push({ Key, Record });
-            }
-            if (res.done) {
-                console.log('end of data');
-                await iterator.close();
-                console.info(allResults);
-                return JSON.stringify(allResults);
-            }
+        for (let transaction of transactions){
+            userTransactions.push(transaction);
         }
+
+        // for (let transaction of transactions) {
+        //     if (userType === 'member') {
+        //         if (transaction.member === userId) {
+        //             userTransactions.push(transaction);
+        //         }
+        //     } else if (userType === 'partner') {
+        //         if (transaction.partner === userId) {
+        //             userTransactions.push(transaction);
+        //         }
+        //     }
+        // }
+
+        return JSON.stringify(userTransactions);
+
     }
 
 

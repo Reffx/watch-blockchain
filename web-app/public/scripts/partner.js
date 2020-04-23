@@ -73,6 +73,18 @@ $('.sign-in-partner').click(function() {
                     return str;
                 });
 
+                //update use points transaction
+                $('.query-watches-transactions').html(function() {
+                    let str = '';
+                    let transactionData = data.queryWatchesResults;
+                    console.log(data.queryWatchesResults);
+
+                    for (let i = 0; i < transactionData.length; i++) {
+                        str = str + '<p>timeStamp: ' + transactionData[i].timestamp + '<br />WatchId: ' + transactionData[i].watchId + '<br />model: ' + transactionData[i].model + '<br />color: ' + transactionData[i].color + '<br />cardId: ' + transactionData[i].cardId + '<br />transactionID: ' + transactionData[i].transactionId + '</p><br>';
+                    }
+                    return str;
+                });
+
                 //remove login section
                 document.getElementById('loginSection').style.display = 'none';
                 //display transaction section
@@ -128,7 +140,7 @@ $('.create-watch').click(function() {
                 return;
             } else {
                 //update member page and notify successful transaction
-                createWatch();
+               // createWatch();
                 alert('Transaction successful');
             }
 

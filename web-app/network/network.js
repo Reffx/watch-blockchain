@@ -555,23 +555,13 @@ module.exports = {
     },
 
     // create car transaction
-    createWatch: async function (key, model, color, cardId) {
-        let response = {};
+    createWatch: async function (watchId, model, color, cardId) {
         try {
 
             // Create a new file system based wallet for managing identities.
             const walletPath = path.join(process.cwd(), '/wallet');
             const wallet = new FileSystemWallet(walletPath);
             console.log(`Wallet path: ${walletPath}`);
-
-            // Check to see if we've already enrolled the user.
-            const userExists = await wallet.exists(cardId);
-            if (!userExists) {
-                console.log('An identity for the user ' + cardId + ' does not exist in the wallet');
-                console.log('Run the registerUser.js application before retrying');
-                response.error = 'An identity for the user ' + cardId + ' does not exist in the wallet. Register ' + cardId + ' first';
-                return response;
-            }
 
             // Create a new gateway for connecting to our peer node.
             const gateway = new Gateway();
@@ -583,11 +573,16 @@ module.exports = {
             // Get the contract from the network.
             const contract = network.getContract('customerloyalty');
 
+            let newWatch = {};
+            newWatch.watchId = watchId;
+            newWatch.model = model;
+            newWatch.color = color;
+            newWatch.cardId = cardId;
+
             // Submit the specified transaction.
             // createCar transaction - requires 5 argument, ex: ('createCar', 'CAR12', 'Honda', 'Accord', 'Black', 'Tom')
-            const createWatchResponse = await contract.submitTransaction('createWatch', key, model, color, cardId);
-            console.log('createWatchResponse: ');
-            console.log(JSON.parse(createWatchResponse.toString()));
+            let response = await contract.submitTransaction('CreateWatch', JSON.stringify(newWatch));
+            console.log(JSON.parse(response.toString()));
             console.log('Transaction has been submitted');
 
             // Disconnect from the gateway.
@@ -651,41 +646,31 @@ module.exports = {
     },
 
     // query all cars transaction
-    queryAllCars: async function () {
-
-        let response = {};
-        try {
-            console.log('queryAllWatches');
+    queryAllWatches: async function (cardId, userType, userId) {
 
             // Create a new file system based wallet for managing identities.
             const walletPath = path.join(process.cwd(), '/wallet');
             const wallet = new FileSystemWallet(walletPath);
             console.log(`Wallet path: ${walletPath}`);
-
-            // Check to see if we've already enrolled the user.
-            const userExists = await wallet.exists(userName);
-            if (!userExists) {
-                console.log('An identity for the user ' + userName + ' does not exist in the wallet');
-                console.log('Run the registerUser.js application before retrying');
-                response.error = 'An identity for the user ' + userName + ' does not exist in the wallet. Register ' + userName + ' first';
-                return response;
-            }
-
+        
+        try {
             // Create a new gateway for connecting to our peer node.
-            const gateway = new Gateway();
-            await gateway.connect(ccp, { wallet, identity: userName, discovery: gatewayDiscovery });
-
+            const gateway2 = new Gateway();
+            await gateway2.connect(ccp, { wallet, identity: cardId, discovery: gatewayDiscovery });
+        
             // Get the network (channel) our contract is deployed to.
-            const network = await gateway.getNetwork('mychannel');
-
+            const network = await gateway2.getNetwork('mychannel');
+        
             // Get the contract from the network.
             const contract = network.getContract('customerloyalty');
 
-            // Evaluate the specified transaction.
-            // queryAllCars transaction - requires no arguments, ex: ('queryAllCars')
-            const result = await contract.evaluateTransaction('queryAllWatches');
-            //console.log('check6');
-            //console.log(`Transaction has been evaluated, result is: ${result.toString()}`);
+            console.log(`\nGet watches transactions state for ${userType} ${userId}`);
+            let result = await contract.evaluateTransaction('queryAllWatches', userType, userId);
+            result = JSON.parse(result.toString());
+            console.log(result);
+
+            // Disconnect from the gateway.
+            await gateway2.disconnect();
 
             return result;
 

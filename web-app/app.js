@@ -19,38 +19,38 @@ app.use('/scripts', express.static(path.join(__dirname, '/public/scripts')));
 app.use(bodyParser.json());
 
 //get home page
-app.get('/home', function(req, res) {
+app.get('/home', function (req, res) {
     res.sendFile(path.join(__dirname + '/public/index.html'));
 });
 
 //get member page
-app.get('/member', function(req, res) {
+app.get('/member', function (req, res) {
     res.sendFile(path.join(__dirname + '/public/member.html'));
 });
 
 //get member registration page
-app.get('/registerMember', function(req, res) {
+app.get('/registerMember', function (req, res) {
     res.sendFile(path.join(__dirname + '/public/registerMember.html'));
 });
 
 //get partner page
-app.get('/partner', function(req, res) {
+app.get('/partner', function (req, res) {
     res.sendFile(path.join(__dirname + '/public/partner.html'));
 });
 
 //get partner registration page
-app.get('/registerPartner', function(req, res) {
+app.get('/registerPartner', function (req, res) {
     res.sendFile(path.join(__dirname + '/public/registerPartner.html'));
 });
 
 //get about page
-app.get('/about', function(req, res) {
+app.get('/about', function (req, res) {
     res.sendFile(path.join(__dirname + '/public/about.html'));
 });
 
 
 //post call to register member on the network
-app.post('/api/registerMember', function(req, res) {
+app.post('/api/registerMember', function (req, res) {
 
     //declare variables to retrieve from request
     let accountNumber = req.body.accountnumber;
@@ -95,7 +95,7 @@ app.post('/api/registerMember', function(req, res) {
 });
 
 //post call to register partner on the network
-app.post('/api/registerPartner', function(req, res) {
+app.post('/api/registerPartner', function (req, res) {
 
     //declare variables to retrieve from request
     let name = req.body.name;
@@ -136,7 +136,7 @@ app.post('/api/registerPartner', function(req, res) {
 });
 
 //post call to perform EarnPoints transaction on the network
-app.post('/api/earnPoints', function(req, res) {
+app.post('/api/earnPoints', function (req, res) {
 
     //declare variables to retrieve from request
     let accountNumber = req.body.accountnumber;
@@ -179,7 +179,7 @@ app.post('/api/earnPoints', function(req, res) {
 });
 
 //post call to perform UsePoints transaction on the network
-app.post('/api/usePoints', function(req, res) {
+app.post('/api/usePoints', function (req, res) {
 
     //declare variables to retrieve from request
     let accountNumber = req.body.accountnumber;
@@ -192,7 +192,7 @@ app.post('/api/usePoints', function(req, res) {
 
     //validate points field
     validate.validatePoints(points)
-    //return error if error in response
+        //return error if error in response
         .then((checkPoints) => {
             if (typeof checkPoints === 'object' && 'error' in checkPoints && checkPoints.error !== null) {
                 res.json({
@@ -223,7 +223,7 @@ app.post('/api/usePoints', function(req, res) {
 });
 
 //post call to retrieve member data, transactions data and partners to perform transactions with from the network
-app.post('/api/memberData', function(req, res) {
+app.post('/api/memberData', function (req, res) {
 
     //declare variables to retrieve from request
     let accountNumber = req.body.accountnumber;
@@ -308,7 +308,7 @@ app.post('/api/memberData', function(req, res) {
 });
 
 //post call to retrieve partner data and transactions data from the network
-app.post('/api/partnerData', function(req, res) {
+app.post('/api/partnerData', function (req, res) {
 
     //declare variables to retrieve from request
     let partnerId = req.body.partnerid;
@@ -336,6 +336,25 @@ app.post('/api/partnerData', function(req, res) {
 
         })
         .then(() => {
+            //get EarnPoints transactions from the network
+            network.queryAllWatches(cardId, 'partner', partnerId)
+                .then((queryWatchesResults) => {
+                    //return error if error in response
+                    if (typeof queryWatchesResults === 'object' && 'error' in queryWatchesResults && queryWatchesResults.error !== null) {
+                        res.json({
+                            error: queryWatchesResults.error
+                        });
+                    } else {
+                        //else add transaction data to return object
+                        returnData.queryWatchesResults = queryWatchesResults;
+                    }
+
+                    //return returnData
+                    //res.json(returnData);
+
+                 });
+        })
+        .then(() => {
             //get UsePoints transactions from the network
             network.usePointsTransactionsInfo(cardId, 'partner', partnerId)
                 .then((usePointsResults) => {
@@ -350,7 +369,6 @@ app.post('/api/partnerData', function(req, res) {
                         //add total points collected by partner to return object
                         returnData.pointsCollected = analysis.totalPointsCollected(usePointsResults);
                     }
-
                 })
                 .then(() => {
                     //get EarnPoints transactions from the network
@@ -366,12 +384,11 @@ app.post('/api/partnerData', function(req, res) {
                                 returnData.earnPointsResults = earnPointsResults;
                                 //add total points given by partner to return object
                                 returnData.pointsGiven = analysis.totalPointsGiven(earnPointsResults);
-                            }
-
-                            //return returnData
-                            res.json(returnData);
-
-                        });
+                                //return returnData
+                                res.json(returnData);
+                            }       
+                        })
+                        //moves here in
                 });
         });
 
@@ -379,10 +396,9 @@ app.post('/api/partnerData', function(req, res) {
 
 app.post('/api/createWatch', (req, res) => {
     console.log(req.body);
-            let newKey = 'Watch';
-            network.createWatch(newKey, req.body.model, req.body.color, req.body.owner)
-                .then((response) => {
-                    res.send(response);
+    network.createWatch(req.body.watchId, req.body.model, req.body.color, req.body.owner)
+        .then((response) => {
+            res.send(response);
         });
 });
 
@@ -400,6 +416,6 @@ if (process.env.VCAP_APPLICATION) {
 }
 
 //run app on port
-app.listen(port, function() {
+app.listen(port, function () {
     console.log('app running on port: %d', port);
 });
