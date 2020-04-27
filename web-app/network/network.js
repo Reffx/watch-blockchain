@@ -138,12 +138,12 @@ module.exports = {
     },
 
     /*
-  * Create Partner participant and import card for identity
-  * @param {String} cardId Import card id for partner
-  * @param {String} partnerId Partner Id as identifier on network
-  * @param {String} name Partner name
+  * Create Manufacturer participant and import card for identity
+  * @param {String} cardId Import card id for manufacturer
+  * @param {String} manufacturerId Manufacturer Id as identifier on network
+  * @param {String} name Manufacturer name
   */
-    registerPartner: async function (cardId, partnerId, name) {
+    registerManufacturer: async function (cardId, manufacturerId, name) {
 
         // Create a new file system based wallet for managing identities.
         const walletPath = path.join(process.cwd(), '/wallet');
@@ -213,20 +213,20 @@ module.exports = {
             // Get the contract from the network.
             const contract = network.getContract('anticounterfeiting');
 
-            let partner = {};
-            partner.id = partnerId;
-            partner.name = name;
+            let manufacturer = {};
+            manufacturer.id = manufacturerId;
+            manufacturer.name = name;
 
             // Submit the specified transaction.
-            console.log('\nSubmit Create Partner transaction.');
-            const createPartnerResponse = await contract.submitTransaction('CreatePartner', JSON.stringify(partner));
-            console.log('createPartnerResponse: ');
-            console.log(JSON.parse(createPartnerResponse.toString()));
+            console.log('\nSubmit Create Manufacturer transaction.');
+            const createManufacturerResponse = await contract.submitTransaction('CreateManufacturer', JSON.stringify(manufacturer));
+            console.log('createManufacturerResponse: ');
+            console.log(JSON.parse(createManufacturerResponse.toString()));
 
-            console.log('\nGet partner state ');
-            const partnerResponse = await contract.evaluateTransaction('GetState', partnerId);
-            console.log('partnerResponse.parse_response: ');
-            console.log(JSON.parse(partnerResponse.toString()));
+            console.log('\nGet manufacturer state ');
+            const manufacturerResponse = await contract.evaluateTransaction('GetState', manufacturerId);
+            console.log('manufacturerResponse.parse_response: ');
+            console.log(JSON.parse(manufacturerResponse.toString()));
 
             // Disconnect from the gateway.
             await gateway2.disconnect();
@@ -247,10 +247,10 @@ module.exports = {
   * Perform EarnPoints transaction
   * @param {String} cardId Card id to connect to network
   * @param {String} accountNumber Account number of member
-  * @param {String} partnerId Partner Id of partner
+  * @param {String} manufacturerId Manufacturer Id of manufacturer
   * @param {Integer} points Points value
   */
-    earnPointsTransaction: async function (cardId, accountNumber, partnerId, points) {
+    earnPointsTransaction: async function (cardId, accountNumber, manufacturerId, points) {
 
         // Create a new file system based wallet for managing identities.
         const walletPath = path.join(process.cwd(), '/wallet');
@@ -271,7 +271,7 @@ module.exports = {
             let earnPoints = {};
             earnPoints.points = points;
             earnPoints.member = accountNumber;
-            earnPoints.partner = partnerId;
+            earnPoints.manufacturer = manufacturerId;
 
             // Submit the specified transaction.
             console.log('\nSubmit EarnPoints transaction.');
@@ -298,10 +298,10 @@ module.exports = {
   * Perform UsePoints transaction
   * @param {String} cardId Card id to connect to network
   * @param {String} accountNumber Account number of member
-  * @param {String} partnerId Partner Id of partner
+  * @param {String} manufacturerId Manufacturer Id of manufacturer
   * @param {Integer} points Points value
   */
-    usePointsTransaction: async function (cardId, accountNumber, partnerId, points) {
+    usePointsTransaction: async function (cardId, accountNumber, manufacturerId, points) {
 
         // Create a new file system based wallet for managing identities.
         const walletPath = path.join(process.cwd(), '/wallet');
@@ -322,7 +322,7 @@ module.exports = {
             let usePoints = {};
             usePoints.points = points;
             usePoints.member = accountNumber;
-            usePoints.partner = partnerId;
+            usePoints.manufacturer = manufacturerId;
 
             // Submit the specified transaction.
             console.log('\nSubmit UsePoints transaction.');
@@ -389,11 +389,11 @@ module.exports = {
     },
 
     /*
-  * Get Partner data
+  * Get Manufacturer data
   * @param {String} cardId Card id to connect to network
-  * @param {String} partnerId Partner Id of partner
+  * @param {String} manufacturerId Manufacturer Id of manufacturer
   */
-    partnerData: async function (cardId, partnerId) {
+    manufacturerData: async function (cardId, manufacturerId) {
 
         // Create a new file system based wallet for managing identities.
         const walletPath = path.join(process.cwd(), '/wallet');
@@ -411,14 +411,14 @@ module.exports = {
             // Get the contract from the network.
             const contract = network.getContract('anticounterfeiting');
 
-            let partner = await contract.submitTransaction('GetState', partnerId);
-            partner = JSON.parse(partner.toString());
-            console.log(partner);
+            let manufacturer = await contract.submitTransaction('GetState', manufacturerId);
+            manufacturer = JSON.parse(manufacturer.toString());
+            console.log(manufacturer);
 
             // Disconnect from the gateway.
             await gateway2.disconnect();
 
-            return partner;
+            return manufacturer;
         }
         catch (err) {
             //print and return error
@@ -431,10 +431,10 @@ module.exports = {
     },
 
     /*
-  * Get all partners data
+  * Get all manufacturers data
   * @param {String} cardId Card id to connect to network
   */
-    allPartnersInfo: async function (cardId) {
+    allManufacturersInfo: async function (cardId) {
 
         // Create a new file system based wallet for managing identities.
         const walletPath = path.join(process.cwd(), '/wallet');
@@ -452,15 +452,15 @@ module.exports = {
             // Get the contract from the network.
             const contract = network.getContract('anticounterfeiting');
 
-            console.log('\nGet all partners state ');
-            let allPartners = await contract.evaluateTransaction('GetState', 'all-partners');
-            allPartners = JSON.parse(allPartners.toString());
-            console.log(allPartners);
+            console.log('\nGet all manufacturers state ');
+            let allManufacturers = await contract.evaluateTransaction('GetState', 'all-manufacturers');
+            allManufacturers = JSON.parse(allManufacturers.toString());
+            console.log(allManufacturers);
 
             // Disconnect from the gateway.
             await gateway2.disconnect();
 
-            return allPartners;
+            return allManufacturers;
         }
         catch (err) {
             //print and return error

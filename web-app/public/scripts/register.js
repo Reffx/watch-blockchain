@@ -61,21 +61,26 @@ $('.register-member').click(function() {
 
 
 //check user input and call server to create dataset
-$('.register-partner').click(function() {
+$('.register-manufacturer').click(function() {
 
     //get user input data
     let formName = $('.name input').val();
-    let formPartnerId = $('.partner-id input').val();
+    let formManufacturerId = $('.manufacturer-id input').val();
     let formCardId = $('.card-id input').val();
 
     //create json data
-    let inputData = '{' + '"name" : "' + formName + '", ' + '"partnerid" : "' + formPartnerId + '", ' + '"cardid" : "' + formCardId + '"}';
+    let inputData = '{' + '"name" : "' + formName + '", ' + '"manufacturerid" : "' + formManufacturerId + '", ' + '"cardid" : "' + formCardId + '"}';
     console.log(inputData);
 
+    registerManufacturer(inputData);
+
+});
+
+function registerManufacturer(inputData){
     //make ajax call to add the dataset
     $.ajax({
         type: 'POST',
-        url: apiUrl + 'registerPartner',
+        url: apiUrl + 'registerManufacturer',
         data: inputData,
         dataType: 'json',
         contentType: 'application/json',
@@ -109,5 +114,4 @@ $('.register-partner').click(function() {
             console.log(jqXHR);
         }
     });
-
-});
+}

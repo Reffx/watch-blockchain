@@ -1,20 +1,8 @@
 [![Build Status](https://travis-ci.org/IBM/customer-loyalty-program-hyperledger-fabric-VSCode.svg?branch=master)](https://travis-ci.org/IBM/customer-loyalty-program-hyperledger-fabric-VSCode)
 
-# Customer Loyalty Program with blockchain
+## Anti Counterfeigt Program
 
-A customer loyalty program allows companies to reward customers who frequently make purchases. Program members are able to earn points on purchases, which can translate into some type of reward such as discount, freebie or special customer treatment. The members work toward a certain amount of points to redeem their reward. These programs can have multiple companies as partners on the program, to cater to a customer base. However, current loyalty program systems are restraint on relations between partners, and with visibility to members. These restraints can be removed by creating the customer loyalty program on a blockchain network.
-
-This blockchain model for a customer loyalty program enhances the value of points to loyalty program members and brings in new value to the partners by creating trusted transactions. Participants in this network have a more level relation among each other and points are in the centric position to connect all participants.
-
-In this code pattern, we will create a customer loyalty program as a blockchain web application using Hyperledger Fabric and Node.js. The application will allow members to register on the network where they will create their account. They will be identified on the network with their account number and will create an access key which they will use to sign in. This access key is used as the card id for the member to make transactions and query records. The member once signed in, can make transactions to earn points and redeem points from the partners on the network. They can view their transactions as part of the blockchain ledger. This code pattern illustrates the use of permissions as part of the network where a member can only view their transactions.
-
-Similarly for the partner, they will register by creating an identity on the network and an access key which will be used to view their records. Partners are allowed to view only transactions they were part of, and thus can keep track of all their transactions where they allocated or redeemed points. The web application shows a basic dashboard for the partner displaying the total points that they have allocated and redeemed to members. As transactions get complex, the partner can perform analysis on their transactions to create informative dashboards.
-
-This code pattern is for developers looking to start building blockchain applications with Hyperledger Fabric and IBM Blockchain extension for VSCode. When the reader has completed this code pattern, they will understand how to:
-
-* Setup a Hyperledger Fabric network on IBM Blockchain Platform Extension for VSCode.
-* Install and instantiate a smart contract through the IBM Blockchain Platform Extension for VSCode on a local fabric connection.
-* Develop a Node.js web application with the Hyperledger Fabric SDK to interact with the deployed network
+idea blablabla...
 
 
 ## Architecture Flow
@@ -23,12 +11,12 @@ This code pattern is for developers looking to start building blockchain applica
   <img src="https://user-images.githubusercontent.com/8854447/72646158-7367dc80-3943-11ea-8d9e-63f79367b95a.png">
 </p>
 
-**Note** The blockchain network will have multiple members and partners
+**Note** The blockchain network will have multiple members and manufacturers
 
 1. Member is registered on the network
 2. Member can sign-in to make transactions to earn points, redeem points and view their transactions
-3. Partner is registered on the network
-4. Partner can sign-in to view their transactions and display dashboard
+3. Manufacturer is registered on the network
+4. Manufacturer can sign-in to view their transactions and display dashboard
 
 
 ## Included Components

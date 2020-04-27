@@ -3,20 +3,20 @@
 let apiUrl = location.protocol + '//' + location.host + '/api/';
 
 //check user input and call server
-function updatePartner() {
+function updateManufacturer() {
 
     //get user input data
-    let formPartnerId = $('.partner-id input').val();
+    let formManufacturerId = $('.manufacturer-id input').val();
     let formCardId = $('.card-id input').val();
 
     //create json data
-    let inputData = '{' + '"partnerid" : "' + formPartnerId + '", ' + '"cardid" : "' + formCardId + '"}';
+    let inputData = '{' + '"manufacturerid" : "' + formManufacturerId + '", ' + '"cardid" : "' + formCardId + '"}';
     console.log(inputData);
 
     //make ajax call
     $.ajax({
         type: 'POST',
-        url: apiUrl + 'partnerData',
+        url: apiUrl + 'manufacturerData',
         data: inputData,
         dataType: 'json',
         contentType: 'application/json',
@@ -57,7 +57,7 @@ function updatePartner() {
                     let transactionData = data.earnPointsResults;
 
                     for (let i = 0; i < transactionData.length; i++) {
-                        str = str + '<p>timeStamp: ' + transactionData[i].timestamp + '<br />partner: ' + transactionData[i].partner + '<br />member: ' + transactionData[i].member + '<br />points: ' + transactionData[i].points + '<br />transactionID: ' + transactionData[i].transactionId + '</p><br>';
+                        str = str + '<p>timeStamp: ' + transactionData[i].timestamp + '<br />manufacturer: ' + transactionData[i].manufacturer + '<br />member: ' + transactionData[i].member + '<br />points: ' + transactionData[i].points + '<br />transactionID: ' + transactionData[i].transactionId + '</p><br>';
                     }
                     return str;
                 });
@@ -68,7 +68,7 @@ function updatePartner() {
                     let transactionData = data.usePointsResults;
 
                     for (let i = 0; i < transactionData.length; i++) {
-                        str = str + '<p>timeStamp: ' + transactionData[i].timestamp + '<br />partner: ' + transactionData[i].partner + '<br />member: ' + transactionData[i].member + '<br />points: ' + transactionData[i].points + '<br />transactionID: ' + transactionData[i].transactionId + '</p><br>';
+                        str = str + '<p>timeStamp: ' + transactionData[i].timestamp + '<br />manufacturer: ' + transactionData[i].manufacturer + '<br />member: ' + transactionData[i].member + '<br />points: ' + transactionData[i].points + '<br />transactionID: ' + transactionData[i].transactionId + '</p><br>';
                     }
                     return str;
                 });
@@ -105,8 +105,8 @@ function updatePartner() {
 };
 
 //check user input and call server
-$('.sign-in-partner').click(function() {
-    updatePartner();
+$('.sign-in-manufacturer').click(function() {
+    updateManufacturer();
 });
 
 //check user input and call server
@@ -143,7 +143,7 @@ $('.create-watch').click(function() {
                 //update member page and notify successful transaction
                // createWatch();
                 alert('Transaction successful');
-                updatePartner();
+                updateManufacturer();
             }
 
 

@@ -1,7 +1,7 @@
 'use strict';
 
 const { Contract } = require('fabric-contract-api');
-const allPartnersKey = 'all-partners';
+const allManufacturersKey = 'all-manufacturers';
 const earnPointsTransactionsKey = 'earn-points-transactions';
 const usePointsTransactionsKey = 'use-points-transactions';
 const showWatchesTransactionKey = 'show-watches-transactions';
@@ -13,7 +13,7 @@ class AntiCounterfeiting extends Contract {
         console.info('============= START : Initialize Ledger ===========');
 
         await ctx.stub.putState('instantiate', Buffer.from('INIT-LEDGER'));
-        await ctx.stub.putState(allPartnersKey, Buffer.from(JSON.stringify([])));
+        await ctx.stub.putState(allManufacturersKey, Buffer.from(JSON.stringify([])));
         await ctx.stub.putState(earnPointsTransactionsKey, Buffer.from(JSON.stringify([])));
         await ctx.stub.putState(usePointsTransactionsKey, Buffer.from(JSON.stringify([])));
         await ctx.stub.putState(showWatchesTransactionKey, Buffer.from(JSON.stringify([])));
@@ -30,18 +30,18 @@ class AntiCounterfeiting extends Contract {
         return JSON.stringify(member);
     }
 
-    // Add a partner on the ledger, and add it to the all-partners list
-    async CreatePartner(ctx, partner) {
-        partner = JSON.parse(partner);
+    // Add a manufacturer on the ledger, and add it to the all-manufacturers list
+    async CreateManufacturer(ctx, manufacturer) {
+        manufacturer = JSON.parse(manufacturer);
 
-        await ctx.stub.putState(partner.id, Buffer.from(JSON.stringify(partner)));
+        await ctx.stub.putState(manufacturer.id, Buffer.from(JSON.stringify(manufacturer)));
 
-        let allPartners = await ctx.stub.getState(allPartnersKey);
-        allPartners = JSON.parse(allPartners);
-        allPartners.push(partner);
-        await ctx.stub.putState(allPartnersKey, Buffer.from(JSON.stringify(allPartners)));
+        let allManufacturers = await ctx.stub.getState(allManufacturersKey);
+        allManufacturers = JSON.parse(allManufacturers);
+        allManufacturers.push(manufacturer);
+        await ctx.stub.putState(allManufacturersKey, Buffer.from(JSON.stringify(allManufacturers)));
 
-        return JSON.stringify(partner);
+        return JSON.stringify(manufacturer);
     }
 
     // Record a transaction where a member earns points
@@ -85,7 +85,7 @@ class AntiCounterfeiting extends Contract {
         return JSON.stringify(usePoints);
     }
 
-    // Get earn points transactions of the particular member or partner
+    // Get earn points transactions of the particular member or manufacturer
     async EarnPointsTransactionsInfo(ctx, userType, userId) {
         console.info('============= START : EarnPointsTransactionsInfo ===========');
 
@@ -98,8 +98,8 @@ class AntiCounterfeiting extends Contract {
                 if (transaction.member === userId) {
                     userTransactions.push(transaction);
                 }
-            } else if (userType === 'partner') {
-                if (transaction.partner === userId) {
+            } else if (userType === 'manufacturer') {
+                if (transaction.manufacturer === userId) {
                     userTransactions.push(transaction);
                 }
             }
@@ -109,7 +109,7 @@ class AntiCounterfeiting extends Contract {
         return JSON.stringify(userTransactions);
     }
 
-    // Get use points transactions of the particular member or partner
+    // Get use points transactions of the particular member or manufacturer
     async UsePointsTransactionsInfo(ctx, userType, userId) {
         let transactions = await ctx.stub.getState(usePointsTransactionsKey);
         transactions = JSON.parse(transactions);
@@ -120,8 +120,8 @@ class AntiCounterfeiting extends Contract {
                 if (transaction.member === userId) {
                     userTransactions.push(transaction);
                 }
-            } else if (userType === 'partner') {
-                if (transaction.partner === userId) {
+            } else if (userType === 'manufacturer') {
+                if (transaction.manufacturer === userId) {
                     userTransactions.push(transaction);
                 }
             }
@@ -182,8 +182,8 @@ class AntiCounterfeiting extends Contract {
         //         if (transaction.member === userId) {
         //             userTransactions.push(transaction);
         //         }
-        //     } else if (userType === 'partner') {
-        //         if (transaction.partner === userId) {
+        //     } else if (userType === 'manufacturer') {
+        //         if (transaction.manufacturer === userId) {
         //             userTransactions.push(transaction);
         //         }
         //     }

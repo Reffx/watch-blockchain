@@ -95,12 +95,12 @@ module.exports = {
     },
 
     /*
-  * Validata partner registration fields ensuring the fields meet the criteria
+  * Validata manufacturer registration fields ensuring the fields meet the criteria
   * @param {String} cardId
-  * @param {String} partnerId
+  * @param {String} pmanufacturerId
   * @param {String} name
   */
-    validatePartnerRegistration: async function(cardId, partnerId, name) {
+    validateManufacturerRegistration: async function(cardId, manufacturerId, name) {
 
         let response = {};
 
@@ -113,12 +113,12 @@ module.exports = {
             response.error = 'Access key can be letters and numbers only';
             console.log(response.error);
             return response;
-        } else if (partnerId.length < 1) {
-            response.error = 'Enter partner id';
+        } else if (manufacturerId.length < 1) {
+            response.error = 'Enter manufacturer id';
             console.log(response.error);
             return response;
-        } else if (!/^[0-9a-zA-Z]+$/.test(partnerId)) {
-            response.error = 'Partner id can be letters and numbers only';
+        } else if (!/^[0-9a-zA-Z]+$/.test(manufacturerId)) {
+            response.error = 'Manufacturer id can be letters and numbers only';
             console.log(response.error);
             return response;
         } else if (name.length < 1) {

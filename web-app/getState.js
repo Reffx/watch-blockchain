@@ -31,7 +31,7 @@ async function he() {
         // Get the contract from the network.
         const contract = network.getContract('anticounterfeiting');
 
-        let member = await contract.submitTransaction('GetState', 'all-partners');
+        let member = await contract.submitTransaction('GetState', 'all-manufacturers');
         member = JSON.parse(JSON.parse(member.toString()));
         console.log(member);
 
