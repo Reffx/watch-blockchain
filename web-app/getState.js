@@ -29,7 +29,7 @@ async function he() {
         const network = await gateway2.getNetwork('mychannel');
 
         // Get the contract from the network.
-        const contract = network.getContract('customerloyalty');
+        const contract = network.getContract('anticounterfeiting');
 
         let member = await contract.submitTransaction('GetState', 'all-partners');
         member = JSON.parse(JSON.parse(member.toString()));

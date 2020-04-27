@@ -101,7 +101,7 @@ module.exports = {
             const network = await gateway2.getNetwork('mychannel');
 
             // Get the contract from the network.
-            const contract = network.getContract('customerloyalty');
+            const contract = network.getContract('anticounterfeiting');
 
             let member = {};
             member.accountNumber = accountNumber;
@@ -211,7 +211,7 @@ module.exports = {
             const network = await gateway2.getNetwork('mychannel');
 
             // Get the contract from the network.
-            const contract = network.getContract('customerloyalty');
+            const contract = network.getContract('anticounterfeiting');
 
             let partner = {};
             partner.id = partnerId;
@@ -266,7 +266,7 @@ module.exports = {
             const network = await gateway2.getNetwork('mychannel');
 
             // Get the contract from the network.
-            const contract = network.getContract('customerloyalty');
+            const contract = network.getContract('anticounterfeiting');
 
             let earnPoints = {};
             earnPoints.points = points;
@@ -317,7 +317,7 @@ module.exports = {
             const network = await gateway2.getNetwork('mychannel');
 
             // Get the contract from the network.
-            const contract = network.getContract('customerloyalty');
+            const contract = network.getContract('anticounterfeiting');
 
             let usePoints = {};
             usePoints.points = points;
@@ -366,7 +366,7 @@ module.exports = {
             const network = await gateway2.getNetwork('mychannel');
 
             // Get the contract from the network.
-            const contract = network.getContract('customerloyalty');
+            const contract = network.getContract('anticounterfeiting');
 
             console.log('\nGet member state ');
             let member = await contract.submitTransaction('GetState', accountNumber);
@@ -409,7 +409,7 @@ module.exports = {
             const network = await gateway2.getNetwork('mychannel');
 
             // Get the contract from the network.
-            const contract = network.getContract('customerloyalty');
+            const contract = network.getContract('anticounterfeiting');
 
             let partner = await contract.submitTransaction('GetState', partnerId);
             partner = JSON.parse(partner.toString());
@@ -450,7 +450,7 @@ module.exports = {
             const network = await gateway2.getNetwork('mychannel');
 
             // Get the contract from the network.
-            const contract = network.getContract('customerloyalty');
+            const contract = network.getContract('anticounterfeiting');
 
             console.log('\nGet all partners state ');
             let allPartners = await contract.evaluateTransaction('GetState', 'all-partners');
@@ -491,7 +491,7 @@ module.exports = {
             const network = await gateway2.getNetwork('mychannel');
 
             // Get the contract from the network.
-            const contract = network.getContract('customerloyalty');
+            const contract = network.getContract('anticounterfeiting');
 
             console.log(`\nGet earn points transactions state for ${userType} ${userId}`);
             let earnPointsTransactions = await contract.evaluateTransaction('EarnPointsTransactionsInfo', userType, userId);
@@ -533,7 +533,7 @@ module.exports = {
             const network = await gateway2.getNetwork('mychannel');
 
             // Get the contract from the network.
-            const contract = network.getContract('customerloyalty');
+            const contract = network.getContract('anticounterfeiting');
 
             console.log(`\nGet use points transactions state for ${userType} ${userId}`);
             let usePointsTransactions = await contract.evaluateTransaction('UsePointsTransactionsInfo', userType, userId);
@@ -571,7 +571,7 @@ module.exports = {
             const network = await gateway.getNetwork('mychannel');
 
             // Get the contract from the network.
-            const contract = network.getContract('customerloyalty');
+            const contract = network.getContract('anticounterfeiting');
 
             let newWatch = {};
             newWatch.watchId = watchId;
@@ -588,7 +588,7 @@ module.exports = {
             // Disconnect from the gateway.
             await gateway.disconnect();
 
-            response.msg = 'createCar Transaction has been submitted';
+            response.msg = 'createWatch Transaction has been submitted';
             return response;
 
         } catch (error) {
@@ -625,7 +625,7 @@ module.exports = {
             const network = await gateway.getNetwork('mychannel');
 
             // Get the contract from the network.
-            const contract = network.getContract('customerloyalty');
+            const contract = network.getContract('anticounterfeiting');
 
             // Submit the specified transaction.
             // changeCarOwner transaction - requires 2 args , ex: ('changeCarOwner', 'CAR10', 'Dave')
@@ -662,7 +662,7 @@ module.exports = {
             const network = await gateway2.getNetwork('mychannel');
         
             // Get the contract from the network.
-            const contract = network.getContract('customerloyalty');
+            const contract = network.getContract('anticounterfeiting');
 
             console.log(`\nGet watches transactions state for ${userType} ${userId}`);
             let result = await contract.evaluateTransaction('queryAllWatches', userType, userId);

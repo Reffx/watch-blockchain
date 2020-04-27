@@ -3,7 +3,7 @@
 let apiUrl = location.protocol + '//' + location.host + '/api/';
 
 //check user input and call server
-$('.sign-in-partner').click(function() {
+function updatePartner() {
 
     //get user input data
     let formPartnerId = $('.partner-id input').val();
@@ -102,9 +102,11 @@ $('.sign-in-partner').click(function() {
             location.reload();
         }
     });
+};
 
-    
-
+//check user input and call server
+$('.sign-in-partner').click(function() {
+    updatePartner();
 });
 
 //check user input and call server
@@ -133,7 +135,6 @@ $('.create-watch').click(function() {
         success: function(data) {
 
             document.getElementById('loader').style.display = 'none';
-
             //check data for error
             if (data.error) {
                 alert(data.error);
@@ -142,6 +143,7 @@ $('.create-watch').click(function() {
                 //update member page and notify successful transaction
                // createWatch();
                 alert('Transaction successful');
+                updatePartner();
             }
 
 
