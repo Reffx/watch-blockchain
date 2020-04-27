@@ -1,6 +1,6 @@
 'use strict';
 
-const CustomerLoyalty = require('./lib/customerloyalty');
+const AntiCounterfeiting = require('./lib/anticounterfeiting');
 
-module.exports.CustomerLoyalty = CustomerLoyalty;
-module.exports.contracts = [ CustomerLoyalty ];
+module.exports.AntiCounterfeiting = AntiCounterfeiting;
+module.exports.contracts = [ AntiCounterfeiting ];

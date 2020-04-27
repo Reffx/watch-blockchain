@@ -6,7 +6,7 @@ const earnPointsTransactionsKey = 'earn-points-transactions';
 const usePointsTransactionsKey = 'use-points-transactions';
 const showWatchesTransactionKey = 'show-watches-transactions';
 
-class CustomerLoyalty extends Contract {
+class AntiCounterfeiting extends Contract {
 
     // Init function executed when the ledger is instantiated
     async instantiate(ctx) {
@@ -196,4 +196,4 @@ class CustomerLoyalty extends Contract {
 
 }
 
-module.exports = CustomerLoyalty;
+module.exports = AntiCounterfeiting;
