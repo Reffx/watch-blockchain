@@ -348,10 +348,21 @@ app.post('/api/manufacturerData', function (req, res) {
                         //else add transaction data to return object
                         returnData.queryWatchesResults = queryWatchesResults;
                     }
-
-                    //return returnData
-                    //res.json(returnData);
-
+                 });
+        })
+        .then(() => {
+            //get EarnPoints transactions from the network
+            network.countAllManufacturers(cardId)
+                .then((countManufacturersResults) => {
+                    //return error if error in response
+                    if (typeof countManufacturersResults === 'object' && 'error' in countManufacturersResults && countManufacturersResults.error !== null) {
+                        res.json({
+                            error: countManufacturersResults.error
+                        });
+                    } else {
+                        //else add transaction data to return object
+                        returnData.countManufacturersResults = countManufacturersResults;
+                    }
                  });
         })
         .then(() => {
