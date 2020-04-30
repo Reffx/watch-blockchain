@@ -49,22 +49,13 @@
 
   <div class="container" id="registration" style="display:block;">
     <div class="col-md-6 order-md-1">
-      <div class="mb-3">
-        <label for="manufacturer-id"><b>Manufacturer ID </b><span class="text-muted"> (identification on the network)</span></label>
-        <div class="input-group manufacturer-id">
-          <input type="text" class="form-control" id="manufacturer-id" placeholder="" required>
-          <div class="invalid-feedback" style="width: 100%;">
-            ID is required.
-          </div>
-        </div>
-      </div>
 
-      <div class="mb-3">
-        <label for="card-id"><b>Access Card ID </b><span class="text-muted"> (access id for your account)</span></label>
-        <div class="input-group card-id">
-          <input type="text" class="form-control" id="card-id" placeholder="" required>
-          <div class="invalid-feedback" style="width: 100%;">
-            ID is required.
+      <div class="row">
+        <div class="col-md-8 mb-3 email">
+          <label for="email"><b>Email</b></label>
+          <input type="text" class="form-control" id="email" placeholder="you@example.com" value="" required>
+          <div class="invalid-feedback">
+            Please enter a valid email address.
           </div>
         </div>
       </div>
@@ -77,7 +68,16 @@
             Please enter a valid name.
           </div>
         </div>
+      </div>
 
+      <div class="mb-3">
+        <label for="password"><b>Password </b><span class="text-muted"> (access for your account)</span></label>
+        <div class="input-group password">
+          <input type="password" class="form-control" id="password" placeholder="" required>
+          <div class="invalid-feedback" style="width: 100%;">
+            Password is required.
+          </div>
+        </div>
       </div>
 
       <div>

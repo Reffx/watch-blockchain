@@ -2,7 +2,7 @@
 
 //stackoverflow
 function isInt(value) {
-    return !isNaN(value) && (function(x) {
+    return !isNaN(value) && (function (x) {
         return (x | 0) === x;
     })(parseFloat(value));
 }
@@ -30,7 +30,7 @@ module.exports = {
   * @param {String} phoneNumber
   * @param {String} email
   */
-    validateMemberRegistration: async function(cardId, accountNumber, firstName, lastName, email, phoneNumber) {
+    validateMemberRegistration: async function (cardId, accountNumber, firstName, lastName, email, phoneNumber) {
 
         let response = {};
 
@@ -100,25 +100,17 @@ module.exports = {
   * @param {String} pmanufacturerId
   * @param {String} name
   */
-    validateManufacturerRegistration: async function(cardId, manufacturerId, name) {
+    validateManufacturerRegistration: async function (email, name) {
 
         let response = {};
 
         //verify input otherwise return error with an informative message
-        if (cardId.length < 1) {
-            response.error = 'Enter access key';
+        if (email.length < 1) {
+            response.error = 'Enter email';
             console.log(response.error);
             return response;
-        } else if (!/^[0-9a-zA-Z]+$/.test(cardId)) {
-            response.error = 'Access key can be letters and numbers only';
-            console.log(response.error);
-            return response;
-        } else if (manufacturerId.length < 1) {
-            response.error = 'Enter manufacturer id';
-            console.log(response.error);
-            return response;
-        } else if (!/^[0-9a-zA-Z]+$/.test(manufacturerId)) {
-            response.error = 'Manufacturer id can be letters and numbers only';
+        } else if (!validateEmail(email)) {
+            response.error = 'Enter valid email';
             console.log(response.error);
             return response;
         } else if (name.length < 1) {
@@ -136,7 +128,7 @@ module.exports = {
 
     },
 
-    validatePoints: async function(points) {
+    validatePoints: async function (points) {
 
         let response = {};
         //verify input otherwise return error with an informative message

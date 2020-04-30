@@ -6,11 +6,11 @@ let apiUrl = location.protocol + '//' + location.host + '/api/';
 function updateManufacturer() {
 
     //get user input data
-    let formManufacturerId = $('.manufacturer-id input').val();
-    let formCardId = $('.card-id input').val();
+    let formManufacturerName= $('.manufacturerName input').val();
+    let formPassword = $('.password input').val();
 
     //create json data
-    let inputData = '{' + '"manufacturerid" : "' + formManufacturerId + '", ' + '"cardid" : "' + formCardId + '"}';
+    let inputData = '{' + '"manufacturerName" : "' + formManufacturerName + '", ' + '"password" : "' + formPassword + '"}';
     console.log(inputData);
 
     //make ajax call
@@ -38,7 +38,7 @@ function updateManufacturer() {
                 //update heading
                 $('.heading').html(function() {
                     let str = '<h2><b> ' + data.name + ' </b></h2>';
-                    str = str + '<h2><b> ' + data.id + ' </b></h2>';
+                    str = str + '<h2><b> ' + data.email + ' </b></h2>';
 
                     return str;
                 });
