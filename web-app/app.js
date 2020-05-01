@@ -98,15 +98,15 @@ app.post('/api/registerMember', function (req, res) {
 app.post('/api/registerManufacturer', function (req, res) {
 
     //declare variables to retrieve from request
+    let email = req.body.email;
     let name = req.body.name;
-    let manufacturerId = req.body.manufacturerid;
-    let cardId = req.body.cardid;
+    let password = req.body.password;
 
     //print variables
-    console.log('Using param - name: ' + name + ' manufacturerId: ' + manufacturerId + ' cardId: ' + cardId);
+    console.log('Using param - name: ' + name + ' email: ' + email);
 
     //validate manufacturer registration fields
-    validate.validateManufacturerRegistration(cardId, manufacturerId, name)
+    validate.validateManufacturerRegistration(email, name)
         .then((response) => {
             //return error if error in response
             if (typeof response === 'object' && 'error' in response && response.error !== null) {
@@ -116,7 +116,7 @@ app.post('/api/registerManufacturer', function (req, res) {
                 return;
             } else {
                 //else register manufacturer on the network
-                network.registerManufacturer(cardId, manufacturerId, name)
+                network.registerManufacturer(email, name, password)
                     .then((response) => {
                         //return error if error in response
                         if (typeof response === 'object' && 'error' in response && response.error !== null) {
@@ -311,17 +311,17 @@ app.post('/api/memberData', function (req, res) {
 app.post('/api/manufacturerData', function (req, res) {
 
     //declare variables to retrieve from request
-    let manufacturerId = req.body.manufacturerid;
-    let cardId = req.body.cardid;
+    let manufacturerName = req.body.manufacturerName;
+    let password = req.body.password;
 
     //print variables
-    console.log('manufacturerData using param - ' + ' manufacturerId: ' + manufacturerId + ' cardId: ' + cardId);
+    console.log('manufacturerData using param - ' + ' manufacturerName: ' + manufacturerName + ' password: ' + password);
 
     //declare return object
     let returnData = {};
 
     //get manufacturer data from network
-    network.manufacturerData(cardId, manufacturerId)
+    network.manufacturerData(manufacturerName, password)
         .then((manufacturer) => {
             //return error if error in response
             if (typeof manufacturer === 'object' && 'error' in manufacturer && manufacturer.error !== null) {
@@ -330,14 +330,14 @@ app.post('/api/manufacturerData', function (req, res) {
                 });
             } else {
                 //else add manufacturer data to return object
-                returnData.id = manufacturer.id;
-                returnData.name = manufacturer.name;
+                returnData.manufacturerName = manufacturer.manufacturerName;
+                returnData.email = manufacturer.email;
             }
 
         })
         .then(() => {
             //get EarnPoints transactions from the network
-            network.queryAllWatches(cardId, 'manufacturer', manufacturerId)
+            network.queryAllWatches(manufacturerName, 'manufacturer', manufacturerName)
                 .then((queryWatchesResults) => {
                     //return error if error in response
                     if (typeof queryWatchesResults === 'object' && 'error' in queryWatchesResults && queryWatchesResults.error !== null) {
@@ -352,7 +352,7 @@ app.post('/api/manufacturerData', function (req, res) {
         })
         .then(() => {
             //get EarnPoints transactions from the network
-            network.countAllManufacturers(cardId)
+            network.countAllManufacturers(manufacturerName)
                 .then((countManufacturersResults) => {
                     //return error if error in response
                     if (typeof countManufacturersResults === 'object' && 'error' in countManufacturersResults && countManufacturersResults.error !== null) {
@@ -367,7 +367,7 @@ app.post('/api/manufacturerData', function (req, res) {
         })
         .then(() => {
             //get UsePoints transactions from the network
-            network.usePointsTransactionsInfo(cardId, 'manufacturer', manufacturerId)
+            network.usePointsTransactionsInfo(manufacturerName, 'manufacturer', manufacturerName)
                 .then((usePointsResults) => {
                     //return error if error in response
                     if (typeof usePointsResults === 'object' && 'error' in usePointsResults && usePointsResults.error !== null) {
@@ -383,7 +383,7 @@ app.post('/api/manufacturerData', function (req, res) {
                 })
                 .then(() => {
                     //get EarnPoints transactions from the network
-                    network.earnPointsTransactionsInfo(cardId, 'manufacturer', manufacturerId)
+                    network.earnPointsTransactionsInfo(manufacturerName, 'manufacturer', manufacturerName)
                         .then((earnPointsResults) => {
                             //return error if error in response
                             if (typeof earnPointsResults === 'object' && 'error' in earnPointsResults && earnPointsResults.error !== null) {

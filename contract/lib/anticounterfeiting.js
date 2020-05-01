@@ -7,6 +7,7 @@ const usePointsTransactionsKey = 'use-points-transactions';
 const showWatchesTransactionKey = 'show-watches-transactions';
 
 class AntiCounterfeiting extends Contract {
+    
 
     // Init function executed when the ledger is instantiated
     async instantiate(ctx) {
@@ -34,7 +35,7 @@ class AntiCounterfeiting extends Contract {
     async CreateManufacturer(ctx, manufacturer) {
         manufacturer = JSON.parse(manufacturer);
 
-        await ctx.stub.putState(manufacturer.id, Buffer.from(JSON.stringify(manufacturer)));
+        await ctx.stub.putState(manufacturer.name, Buffer.from(JSON.stringify(manufacturer)));
 
         let allManufacturers = await ctx.stub.getState(allManufacturersKey);
         allManufacturers = JSON.parse(allManufacturers);
@@ -192,6 +193,24 @@ class AntiCounterfeiting extends Contract {
         return JSON.stringify(userTransactions);
 
     }
+
+    async countAllManufacturers(ctx) {
+            let transactions = await ctx.stub.getState(allManufacturersKey);
+            transactions = JSON.parse(transactions);
+            let userTransactions = [];
+    
+            for (let transaction of transactions){
+                userTransactions.push(transaction);
+            }
+            let countManufacturers = userTransactions.length;
+            
+            // eslint-disable-next-line no-constant-condition
+                // countManufacturers = keyManu.length;
+                // console.log('end of data');
+                // console.info(countManufacturers);
+                return JSON.stringify(countManufacturers);
+            
+        }
 
 
 }
