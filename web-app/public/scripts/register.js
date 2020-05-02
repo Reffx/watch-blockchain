@@ -67,9 +67,11 @@ $('.register-manufacturer').click(function() {
     let formName = $('.name input').val();
     let formPassword = $('.password input').val();
     let formEmail = $('.email input').val();
+    let formPhoneNumber = $('.phone-number input').val();
+
 
     //create json data
-    let inputData = '{' + '"name" : "' + formName + '", ' + '"password" : "' + formPassword + '", ' + '"email" : "' + formEmail + '"}';
+    let inputData = '{' + '"name" : "' + formName + '", ' + '"password" : "' + formPassword + '", ' + '"email" : "' + formEmail + '", ' + '"phonenumber" : "' + formPhoneNumber + '"}';
     console.log(inputData);
 
     registerManufacturer(inputData);

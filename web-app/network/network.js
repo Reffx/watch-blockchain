@@ -143,7 +143,7 @@ module.exports = {
   * @param {String} email Manufacturer Id as identifier on network
   * @param {String} name Manufacturer name
   */
-    registerManufacturer: async function (email, manufacturerName, password) {
+    registerManufacturer: async function (manufacturerName, password, email, phoneNumber) {
 
         // Create a new file system based wallet for managing identities.
         const walletPath = path.join(process.cwd(), '/wallet');
@@ -220,8 +220,10 @@ module.exports = {
             let manufacturer = {};
             manufacturer.id = countM;
             manufacturer.name = manufacturerName;
-            manufacturer.email = email;
             manufacturer.password = password;
+            manufacturer.email = email;
+            manufacturer.phoneNumber = phoneNumber;
+
 
             // Submit the specified transaction.
             console.log('\nSubmit Create Manufacturer transaction.');

@@ -15,7 +15,7 @@ function validateEmail(email) {
 
 //stackoverflow
 function validatePhoneNumber(phoneNumber) {
-    let re = /^[+]?[(]?[0-9]{3}[)]?[-\s.]?[0-9]{3}[-\s.]?[0-9]{4,6}$/;
+    let re = /^[+]?[(]?[0-9]{3}[)]?[ \s.]?[0-9]{3}[ \s.]?[0-9]{2,4}[ \s.]?[0-9]{2,4}$/;
     return re.test(String(phoneNumber));
 }
 
@@ -100,7 +100,7 @@ module.exports = {
   * @param {String} pmanufacturerId
   * @param {String} name
   */
-    validateManufacturerRegistration: async function (email, name) {
+    validateManufacturerRegistration: async function (email, name, phoneNumber) {
 
         let response = {};
 
@@ -119,6 +119,10 @@ module.exports = {
             return response;
         } else if (!/^[a-zA-Z]+$/.test(name)) {
             response.error = 'Company name must be letters only';
+            console.log(response.error);
+            return response;
+        } else if (!validatePhoneNumber(phoneNumber)) {
+            response.error = 'Enter valid phone number';
             console.log(response.error);
             return response;
         } else {
