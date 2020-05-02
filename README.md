@@ -2,21 +2,12 @@
 
 ## Anti Counterfeigt Program
 
-idea blablabla...
+to be defined...
 
 
 ## Architecture Flow
 
-<p align="center">
-  <img src="https://user-images.githubusercontent.com/8854447/72646158-7367dc80-3943-11ea-8d9e-63f79367b95a.png">
-</p>
-
-**Note** The blockchain network will have multiple members and manufacturers
-
-1. Member is registered on the network
-2. Member can sign-in to make transactions to earn points, redeem points and view their transactions
-3. Manufacturer is registered on the network
-4. Manufacturer can sign-in to view their transactions and display dashboard
+to be defined...
 
 
 ## Included Components
@@ -181,12 +172,6 @@ Once instantiation of the contract completes, you should get the message `Succes
     ```
 
 You can find the app running at http://localhost:8000/
-
-<br>
-<p align="center">
-  <img src="https://user-images.githubusercontent.com/8854447/72647296-3bae6400-3946-11ea-9998-80c5f8c5a82c.png">
-</p>
-<br>
 
 
 ## Links
