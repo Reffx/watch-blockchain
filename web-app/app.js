@@ -98,7 +98,7 @@ app.post('/api/registerMember', function (req, res) {
 app.post('/api/registerManufacturer', function (req, res) {
 
     //declare variables to retrieve from request
-    let name = req.body.name;
+    let manufacturerName = req.body.manufacturerName;
     let password = req.body.password;
     let email = req.body.email;
     let phoneNumber = req.body.phonenumber;
@@ -107,10 +107,10 @@ app.post('/api/registerManufacturer', function (req, res) {
     let place = req.body.place;
 
     //print variables
-    console.log('Using param - name: ' + name + ' email: ' + email);
+    console.log('Using param - name: ' + manufacturerName + ' email: ' + email);
 
     //validate manufacturer registration fields
-    validate.validateManufacturerRegistration(email, name, phoneNumber)
+    validate.validateManufacturerRegistration(email, manufacturerName, phoneNumber)
         .then((response) => {
             //return error if error in response
             if (typeof response === 'object' && 'error' in response && response.error !== null) {
@@ -120,7 +120,7 @@ app.post('/api/registerManufacturer', function (req, res) {
                 return;
             } else {
                 //else register manufacturer on the network
-                network.registerManufacturer(name, password, email, phoneNumber, address, zipCode, place)
+                network.registerManufacturer(manufacturerName, password, email, phoneNumber, address, zipCode, place)
                     .then((response) => {
                         //return error if error in response
                         if (typeof response === 'object' && 'error' in response && response.error !== null) {
@@ -334,7 +334,7 @@ app.post('/api/manufacturerData', function (req, res) {
                 });
             } else {
                 //else add manufacturer data to return object
-                returnData.manufacturerName = manufacturer.manufacturerName;
+                returnData.name = manufacturer.name;
                 returnData.email = manufacturer.email;
             }
 
@@ -418,7 +418,7 @@ app.post('/api/createWatch', (req, res) => {
 });
 
 app.post('/api/changeWatchOwner', (req, res) => {
-    network.changeWatchOwner(req.body.key, req.body.newOwner)
+    network.changeWatchOwner(req.body.watchId, req.body.newOwner)
         .then((response) => {
             res.send(response);
         });

@@ -402,7 +402,8 @@ module.exports = {
   * @param {String} cardId Card id to connect to network
   * @param {String} manufacturerId Manufacturer Id of manufacturer
   */
-    manufacturerData: async function (cardId, manufacturerId) {
+    manufacturerData: async function (manufacturerName, password) {
+        //todo: check pw before
 
         // Create a new file system based wallet for managing identities.
         const walletPath = path.join(process.cwd(), '/wallet');
@@ -412,7 +413,7 @@ module.exports = {
         try {
             // Create a new gateway for connecting to our peer node.
             const gateway2 = new Gateway();
-            await gateway2.connect(ccp, { wallet, identity: cardId, discovery: gatewayDiscovery });
+            await gateway2.connect(ccp, { wallet, identity: manufacturerName, discovery: gatewayDiscovery });
 
             // Get the network (channel) our contract is deployed to.
             const network = await gateway2.getNetwork('mychannel');
@@ -420,7 +421,7 @@ module.exports = {
             // Get the contract from the network.
             const contract = network.getContract('anticounterfeiting');
 
-            let manufacturer = await contract.submitTransaction('GetState', manufacturerId);
+            let manufacturer = await contract.submitTransaction('GetState', manufacturerName);
             manufacturer = JSON.parse(manufacturer.toString());
             console.log(manufacturer);
 
@@ -610,7 +611,7 @@ module.exports = {
     },
 
     // change watch owner transaction
-    changeWatchOwner: async function (key, newOwner) {
+    changeWatchOwner: async function (watchId, newOwner) {
         let response = {};
         try {
 
@@ -640,7 +641,7 @@ module.exports = {
 
             // Submit the specified transaction.
             // changeCarOwner transaction - requires 2 args , ex: ('changeCarOwner', 'CAR10', 'Dave')
-            await contract.submitTransaction('changeWatchOwner', key, newOwner);
+            await contract.submitTransaction('changeWatchOwner', watchId, newOwner);
             console.log('Transaction has been submitted');
 
             // Disconnect from the gateway.
