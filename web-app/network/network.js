@@ -583,10 +583,12 @@ module.exports = {
             const contract = network.getContract('anticounterfeiting');
 
             let newWatch = {};
+            newWatch.owner = cardId;
+            newWatch.manufacturer = cardId;
             newWatch.watchId = watchId;
             newWatch.model = model;
             newWatch.color = color;
-            newWatch.cardId = cardId;
+
 
             // Submit the specified transaction.
             // createCar transaction - requires 5 argument, ex: ('createCar', 'CAR12', 'Honda', 'Accord', 'Black', 'Tom')

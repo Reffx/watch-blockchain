@@ -80,7 +80,7 @@ function updateManufacturer() {
                     console.log(data.queryWatchesResults);
 
                     for (let i = 0; i < transactionData.length; i++) {
-                        str = str + '<p>timeStamp: ' + transactionData[i].timestamp + '<br />WatchId: ' + transactionData[i].watchId + '<br />model: ' + transactionData[i].model + '<br />color: ' + transactionData[i].color + '<br />cardId: ' + transactionData[i].cardId + '<br />transactionID: ' + transactionData[i].transactionId + '</p><br>';
+                        str = str + '<p>timeStamp: ' + transactionData[i].timestamp + '<br />owner: ' + transactionData[i].owner + '<br />manufacturer: ' + transactionData[i].manufacturer + '<br />WatchId: ' + transactionData[i].watchId + '<br />model: ' + transactionData[i].model + '<br />color: ' + transactionData[i].color + '<br />transactionID: ' + transactionData[i].transactionId + '</p><br>';
                     }
                     return str;
                 });
