@@ -116,9 +116,11 @@ $('.create-watch').click(function() {
     let formWatchId = $('.watchid-id input').val();
     let formModel = $('.model-id input').val();
     let formColor = $('.color-id input').val();
+    let formOwner = $('.manufacturerName input').val();
+
 
     //create json data
-    let inputData = '{' + '"watchId" : "' + formWatchId + '", ' + '"model" : "' + formModel + '", ' + '"color" : "' + formColor + '", ' + '"owner" : "' + "rolex" + '"}';
+    let inputData = '{' + '"watchId" : "' + formWatchId + '", ' + '"model" : "' + formModel + '", ' + '"color" : "' + formColor + '", ' + '"owner" : "' + formOwner + '"}';
     console.log(inputData);
 
     //make ajax call
