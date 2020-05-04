@@ -200,7 +200,7 @@ class AntiCounterfeiting extends Contract {
         }
 
         for (let myWatch of allRecentWatchesTransactions){
-            for (transaction2 of transactions)
+            for (let transaction2 of transactions)
             if (myWatch.timestamp < transaction2.timestamp){
                 allRecentWatchesTransactions.remove(myWatch);
         }
