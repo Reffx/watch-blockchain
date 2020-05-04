@@ -163,12 +163,13 @@ $('.create-watch').click(function() {
 $('.sell-watch').click(function() {
 
     //get user input data
-    let formWatchId = $('.watchid-id input').val();
-    let formOwner = $('.manufacturerName input').val();
+    let formWatchId = $('.sell-watchid-id input').val();
+    let formManufacturerName = $('.manufacturerName input').val();
+    let formOwner = $('.newOwner-id input').val();
 
 
     //create json data
-    let inputData = '{' + '"watchId" : "' + formWatchId + '", ' + '"newOwner" : "' + formOwner + '"}';
+    let inputData = '{' + '"watchId" : "' + formWatchId + '", ' + '"oldOwner" : "' + formManufacturerName + '", ' + '"newOwner" : "' + formOwner + '"}';
     console.log(inputData);
 
     //make ajax call

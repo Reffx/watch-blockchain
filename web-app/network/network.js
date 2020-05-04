@@ -611,7 +611,7 @@ module.exports = {
     },
 
     // change watch owner transaction
-    changeWatchOwner: async function (watchId, newOwner) {
+    changeWatchOwner: async function (watchId, oldOwner, newOwner) {
         let response = {};
         try {
 
@@ -620,18 +620,9 @@ module.exports = {
             const wallet = new FileSystemWallet(walletPath);
             console.log(`Wallet path: ${walletPath}`);
 
-            // Check to see if we've already enrolled the user.
-            const userExists = await wallet.exists(userName);
-            if (!userExists) {
-                console.log('An identity for the user ' + userName + ' does not exist in the wallet');
-                console.log('Run the registerUser.js application before retrying');
-                response.error = 'An identity for the user ' + userName + ' does not exist in the wallet. Register ' + userName + ' first';
-                return response;
-            }
-
             // Create a new gateway for connecting to our peer node.
             const gateway = new Gateway();
-            await gateway.connect(ccp, { wallet, identity: userName, discovery: gatewayDiscovery });
+            await gateway.connect(ccp, { wallet, identity: oldOwner, discovery: gatewayDiscovery });
 
             // Get the network (channel) our contract is deployed to.
             const network = await gateway.getNetwork('mychannel');
@@ -641,7 +632,7 @@ module.exports = {
 
             // Submit the specified transaction.
             // changeCarOwner transaction - requires 2 args , ex: ('changeCarOwner', 'CAR10', 'Dave')
-            await contract.submitTransaction('ChangeWatchOwner', watchId, userName, newOwner);
+            await contract.submitTransaction('ChangeWatchOwner', watchId, oldOwner, newOwner);
             console.log('Transaction has been submitted');
 
             // Disconnect from the gateway.

@@ -418,7 +418,7 @@ app.post('/api/createWatch', (req, res) => {
 });
 
 app.post('/api/changeWatchOwner', (req, res) => {
-    network.changeWatchOwner(req.body.watchId, req.body.newOwner)
+    network.changeWatchOwner(req.body.watchId, req.body.oldOwner, req.body.newOwner)
         .then((response) => {
             res.send(response);
         });
