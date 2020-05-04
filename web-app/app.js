@@ -98,7 +98,7 @@ app.post('/api/registerMember', function (req, res) {
 app.post('/api/registerManufacturer', function (req, res) {
 
     //declare variables to retrieve from request
-    let manufacturerName = req.body.manufacturerName;
+    let name = req.body.name;
     let password = req.body.password;
     let email = req.body.email;
     let phoneNumber = req.body.phonenumber;
@@ -107,10 +107,10 @@ app.post('/api/registerManufacturer', function (req, res) {
     let place = req.body.place;
 
     //print variables
-    console.log('Using param - name: ' + manufacturerName + ' email: ' + email);
+    console.log('Using param - name: ' + name + ' email: ' + email);
 
     //validate manufacturer registration fields
-    validate.validateManufacturerRegistration(email, manufacturerName, phoneNumber)
+    validate.validateManufacturerRegistration(email, name, phoneNumber)
         .then((response) => {
             //return error if error in response
             if (typeof response === 'object' && 'error' in response && response.error !== null) {
@@ -120,7 +120,7 @@ app.post('/api/registerManufacturer', function (req, res) {
                 return;
             } else {
                 //else register manufacturer on the network
-                network.registerManufacturer(manufacturerName, password, email, phoneNumber, address, zipCode, place)
+                network.registerManufacturer(name, password, email, phoneNumber, address, zipCode, place)
                     .then((response) => {
                         //return error if error in response
                         if (typeof response === 'object' && 'error' in response && response.error !== null) {

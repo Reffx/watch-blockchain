@@ -213,7 +213,7 @@ module.exports = {
             // Get the contract from the network.
             const contract = network.getContract('anticounterfeiting');
 
-            let countM = await contract.evaluateTransaction('countAllManufacturers');
+            let countM = await contract.evaluateTransaction('CountAllManufacturers');
             countM = JSON.parse(countM.toString());
             countM = "M" + (countM+1);
 
@@ -641,7 +641,7 @@ module.exports = {
 
             // Submit the specified transaction.
             // changeCarOwner transaction - requires 2 args , ex: ('changeCarOwner', 'CAR10', 'Dave')
-            await contract.submitTransaction('changeWatchOwner', watchId, newOwner);
+            await contract.submitTransaction('ChangeWatchOwner', watchId, userName, newOwner);
             console.log('Transaction has been submitted');
 
             // Disconnect from the gateway.
@@ -677,7 +677,7 @@ module.exports = {
             const contract = network.getContract('anticounterfeiting');
 
             console.log(`\nGet watches transactions state for ${userType} ${userId}`);
-            let result = await contract.evaluateTransaction('queryAllWatches', userType, userId);
+            let result = await contract.evaluateTransaction('QueryAllWatches', userType, userId);
             result = JSON.parse(result.toString());
             console.log(result);
 
@@ -717,7 +717,7 @@ module.exports = {
 
         // Evaluate the specified transaction.
         // countAllManufacturers transaction - requires no arguments, ex: ('countAllManufacturers')
-        const result = await contract.evaluateTransaction('countAllManufacturers');
+        const result = await contract.evaluateTransaction('CountAllManufacturers');
         //console.log('check6');
         //console.log(`Transaction has been evaluated, result is: ${result.toString()}`);
 
