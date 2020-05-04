@@ -195,15 +195,16 @@ class AntiCounterfeiting extends Contract {
 
         for (let transaction of transactions){
             if (transaction.owner === currentOwner){
-                allRecentWatchesTransactions.push(transaction);
+                checkLatest(transaction);
         }
         }
 
-        for (let myWatch of allRecentWatchesTransactions){
-            for (let transaction2 of transactions)
-            if (myWatch.timestamp < transaction2.timestamp){
-                allRecentWatchesTransactions.remove(myWatch);
-        }
+        function checkLatest(transaction3){
+            for (let transaction2 of transactions){
+                if (transaction3.watchId === transaction2.watchId && transaction3.timestamp >= transaction2.timestamp){
+                    allRecentWatchesTransactions.push(transaction3);
+                };
+            }
         }
 
         console.info('============= END : Query Single Watch ===========');
