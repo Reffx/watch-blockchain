@@ -158,3 +158,51 @@ $('.create-watch').click(function() {
         }
     });
 });
+
+//check user input and call server
+$('.sell-watch').click(function() {
+
+    //get user input data
+    let formWatchId = $('.watchid-id input').val();
+    let formOwner = $('.manufacturerName input').val();
+
+
+    //create json data
+    let inputData = '{' + '"watchId" : "' + formWatchId + '", ' + '"newOwner" : "' + formOwner + '"}';
+    console.log(inputData);
+
+    //make ajax call
+    $.ajax({
+        type: 'POST',
+        url: apiUrl + 'changeWatchOwner',
+        data: inputData,
+        dataType: 'json',
+        contentType: 'application/json',
+        beforeSend: function() {
+            //display loading
+            document.getElementById('loader').style.display = 'block';
+        },
+        success: function(data) {
+
+            document.getElementById('loader').style.display = 'none';
+            //check data for error
+            if (data.error) {
+                alert(data.error);
+                return;
+            } else {
+                //update member page and notify successful transaction
+               // createWatch();
+                alert('Transaction successful');
+                updateManufacturer();
+            }
+
+
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            alert('Error: Try again');
+            console.log(errorThrown);
+            console.log(textStatus);
+            console.log(jqXHR);
+        }
+    });
+});
