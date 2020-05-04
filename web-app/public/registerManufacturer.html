@@ -50,14 +50,12 @@
   <div class="container" id="registration" style="display:block;">
     <div class="col-md-6 order-md-1">
 
-      <div class="row">
-        <div class="col-md-8 mb-3 name">
+      <div class="mb-3">
           <label for="name"><b>Company Name</b></label>
           <input type="text" class="form-control" id="name" placeholder="" value="" required>
           <div class="invalid-feedback">
             Please enter a valid name.
           </div>
-        </div>
       </div>
 
       <div class="mb-3">
@@ -71,21 +69,44 @@
       </div>
 
       <div class="row">
-        <div class="col-md-8 mb-3 email">
+        <div class="col-md-6 mb-3 email">
           <label for="email"><b>Email</b></label>
           <input type="text" class="form-control" id="email" placeholder="you@example.com" value="" required>
           <div class="invalid-feedback">
             Please enter a valid email address.
           </div>
         </div>
-      </div>
-
-      <div class="row">
         <div class="col-md-6 mb-3 phone-number">
           <label for="phone-number"><b>Phone Number</b></label>
-          <input type="text" class="form-control" id="phone-number" placeholder="555-555-5555" value="" required>
+          <input type="text" class="form-control" id="phone-number" placeholder="079 123 45 67" value="" required>
           <div class="invalid-feedback">
             Please enter your phone number.
+          </div>
+        </div>
+      </div>
+
+      <div class="mb-3">
+          <label for="address"><b>Address</b></label>
+          <input type="text" class="form-control" id="address" placeholder="Bahnhofstrasse 99" value="" required>
+          <div class="invalid-feedback">
+            Please enter your address.
+          </div>
+        </div>
+      
+
+      <div class="row">
+        <div class="col-md-6 mb-3 zipCode">
+          <label for="zipCode"><b>zip code</b></label>
+          <input type="text" class="form-control" id="zipCode" placeholder="6004" value="" required>
+          <div class="invalid-feedback">
+            Please enter your zip code.
+          </div>
+        </div>
+        <div class="col-md-6 mb-3 place">
+          <label for="place"><b>Place</label>
+          <input type="text" class="form-control" id="place" placeholder="Luzern" value="" required>
+          <div class="invalid-feedback">
+            Please enter your place.
           </div>
         </div>
       </div>
