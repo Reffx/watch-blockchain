@@ -187,6 +187,29 @@ class AntiCounterfeiting extends Contract {
         return JSON.stringify(userTransactions);
     }
 
+    async QueryMyWatches(ctx, currentOwner) {
+        console.info('============= START : Query Single Watch ===========');
+        let transactions = await ctx.stub.getState(showWatchesTransactionKey);
+        transactions = JSON.parse(transactions);
+        let allRecentWatchesTransactions = [];
+
+        for (let transaction of transactions){
+            if (transaction.owner === currentOwner){
+                allRecentWatchesTransactions.push(transaction);
+        }
+        }
+
+        for (let myWatch of allRecentWatchesTransactions){
+            for (transaction2 of transactions)
+            if (myWatch.timestamp < transaction2.timestamp){
+                allRecentWatchesTransactions.remove(myWatch);
+        }
+        }
+
+        console.info('============= END : Query Single Watch ===========');
+        return JSON.stringify(allRecentWatchesTransactions);
+    }
+
     async QueryAllWatches(ctx, userType, userId) {
         let transactions = await ctx.stub.getState(showWatchesTransactionKey);
         transactions = JSON.parse(transactions);
