@@ -342,15 +342,30 @@ app.post('/api/manufacturerData', function (req, res) {
         .then(() => {
             //get EarnPoints transactions from the network
             network.queryAllWatches(manufacturerName, 'manufacturer', manufacturerName)
-                .then((queryWatchesResults) => {
+                .then((queryAllWatchesResults) => {
                     //return error if error in response
-                    if (typeof queryWatchesResults === 'object' && 'error' in queryWatchesResults && queryWatchesResults.error !== null) {
+                    if (typeof queryAllWatchesResults === 'object' && 'error' in queryAllWatchesResults && queryAllWatchesResults.error !== null) {
                         res.json({
-                            error: queryWatchesResults.error
+                            error: queryAllWatchesResults.error
                         });
                     } else {
                         //else add transaction data to return object
-                        returnData.queryWatchesResults = queryWatchesResults;
+                        returnData.queryAllWatchesResults = queryAllWatchesResults;
+                    }
+                 });
+        })
+        .then(() => {
+            //get EarnPoints transactions from the network
+            network.queryMyWatches(manufacturerName)
+                .then((queryMyWatchesResults) => {
+                    //return error if error in response
+                    if (typeof queryMyWatchesResults === 'object' && 'error' in queryMyWatchesResults && queryMyWatchesResults.error !== null) {
+                        res.json({
+                            error: queryMyWatchesResults.error
+                        });
+                    } else {
+                        //else add transaction data to return object
+                        returnData.queryMyWatchesResults = queryMyWatchesResults;
                     }
                  });
         })
