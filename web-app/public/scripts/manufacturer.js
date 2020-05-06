@@ -74,10 +74,22 @@ function updateManufacturer() {
                 });
 
                 //update use points transaction
+                $('.query-myWatches-transactions').html(function() {
+                    let str = '';
+                    let transactionData = data.queryMyWatchesResults;
+                    console.log(data.queryMyWatchesResults);
+
+                    for (let i = 0; i < transactionData.length; i++) {
+                        str = str + '<p>timeStamp: ' + transactionData[i].timestamp + '<br />owner: ' + transactionData[i].owner + '<br />manufacturer: ' + transactionData[i].manufacturer + '<br />WatchId: ' + transactionData[i].watchId + '<br />model: ' + transactionData[i].model + '<br />color: ' + transactionData[i].color + '<br />transactionID: ' + transactionData[i].transactionId + '</p><br>';
+                    }
+                    return str;
+                });
+
+                //update use points transaction
                 $('.query-watches-transactions').html(function() {
                     let str = '';
-                    let transactionData = data.queryWatchesResults;
-                    console.log(data.queryWatchesResults);
+                    let transactionData = data.queryAllWatchesResults;
+                    console.log(data.queryAllWatchesResults);
 
                     for (let i = 0; i < transactionData.length; i++) {
                         str = str + '<p>timeStamp: ' + transactionData[i].timestamp + '<br />owner: ' + transactionData[i].owner + '<br />manufacturer: ' + transactionData[i].manufacturer + '<br />WatchId: ' + transactionData[i].watchId + '<br />model: ' + transactionData[i].model + '<br />color: ' + transactionData[i].color + '<br />transactionID: ' + transactionData[i].transactionId + '</p><br>';
