@@ -142,6 +142,8 @@ class AntiCounterfeiting extends Contract {
     async CreateWatch(ctx, watchInformation) {
         console.info('============= START : Create Watch ===========');
         watchInformation = JSON.parse(watchInformation);
+
+
         //let usePointsTransactions = await ctx.stub.getState(showWatchesTransactionKey);
         watchInformation.timestamp = new Date((ctx.stub.txTimestamp.seconds.low*1000)).toGMTString();
         watchInformation.transactionId = ctx.stub.txId;
@@ -159,11 +161,19 @@ class AntiCounterfeiting extends Contract {
         console.info('============= START : changeWatchOwner ===========');
         let watchTransactions = await ctx.stub.getState(showWatchesTransactionKey);
         watchTransactions = JSON.parse(watchTransactions);
+        
 
         for (let transaction of watchTransactions){
             if (transaction.watchId === watchId && transaction.owner === oldOwner){
-                transaction.owner = newOwner;
-                watchTransactions.push(transaction);
+                let newTransaction;
+                newTransaction.watchId = transaction.watchId;
+                newTransaction.manufacturer = transaction.manufacturer;
+                newTransaction.model = transaction.model;
+                newTransaction.color = transaction.color;
+                newTransaction.owner = newOwner;
+                newTransaction.timestamp = new Date((ctx.stub.txTimestamp.seconds.low*1000)).toGMTString();
+                newTransaction.transactionId = ctx.stub.txId;
+                watchTransactions.push(newTransaction);
             }
         }
 
@@ -171,14 +181,14 @@ class AntiCounterfeiting extends Contract {
         console.info('============= END : changeWatchOwner ===========');
     }
 
-    async QuerySingleWatch(ctx, watchId) {
+    async QuerySingleWatch(ctx, manufacturerName, watchId) {
         console.info('============= START : Query Single Watch ===========');
         let transactions = await ctx.stub.getState(showWatchesTransactionKey);
         transactions = JSON.parse(transactions);
         let userTransactions = [];
 
         for (let transaction of transactions){
-            if (transaction.watchId === watchId){
+            if (transaction.watchId === watchId && transaction.manufacturer === manufacturerName){
             userTransactions.push(transaction);
         }
         }

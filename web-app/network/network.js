@@ -568,6 +568,8 @@ module.exports = {
     createWatch: async function (watchId, model, color, cardId) {
         try {
 
+            let response = {};
+
             // Create a new file system based wallet for managing identities.
             const walletPath = path.join(process.cwd(), '/wallet');
             const wallet = new FileSystemWallet(walletPath);
@@ -583,6 +585,16 @@ module.exports = {
             // Get the contract from the network.
             const contract = network.getContract('anticounterfeiting');
 
+            let checkExistence = await contract.evaluateTransaction('QuerySingleWatch', cardId, watchId);
+            checkExistence = JSON.parse(checkExistence.toString());
+            if (checkExistence.length != 0){
+                let err = 'A watch with this ID from that manufacturer exists already!';
+                console.log(err);
+                response.error = err;
+                return response;
+            }
+
+
             let newWatch = {};
             newWatch.owner = cardId;
             newWatch.manufacturer = cardId;
@@ -592,16 +604,16 @@ module.exports = {
 
 
             // Submit the specified transaction.
-            // createCar transaction - requires 5 argument, ex: ('createCar', 'CAR12', 'Honda', 'Accord', 'Black', 'Tom')
-            let response = await contract.submitTransaction('CreateWatch', JSON.stringify(newWatch));
-            console.log(JSON.parse(response.toString()));
+            // createWatch transaction 
+            let result = await contract.submitTransaction('CreateWatch', JSON.stringify(newWatch));
+            console.log(JSON.parse(result.toString()));
             console.log('Transaction has been submitted');
 
             // Disconnect from the gateway.
             await gateway.disconnect();
 
-            response.msg = 'createWatch Transaction has been submitted';
-            return response;
+            result.msg = 'createWatch Transaction has been submitted';
+            return result;
 
         } catch (error) {
             console.error(`Failed to submit transaction: ${error}`);
