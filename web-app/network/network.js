@@ -566,10 +566,9 @@ module.exports = {
 
     // create car transaction
     createWatch: async function (watchId, model, color, cardId) {
+        let response = {};
+        let result = {};
         try {
-
-            let response = {};
-
             // Create a new file system based wallet for managing identities.
             const walletPath = path.join(process.cwd(), '/wallet');
             const wallet = new FileSystemWallet(walletPath);
@@ -585,30 +584,26 @@ module.exports = {
             // Get the contract from the network.
             const contract = network.getContract('anticounterfeiting');
 
-            let checkExistence = await contract.evaluateTransaction('QuerySingleWatch', cardId, watchId);
+            let checkExistence = await contract.evaluateTransaction('CheckWatchExistence', cardId, watchId);
             checkExistence = JSON.parse(checkExistence.toString());
-            if (checkExistence.length != 0){
-                let err = 'A watch with this ID from that manufacturer exists already!';
-                console.log(err);
-                response.error = err;
-                return response;
-            }
-
-
+            if (checkExistence === 0){
             let newWatch = {};
             newWatch.owner = cardId;
             newWatch.manufacturer = cardId;
             newWatch.watchId = watchId;
             newWatch.model = model;
             newWatch.color = color;
-
-
             // Submit the specified transaction.
             // createWatch transaction 
-            let result = await contract.submitTransaction('CreateWatch', JSON.stringify(newWatch));
+            result = await contract.submitTransaction('CreateWatch', JSON.stringify(newWatch));
             console.log(JSON.parse(result.toString()));
             console.log('Transaction has been submitted');
-
+            } else {
+            let err = 'A watch with this ID from that manufacturer exists already!';
+                console.log(err);
+                response.error = err;
+                return response;
+            }  
             // Disconnect from the gateway.
             await gateway.disconnect();
 
