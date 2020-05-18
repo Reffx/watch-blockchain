@@ -25,8 +25,11 @@ class AntiCounterfeiting extends Contract {
     // Add a member on the ledger
     async CreateMember(ctx, member) {
         member = JSON.parse(member);
+        //test
+        let memberInformation = [];
+        memberInformation.push(member);
 
-        await ctx.stub.putState(member.accountNumber, Buffer.from(JSON.stringify(member)));
+        await ctx.stub.putState(member.accountNumber, Buffer.from(JSON.stringify(memberInformation)));
 
         return JSON.stringify(member);
     }
@@ -34,8 +37,11 @@ class AntiCounterfeiting extends Contract {
     // Add a manufacturer on the ledger, and add it to the all-manufacturers list
     async CreateManufacturer(ctx, manufacturer) {
         manufacturer = JSON.parse(manufacturer);
+          //test
+          let manufacturerInformation = [];
+          manufacturerInformation.push(manufacturer);
 
-        await ctx.stub.putState(manufacturer.name, Buffer.from(JSON.stringify(manufacturer)));
+        await ctx.stub.putState(manufacturer.name, Buffer.from(JSON.stringify(manufacturerInformation)));
 
         let allManufacturers = await ctx.stub.getState(allManufacturersKey);
         allManufacturers = JSON.parse(allManufacturers);
@@ -43,6 +49,21 @@ class AntiCounterfeiting extends Contract {
         await ctx.stub.putState(allManufacturersKey, Buffer.from(JSON.stringify(allManufacturers)));
 
         return JSON.stringify(manufacturer);
+    }
+
+    // Add a manufacturer on the ledger, and add it to the all-manufacturers list
+    async GetLatestManufacturerInfo(ctx, manufacturerName) {    
+        let transactions = await ctx.stub.getState(manufacturerName);
+        transactions = JSON.parse(transactions);
+        
+        let manuInformation = [];
+        for (let c of transactions){
+            manuInformation.push(c);
+        }
+
+        manuInformation = manuInformation[manuInformation.length-1];
+
+       return JSON.stringify(transactions);
     }
 
     // Record a transaction where a member earns points
