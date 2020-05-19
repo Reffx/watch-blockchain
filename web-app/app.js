@@ -38,6 +38,16 @@ app.get('/manufacturer', function (req, res) {
     res.sendFile(path.join(__dirname + '/public/manufacturer.html'));
 });
 
+//get retailer registration page
+app.get('/registerRetailer', function (req, res) {
+    res.sendFile(path.join(__dirname + '/public/registerRetailer.html'));
+});
+
+//get retailer page
+app.get('/retailer', function (req, res) {
+    res.sendFile(path.join(__dirname + '/public/retailer.html'));
+});
+
 //get manufacturer registration page
 app.get('/registerManufacturer', function (req, res) {
     res.sendFile(path.join(__dirname + '/public/registerManufacturer.html'));
@@ -94,6 +104,51 @@ app.post('/api/registerMember', function (req, res) {
 
 });
 
+//post call to register retailer on the network
+app.post('/api/registerRetailer', function (req, res) {
+
+    //declare variables to retrieve from request
+    let name = req.body.name;
+    let password = req.body.password;
+    let email = req.body.email;
+    let phoneNumber = req.body.phonenumber;
+    let address = req.body.address;
+    let zipCode = req.body.zipCode;
+    let place = req.body.place;
+
+    //print variables
+    console.log('Using param - name: ' + name + ' email: ' + email);
+
+    //validate retailer registration fields
+    validate.validateInputRegistration(email, name, phoneNumber)
+        .then((response) => {
+            //return error if error in response
+            if (typeof response === 'object' && 'error' in response && response.error !== null) {
+                res.json({
+                    error: response.error
+                });
+                return;
+            } else {
+                //else register manufacturer on the network
+                network.registerRetailer(name, password, email, phoneNumber, address, zipCode, place)
+                    .then((response) => {
+                        //return error if error in response
+                        if (typeof response === 'object' && 'error' in response && response.error !== null) {
+                            res.json({
+                                error: response.error
+                            });
+                        } else {
+                            //else return success
+                            res.json({
+                                success: response
+                            });
+                        }
+                    });
+            }
+        });
+
+});
+
 //post call to register manufacturer on the network
 app.post('/api/registerManufacturer', function (req, res) {
 
@@ -110,7 +165,7 @@ app.post('/api/registerManufacturer', function (req, res) {
     console.log('Using param - name: ' + name + ' email: ' + email);
 
     //validate manufacturer registration fields
-    validate.validateManufacturerRegistration(email, name, phoneNumber)
+    validate.validateInputRegistration(email, name, phoneNumber)
         .then((response) => {
             //return error if error in response
             if (typeof response === 'object' && 'error' in response && response.error !== null) {
