@@ -95,12 +95,9 @@ module.exports = {
     },
 
     /*
-  * Validata manufacturer registration fields ensuring the fields meet the criteria
-  * @param {String} cardId
-  * @param {String} pmanufacturerId
-  * @param {String} name
+  * Validata manufacturer/retailer registration fields ensuring the fields meet the criteria
   */
-    validateManufacturerRegistration: async function (email, name, phoneNumber) {
+    validateInputRegistration: async function (email, name, phoneNumber) {
 
         let response = {};
 
