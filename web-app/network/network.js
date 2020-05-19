@@ -421,14 +421,15 @@ module.exports = {
             // Get the contract from the network.
             const contract = network.getContract('anticounterfeiting');
 
-            let manufacturer = await contract.submitTransaction('GetState', manufacturerName);
+            let manufacturer = await contract.submitTransaction('GetLatestManufacturerInfo', manufacturerName);
             manufacturer = JSON.parse(manufacturer.toString());
             console.log(manufacturer);
+            let latestManufacturerInfo = manufacturer[0];
 
             // Disconnect from the gateway.
             await gateway2.disconnect();
 
-            return manufacturer;
+            return latestManufacturerInfo;
         }
         catch (err) {
             //print and return error
@@ -618,7 +619,7 @@ module.exports = {
     },
 
     // change watch owner transaction
-    changeWatchOwner: async function (watchId, oldOwner, newOwner) {
+    changeWatchOwner: async function (watchId, manufacturerName, oldOwner, newOwner) {
         let response = {};
         try {
 
@@ -639,7 +640,7 @@ module.exports = {
 
             // Submit the specified transaction.
             // changeCarOwner transaction - requires 2 args , ex: ('changeCarOwner', 'CAR10', 'Dave')
-            await contract.submitTransaction('ChangeWatchOwner', watchId, oldOwner, newOwner);
+            await contract.submitTransaction('ChangeWatchOwner', watchId, manufacturerName, oldOwner, newOwner);
             console.log('Transaction has been submitted');
 
             // Disconnect from the gateway.
