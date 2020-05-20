@@ -138,6 +138,119 @@ module.exports = {
 
     },
 
+        /*
+  * Create Retailer participant and import card for identity
+  * @param {String} email Retailer Id as identifier on network
+  * @param {String} name Retailer name
+  */
+ registerRetailer: async function (RetailerName, password, email, phoneNumber, address, zipCode, place) {
+
+    // Create a new file system based wallet for managing identities.
+    const walletPath = path.join(process.cwd(), '/wallet');
+    const wallet = new FileSystemWallet(walletPath);
+    console.log(`Wallet path: ${walletPath}`);
+
+    try {
+        let response = {};
+
+        // Check to see if we've already enrolled the user.
+        const userExists = await wallet.exists(RetailerName);
+        if (userExists) {
+            let err = `An identity for the user ${RetailerName} already exists in the wallet`;
+            console.log(err);
+            response.error = err;
+            return response;
+        }
+
+        // Check to see if we've already enrolled the admin user.
+        const adminExists = await wallet.exists(appAdmin);
+        if (!adminExists) {
+            let err = 'An identity for the admin user-admin does not exist in the wallet. Run the enrollAdmin.js application before retrying';
+            console.log(err);
+            response.error = err;
+            return response;
+        }
+
+        // Create a new gateway for connecting to our peer node.
+        const gateway = new Gateway();
+        await gateway.connect(ccp, { wallet, identity: appAdmin, discovery: gatewayDiscovery });
+
+        // Get the CA client object from the gateway for interacting with the CA.
+        const ca = gateway.getClient().getCertificateAuthority();
+        const adminIdentity = gateway.getCurrentIdentity();
+
+        // Register the user, enroll the user, and import the new identity into the wallet.
+        const secret = await ca.register({ affiliation: 'org1.department1', enrollmentID: RetailerName, role: 'client' }, adminIdentity);
+        const enrollment = await ca.enroll({ enrollmentID: RetailerName, enrollmentSecret: secret });
+        const userIdentity = X509WalletMixin.createIdentity(orgMSPID, enrollment.certificate, enrollment.key.toBytes());
+        wallet.import(RetailerName, userIdentity);
+        console.log('Successfully registered and enrolled admin user ' + RetailerName + ' and imported it into the wallet');
+                    
+        // Disconnect from the gateway.
+        await gateway.disconnect();
+        console.log('admin user admin disconnected');
+
+    } catch (err) {
+        //print and return error
+        console.log(err);
+        let error = {};
+        error.error = err.message;
+        return error;
+    }
+
+    await sleep(2000);
+
+    try {
+        // Create a new gateway for connecting to our peer node.
+        const gateway2 = new Gateway();
+        await gateway2.connect(ccp, { wallet, identity: RetailerName, discovery: gatewayDiscovery });
+
+        // Get the network (channel) our contract is deployed to.
+        const network = await gateway2.getNetwork('mychannel');
+
+        // Get the contract from the network.
+        const contract = network.getContract('anticounterfeiting');
+
+        let countR = await contract.evaluateTransaction('CountAllRetailers');
+        countR = JSON.parse(countR.toString());
+        countR = "R" + (countR+1);
+
+        let retailer = {};
+        retailer.id = countR;
+        retailer.name = RetailerName;
+        retailer.password = password;
+        retailer.email = email;
+        retailer.phoneNumber = phoneNumber;
+        retailer.address = address;
+        retailer.zipCode = zipCode;
+        retailer.place = place;
+
+        // Submit the specified transaction.
+        console.log('\nSubmit Create Retailer transaction.');
+        const createRetailerResponse = await contract.submitTransaction('CreateRetailer', JSON.stringify(retailer));
+        console.log('createRetailerResponse: ');
+        console.log(JSON.parse(createRetailerResponse.toString()));
+
+        console.log('\nGet retailer state ');
+        const retailerResponse = await contract.evaluateTransaction('GetState', RetailerName);
+        console.log('retailerResponse.parse_response: ');
+        console.log(JSON.parse(retailerResponse.toString()));
+
+        // Disconnect from the gateway.
+        await gateway2.disconnect();
+
+        return true;
+    }
+    catch (err) {
+        //print and return error
+        console.log(err);
+        let error = {};
+        error.error = err.message;
+        return error;
+    }
+
+},
+
     /*
   * Create Manufacturer participant and import card for identity
   * @param {String} email Manufacturer Id as identifier on network
@@ -213,12 +326,12 @@ module.exports = {
             // Get the contract from the network.
             const contract = network.getContract('anticounterfeiting');
 
-            let countM = await contract.evaluateTransaction('CountAllManufacturers');
-            countM = JSON.parse(countM.toString());
-            countM = "M" + (countM+1);
+         //   let countM = await contract.evaluateTransaction('CountAllManufacturers');
+         //   countM = JSON.parse(countM.toString());
+         //   countM = "M" + (countM+1);
 
             let manufacturer = {};
-            manufacturer.id = countM;
+        //    manufacturer.id = countM;
             manufacturer.name = manufacturerName;
             manufacturer.password = password;
             manufacturer.email = email;
