@@ -9,7 +9,6 @@ const allWatchesTransactionKey = 'all-watches-transactions';
 
 class AntiCounterfeiting extends Contract {
 
-
     // Init function executed when the ledger is instantiated
     async instantiate(ctx) {
         console.info('============= START : Initialize Ledger ===========');
@@ -83,92 +82,6 @@ class AntiCounterfeiting extends Contract {
         manuInformation = manuInformation[manuInformation.length-1];
 
        return JSON.stringify(transactions);
-    }
-
-    // Record a transaction where a member earns points
-    async EarnPoints(ctx, earnPoints) {
-        earnPoints = JSON.parse(earnPoints);
-        earnPoints.timestamp = new Date((ctx.stub.txTimestamp.seconds.low * 1000)).toGMTString();
-        earnPoints.transactionId = ctx.stub.txId;
-
-        let member = await ctx.stub.getState(earnPoints.member);
-        member = JSON.parse(member);
-        member.points += earnPoints.points;
-        await ctx.stub.putState(earnPoints.member, Buffer.from(JSON.stringify(member)));
-
-        let earnPointsTransactions = await ctx.stub.getState(earnPointsTransactionsKey);
-        earnPointsTransactions = JSON.parse(earnPointsTransactions);
-        earnPointsTransactions.push(earnPoints);
-        await ctx.stub.putState(earnPointsTransactionsKey, Buffer.from(JSON.stringify(earnPointsTransactions)));
-
-        return JSON.stringify(earnPoints);
-    }
-
-    // Record a transaction where a member redeems points
-    async UsePoints(ctx, usePoints) {
-        usePoints = JSON.parse(usePoints);
-        usePoints.timestamp = new Date((ctx.stub.txTimestamp.seconds.low * 1000)).toGMTString();
-        usePoints.transactionId = ctx.stub.txId;
-
-        let member = await ctx.stub.getState(usePoints.member);
-        member = JSON.parse(member);
-        if (member.points < usePoints.points) {
-            throw new Error('Member does not have sufficient points');
-        }
-        member.points -= usePoints.points;
-        await ctx.stub.putState(usePoints.member, Buffer.from(JSON.stringify(member)));
-
-        let usePointsTransactions = await ctx.stub.getState(usePointsTransactionsKey);
-        usePointsTransactions = JSON.parse(usePointsTransactions);
-        usePointsTransactions.push(usePoints);
-        await ctx.stub.putState(usePointsTransactionsKey, Buffer.from(JSON.stringify(usePointsTransactions)));
-
-        return JSON.stringify(usePoints);
-    }
-
-    // Get earn points transactions of the particular member or manufacturer
-    async EarnPointsTransactionsInfo(ctx, userType, userId) {
-        console.info('============= START : EarnPointsTransactionsInfo ===========');
-
-        let transactions = await ctx.stub.getState(earnPointsTransactionsKey);
-        transactions = JSON.parse(transactions);
-        let userTransactions = [];
-
-        for (let transaction of transactions) {
-            if (userType === 'member') {
-                if (transaction.member === userId) {
-                    userTransactions.push(transaction);
-                }
-            } else if (userType === 'manufacturer') {
-                if (transaction.manufacturer === userId) {
-                    userTransactions.push(transaction);
-                }
-            }
-        }
-
-        console.info('============= END : EarnPointsTransactionsInfo ===========');
-        return JSON.stringify(userTransactions);
-    }
-
-    // Get use points transactions of the particular member or manufacturer
-    async UsePointsTransactionsInfo(ctx, userType, userId) {
-        let transactions = await ctx.stub.getState(usePointsTransactionsKey);
-        transactions = JSON.parse(transactions);
-        let userTransactions = [];
-
-        for (let transaction of transactions) {
-            if (userType === 'member') {
-                if (transaction.member === userId) {
-                    userTransactions.push(transaction);
-                }
-            } else if (userType === 'manufacturer') {
-                if (transaction.manufacturer === userId) {
-                    userTransactions.push(transaction);
-                }
-            }
-        }
-
-        return JSON.stringify(userTransactions);
     }
 
     // get the state from key
@@ -334,23 +247,9 @@ class AntiCounterfeiting extends Contract {
         let transactions = await ctx.stub.getState(allWatchesTransactionKey);
         transactions = JSON.parse(transactions);
         let userTransactions = [];
-
         for (let transaction of transactions) {
             userTransactions.push(transaction);
         }
-
-        // for (let transaction of transactions) {
-        //     if (userType === 'member') {
-        //         if (transaction.member === userId) {
-        //             userTransactions.push(transaction);
-        //         }
-        //     } else if (userType === 'manufacturer') {
-        //         if (transaction.manufacturer === userId) {
-        //             userTransactions.push(transaction);
-        //         }
-        //     }
-        // }
-
         return JSON.stringify(userTransactions);
 
     }
