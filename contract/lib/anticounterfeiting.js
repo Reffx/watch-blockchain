@@ -92,6 +92,55 @@ class AntiCounterfeiting extends Contract {
         return JSON.stringify(jsonData);
     }
 
+    async GetVerifyRetailers(ctx, manufacturerName){
+        let transactions = await ctx.stub.getState(manufacturerName + "-verifiedRetailers");
+        transactions = JSON.parse(transactions);
+        let verifiedTransactions = [];
+            for (let transaction of transactions) {
+                verifiedTransactions.push(transaction);
+        }
+        let lastVerifiedTransaction = verifiedTransactions[verifiedTransactions.length-1];
+        return JSON.stringify(lastVerifiedTransaction);
+    }
+
+    async AddVerifiedRetailer(ctx, manufacturerName, retailerName){
+        let transactions = await ctx.stub.getState(manufacturerName + "-verifiedRetailers");
+        let verifiedRetailersTransactions = [];
+        if (transactions.length != 0){
+        transactions = JSON.parse(transactions);
+            for (let transaction of transactions) {
+                verifiedRetailersTransactions.push(transaction);
+            }
+         } else {
+             let newTransaction = {};
+             newTransaction.timestamp = new Date((ctx.stub.txTimestamp.seconds.low * 1000)).toGMTString();
+             newTransaction.retailerList = [];
+             newTransaction.retailerList.push(retailerName);
+             verifiedRetailersTransactions.push(newTransaction);
+             await ctx.stub.putState(manufacturerName + "-verifiedRetailers", Buffer.from(JSON.stringify(verifiedRetailersTransactions)));
+             return JSON.stringify(verifiedRetailersTransactions);
+         }
+
+        let lastVerifiedTransaction = [];
+        lastVerifiedTransaction = verifiedRetailersTransactions[verifiedRetailersTransactions.length-1];
+
+        let newTransaction = {};
+        newTransaction.timestamp = new Date((ctx.stub.txTimestamp.seconds.low * 1000)).toGMTString();
+        newTransaction.retailerList = lastVerifiedTransaction.retailerList.push(retailerName);
+
+        transactions.push(newTransaction);
+        await ctx.stub.putState(manufacturerName + "-verifiedRetailers", Buffer.from(JSON.stringify(transactions))); //push to all watches
+
+        return JSON.stringify(lastVerifiedTransaction);
+    }
+
+    async removeVerifiedRetailer(ctx, manufacturerName, retailerName){
+        let transactions = await ctx.stub.getState(manufacturerName + "-verifiedRetailers");
+        //todo
+
+        return JSON.stringify();
+    }
+
     async CreateWatch(ctx, watchInformation) {
         console.info('============= START : Create Watch ===========');
         watchInformation = JSON.parse(watchInformation);
