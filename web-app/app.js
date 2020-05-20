@@ -244,9 +244,6 @@ app.post('/api/memberData', function (req, res) {
 
                 });
         });
-
-
-
 });
 
 //post call to retrieve manufacturer data and transactions data from the network
@@ -290,40 +287,40 @@ app.post('/api/manufacturerData', function (req, res) {
                         //else add transaction data to return object
                         returnData.queryAllWatchesResults = queryAllWatchesResults;
                     }
-                });
-        })
-        .then(() => {
-            //get EarnPoints transactions from the network
-            network.queryMyWatches(manufacturerName)
-                .then((queryMyWatchesResults) => {
-                    //return error if error in response
-                    if (typeof queryMyWatchesResults === 'object' && 'error' in queryMyWatchesResults && queryMyWatchesResults.error !== null) {
-                        res.json({
-                            error: queryMyWatchesResults.error
+                })
+                .then(() => {
+                    //get EarnPoints transactions from the network
+                    network.queryMyWatches(manufacturerName)
+                        .then((queryMyWatchesResults) => {
+                            //return error if error in response
+                            if (typeof queryMyWatchesResults === 'object' && 'error' in queryMyWatchesResults && queryMyWatchesResults.error !== null) {
+                                res.json({
+                                    error: queryMyWatchesResults.error
+                                });
+                            } else {
+                                //else add transaction data to return object
+                                returnData.queryMyWatchesResults = queryMyWatchesResults;
+                            }
+                        })
+                        .then(() => {
+                            //get EarnPoints transactions from the network
+                            network.countAllManufacturers(manufacturerName)
+                                .then((countManufacturersResults) => {
+                                    //return error if error in response
+                                    if (typeof countManufacturersResults === 'object' && 'error' in countManufacturersResults && countManufacturersResults.error !== null) {
+                                        res.json({
+                                            error: countManufacturersResults.error
+                                        });
+                                    } else {
+                                        //else add transaction data to return object
+                                        returnData.countManufacturersResults = countManufacturersResults;
+                                        //return returnData
+                                        res.json(returnData);
+                                    }
+                                });
                         });
-                    } else {
-                        //else add transaction data to return object
-                        returnData.queryMyWatchesResults = queryMyWatchesResults;
-                    }
                 });
-        })
-        .then(() => {
-            //get EarnPoints transactions from the network
-            network.countAllManufacturers(manufacturerName)
-                .then((countManufacturersResults) => {
-                    //return error if error in response
-                    if (typeof countManufacturersResults === 'object' && 'error' in countManufacturersResults && countManufacturersResults.error !== null) {
-                        res.json({
-                            error: countManufacturersResults.error
-                        });
-                    } else {
-                        //else add transaction data to return object
-                        returnData.countManufacturersResults = countManufacturersResults;
-                         //return returnData
-                         res.json(returnData);
-                    }
-                });
-        })
+        });
 });
 
 app.post('/api/createWatch', (req, res) => {
