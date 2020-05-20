@@ -194,93 +194,6 @@ app.post('/api/registerManufacturer', function (req, res) {
 
 });
 
-//post call to perform EarnPoints transaction on the network
-app.post('/api/earnPoints', function (req, res) {
-
-    //declare variables to retrieve from request
-    let accountNumber = req.body.accountnumber;
-    let cardId = req.body.cardid;
-    let manufacturerId = req.body.manufacturerid;
-    let points = parseFloat(req.body.points);
-
-    //print variables
-    console.log('Using param - points: ' + points + ' manufacturerId: ' + manufacturerId + ' accountNumber: ' + accountNumber + ' cardId: ' + cardId);
-
-    //validate points field
-    validate.validatePoints(points)
-        .then((checkPoints) => {
-            //return error if error in response
-            if (typeof checkPoints === 'object' && 'error' in checkPoints && checkPoints.error !== null) {
-                res.json({
-                    error: checkPoints.error
-                });
-                return;
-            } else {
-                points = checkPoints;
-                //else perforn EarnPoints transaction on the network
-                network.earnPointsTransaction(cardId, accountNumber, manufacturerId, points)
-                    .then((response) => {
-                        //return error if error in response
-                        if (typeof response === 'object' && 'error' in response && response.error !== null) {
-                            res.json({
-                                error: response.error
-                            });
-                        } else {
-                            //else return success
-                            res.json({
-                                success: response
-                            });
-                        }
-                    });
-            }
-        });
-
-});
-
-//post call to perform UsePoints transaction on the network
-app.post('/api/usePoints', function (req, res) {
-
-    //declare variables to retrieve from request
-    let accountNumber = req.body.accountnumber;
-    let cardId = req.body.cardid;
-    let manufacturerId = req.body.manufacturerid;
-    let points = parseFloat(req.body.points);
-
-    //print variables
-    console.log('Using param - points: ' + points + ' manufacturerId: ' + manufacturerId + ' accountNumber: ' + accountNumber + ' cardId: ' + cardId);
-
-    //validate points field
-    validate.validatePoints(points)
-        //return error if error in response
-        .then((checkPoints) => {
-            if (typeof checkPoints === 'object' && 'error' in checkPoints && checkPoints.error !== null) {
-                res.json({
-                    error: checkPoints.error
-                });
-                return;
-            } else {
-                points = checkPoints;
-                //else perforn UsePoints transaction on the network
-                network.usePointsTransaction(cardId, accountNumber, manufacturerId, points)
-                    .then((response) => {
-                        //return error if error in response
-                        if (typeof response === 'object' && 'error' in response && response.error !== null) {
-                            res.json({
-                                error: response.error
-                            });
-                        } else {
-                            //else return success
-                            res.json({
-                                success: response
-                            });
-                        }
-                    });
-            }
-        });
-
-
-});
-
 //post call to retrieve member data, transactions data and manufacturers to perform transactions with from the network
 app.post('/api/memberData', function (req, res) {
 
@@ -311,58 +224,28 @@ app.post('/api/memberData', function (req, res) {
                 returnData.email = member.email;
                 returnData.points = member.points;
             }
-
         })
         .then(() => {
-            //get UsePoints transactions from the network
-            network.usePointsTransactionsInfo(cardId, 'member', accountNumber)
-                .then((usePointsResults) => {
+            //get manufacturers to transact with from the network
+            network.allManufacturersInfo(cardId)
+                .then((manufacturersInfo) => {
                     //return error if error in response
-                    if (typeof usePointsResults === 'object' && 'error' in usePointsResults && usePointsResults.error !== null) {
+                    if (typeof manufacturersInfo === 'object' && 'error' in manufacturersInfo && manufacturersInfo.error !== null) {
                         res.json({
-                            error: usePointsResults.error
+                            error: manufacturersInfo.error
                         });
                     } else {
-                        //else add transaction data to return object
-                        returnData.usePointsResults = usePointsResults;
+                        //else add manufacturers data to return object
+                        returnData.manufacturersData = manufacturersInfo;
                     }
 
-                }).then(() => {
-                    //get EarnPoints transactions from the network
-                    network.earnPointsTransactionsInfo(cardId, 'member', accountNumber)
-                        .then((earnPointsResults) => {
-                            //return error if error in response
-                            if (typeof earnPointsResults === 'object' && 'error' in earnPointsResults && earnPointsResults.error !== null) {
-                                res.json({
-                                    error: earnPointsResults.error
-                                });
-                            } else {
-                                //else add transaction data to return object
-                                returnData.earnPointsResult = earnPointsResults;
-                            }
+                    //return returnData
+                    res.json(returnData);
 
-                        })
-                        .then(() => {
-                            //get manufacturers to transact with from the network
-                            network.allManufacturersInfo(cardId)
-                                .then((manufacturersInfo) => {
-                                    //return error if error in response
-                                    if (typeof manufacturersInfo === 'object' && 'error' in manufacturersInfo && manufacturersInfo.error !== null) {
-                                        res.json({
-                                            error: manufacturersInfo.error
-                                        });
-                                    } else {
-                                        //else add manufacturers data to return object
-                                        returnData.manufacturersData = manufacturersInfo;
-                                    }
-
-                                    //return returnData
-                                    res.json(returnData);
-
-                                });
-                        });
                 });
         });
+
+
 
 });
 
@@ -407,7 +290,7 @@ app.post('/api/manufacturerData', function (req, res) {
                         //else add transaction data to return object
                         returnData.queryAllWatchesResults = queryAllWatchesResults;
                     }
-                 });
+                });
         })
         .then(() => {
             //get EarnPoints transactions from the network
@@ -422,7 +305,7 @@ app.post('/api/manufacturerData', function (req, res) {
                         //else add transaction data to return object
                         returnData.queryMyWatchesResults = queryMyWatchesResults;
                     }
-                 });
+                });
         })
         .then(() => {
             //get EarnPoints transactions from the network
@@ -436,47 +319,11 @@ app.post('/api/manufacturerData', function (req, res) {
                     } else {
                         //else add transaction data to return object
                         returnData.countManufacturersResults = countManufacturersResults;
+                         //return returnData
+                         res.json(returnData);
                     }
-                 });
-        })
-        .then(() => {
-            //get UsePoints transactions from the network
-            network.usePointsTransactionsInfo(manufacturerName, 'manufacturer', manufacturerName)
-                .then((usePointsResults) => {
-                    //return error if error in response
-                    if (typeof usePointsResults === 'object' && 'error' in usePointsResults && usePointsResults.error !== null) {
-                        res.json({
-                            error: usePointsResults.error
-                        });
-                    } else {
-                        //else add transaction data to return object
-                        returnData.usePointsResults = usePointsResults;
-                        //add total points collected by manufacturer to return object
-                        returnData.pointsCollected = analysis.totalPointsCollected(usePointsResults);
-                    }
-                })
-                .then(() => {
-                    //get EarnPoints transactions from the network
-                    network.earnPointsTransactionsInfo(manufacturerName, 'manufacturer', manufacturerName)
-                        .then((earnPointsResults) => {
-                            //return error if error in response
-                            if (typeof earnPointsResults === 'object' && 'error' in earnPointsResults && earnPointsResults.error !== null) {
-                                res.json({
-                                    error: earnPointsResults.error
-                                });
-                            } else {
-                                //else add transaction data to return object
-                                returnData.earnPointsResults = earnPointsResults;
-                                //add total points given by manufacturer to return object
-                                returnData.pointsGiven = analysis.totalPointsGiven(earnPointsResults);
-                                //return returnData
-                                res.json(returnData);
-                            }       
-                        })
-                        //moves here in
                 });
-        });
-
+        })
 });
 
 app.post('/api/createWatch', (req, res) => {

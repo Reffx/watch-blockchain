@@ -51,28 +51,6 @@ function updateManufacturer() {
                     return str;
                 });
 
-                //update earn points transaction
-                $('.points-allocated-transactions').html(function() {
-                    let str = '';
-                    let transactionData = data.earnPointsResults;
-
-                    for (let i = 0; i < transactionData.length; i++) {
-                        str = str + '<p>timeStamp: ' + transactionData[i].timestamp + '<br />manufacturer: ' + transactionData[i].manufacturer + '<br />member: ' + transactionData[i].member + '<br />points: ' + transactionData[i].points + '<br />transactionID: ' + transactionData[i].transactionId + '</p><br>';
-                    }
-                    return str;
-                });
-
-                //update use points transaction
-                $('.points-redeemed-transactions').html(function() {
-                    let str = '';
-                    let transactionData = data.usePointsResults;
-
-                    for (let i = 0; i < transactionData.length; i++) {
-                        str = str + '<p>timeStamp: ' + transactionData[i].timestamp + '<br />manufacturer: ' + transactionData[i].manufacturer + '<br />member: ' + transactionData[i].member + '<br />points: ' + transactionData[i].points + '<br />transactionID: ' + transactionData[i].transactionId + '</p><br>';
-                    }
-                    return str;
-                });
-
                 //update use points transaction
                 $('.query-myWatches-transactions').html(function() {
                     let str = '';
