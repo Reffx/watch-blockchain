@@ -2,6 +2,7 @@
 
 const { Contract } = require('fabric-contract-api');
 const allManufacturersKey = 'all-manufacturers';
+const allRetailersKey = 'all-retailers';
 const earnPointsTransactionsKey = 'earn-points-transactions';
 const usePointsTransactionsKey = 'use-points-transactions';
 const allWatchesTransactionKey = 'all-watches-transactions';
@@ -15,6 +16,7 @@ class AntiCounterfeiting extends Contract {
 
         await ctx.stub.putState('instantiate', Buffer.from('INIT-LEDGER'));
         await ctx.stub.putState(allManufacturersKey, Buffer.from(JSON.stringify([])));
+        await ctx.stub.putState(allRetailersKey, Buffer.from(JSON.stringify([])));
         await ctx.stub.putState(earnPointsTransactionsKey, Buffer.from(JSON.stringify([])));
         await ctx.stub.putState(usePointsTransactionsKey, Buffer.from(JSON.stringify([])));
         await ctx.stub.putState(allWatchesTransactionKey, Buffer.from(JSON.stringify([])));
@@ -49,6 +51,23 @@ class AntiCounterfeiting extends Contract {
         await ctx.stub.putState(allManufacturersKey, Buffer.from(JSON.stringify(allManufacturers)));
 
         return JSON.stringify(manufacturer);
+    }
+
+    // Add a retailer on the ledger, and add it to the all-manufacturers list
+    async CreateRetailer(ctx, retailer) {
+        retailer = JSON.parse(retailer);
+          //test
+          let retailerInformation = [];
+          retailerInformation.push(retailer);
+
+        await ctx.stub.putState(retailer.name, Buffer.from(JSON.stringify(retailerInformation)));
+
+        let allRetailers = await ctx.stub.getState(allRetailersKey);
+        allRetailers = JSON.parse(allRetailers);
+        allRetailers.push(retailer);
+        await ctx.stub.putState(allRetailersKey, Buffer.from(JSON.stringify(allRetailers)));
+
+        return JSON.stringify(retailer);
     }
 
     // Add a manufacturer on the ledger, and add it to the all-manufacturers list
@@ -340,18 +359,22 @@ class AntiCounterfeiting extends Contract {
         let transactions = await ctx.stub.getState(allManufacturersKey);
         transactions = JSON.parse(transactions);
         let userTransactions = [];
-
         for (let transaction of transactions) {
             userTransactions.push(transaction);
         }
         let countManufacturers = userTransactions.length;
-
-        // eslint-disable-next-line no-constant-condition
-        // countManufacturers = keyManu.length;
-        // console.log('end of data');
-        // console.info(countManufacturers);
         return JSON.stringify(countManufacturers);
+    }
 
+    async CountAllRetailers(ctx) {
+        let transactions = await ctx.stub.getState(allRetailersKey);
+        transactions = JSON.parse(transactions);
+        let userTransactions = [];
+        for (let transaction of transactions) {
+            userTransactions.push(transaction);
+        }
+        let countRetailers = userTransactions.length;
+        return JSON.stringify(countRetailers);
     }
 
 
