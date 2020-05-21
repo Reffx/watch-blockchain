@@ -138,118 +138,118 @@ module.exports = {
 
     },
 
-        /*
-  * Create Retailer participant and import card for identity
-  * @param {String} email Retailer Id as identifier on network
-  * @param {String} name Retailer name
-  */
- registerRetailer: async function (RetailerName, password, email, phoneNumber, address, zipCode, place) {
+    /*
+* Create Retailer participant and import card for identity
+* @param {String} email Retailer Id as identifier on network
+* @param {String} name Retailer name
+*/
+    registerRetailer: async function (RetailerName, password, email, phoneNumber, address, zipCode, place) {
 
-    // Create a new file system based wallet for managing identities.
-    const walletPath = path.join(process.cwd(), '/wallet');
-    const wallet = new FileSystemWallet(walletPath);
-    console.log(`Wallet path: ${walletPath}`);
+        // Create a new file system based wallet for managing identities.
+        const walletPath = path.join(process.cwd(), '/wallet');
+        const wallet = new FileSystemWallet(walletPath);
+        console.log(`Wallet path: ${walletPath}`);
 
-    try {
-        let response = {};
+        try {
+            let response = {};
 
-        // Check to see if we've already enrolled the user.
-        const userExists = await wallet.exists(RetailerName);
-        if (userExists) {
-            let err = `An identity for the user ${RetailerName} already exists in the wallet`;
+            // Check to see if we've already enrolled the user.
+            const userExists = await wallet.exists(RetailerName);
+            if (userExists) {
+                let err = `An identity for the user ${RetailerName} already exists in the wallet`;
+                console.log(err);
+                response.error = err;
+                return response;
+            }
+
+            // Check to see if we've already enrolled the admin user.
+            const adminExists = await wallet.exists(appAdmin);
+            if (!adminExists) {
+                let err = 'An identity for the admin user-admin does not exist in the wallet. Run the enrollAdmin.js application before retrying';
+                console.log(err);
+                response.error = err;
+                return response;
+            }
+
+            // Create a new gateway for connecting to our peer node.
+            const gateway = new Gateway();
+            await gateway.connect(ccp, { wallet, identity: appAdmin, discovery: gatewayDiscovery });
+
+            // Get the CA client object from the gateway for interacting with the CA.
+            const ca = gateway.getClient().getCertificateAuthority();
+            const adminIdentity = gateway.getCurrentIdentity();
+
+            // Register the user, enroll the user, and import the new identity into the wallet.
+            const secret = await ca.register({ affiliation: 'org1.department1', enrollmentID: RetailerName, role: 'client' }, adminIdentity);
+            const enrollment = await ca.enroll({ enrollmentID: RetailerName, enrollmentSecret: secret });
+            const userIdentity = X509WalletMixin.createIdentity(orgMSPID, enrollment.certificate, enrollment.key.toBytes());
+            wallet.import(RetailerName, userIdentity);
+            console.log('Successfully registered and enrolled admin user ' + RetailerName + ' and imported it into the wallet');
+
+            // Disconnect from the gateway.
+            await gateway.disconnect();
+            console.log('admin user admin disconnected');
+
+        } catch (err) {
+            //print and return error
             console.log(err);
-            response.error = err;
-            return response;
+            let error = {};
+            error.error = err.message;
+            return error;
         }
 
-        // Check to see if we've already enrolled the admin user.
-        const adminExists = await wallet.exists(appAdmin);
-        if (!adminExists) {
-            let err = 'An identity for the admin user-admin does not exist in the wallet. Run the enrollAdmin.js application before retrying';
+        await sleep(2000);
+
+        try {
+            // Create a new gateway for connecting to our peer node.
+            const gateway2 = new Gateway();
+            await gateway2.connect(ccp, { wallet, identity: RetailerName, discovery: gatewayDiscovery });
+
+            // Get the network (channel) our contract is deployed to.
+            const network = await gateway2.getNetwork('mychannel');
+
+            // Get the contract from the network.
+            const contract = network.getContract('anticounterfeiting');
+
+            let countR = await contract.evaluateTransaction('CountAllRetailers');
+            countR = JSON.parse(countR.toString());
+            countR = "R" + (countR + 1);
+
+            let retailer = {};
+            retailer.id = countR;
+            retailer.name = RetailerName;
+            retailer.password = password;
+            retailer.email = email;
+            retailer.phoneNumber = phoneNumber;
+            retailer.address = address;
+            retailer.zipCode = zipCode;
+            retailer.place = place;
+
+            // Submit the specified transaction.
+            console.log('\nSubmit Create Retailer transaction.');
+            const createRetailerResponse = await contract.submitTransaction('CreateRetailer', JSON.stringify(retailer));
+            console.log('createRetailerResponse: ');
+            console.log(JSON.parse(createRetailerResponse.toString()));
+
+            console.log('\nGet retailer state ');
+            const retailerResponse = await contract.evaluateTransaction('GetState', RetailerName);
+            console.log('retailerResponse.parse_response: ');
+            console.log(JSON.parse(retailerResponse.toString()));
+
+            // Disconnect from the gateway.
+            await gateway2.disconnect();
+
+            return true;
+        }
+        catch (err) {
+            //print and return error
             console.log(err);
-            response.error = err;
-            return response;
+            let error = {};
+            error.error = err.message;
+            return error;
         }
 
-        // Create a new gateway for connecting to our peer node.
-        const gateway = new Gateway();
-        await gateway.connect(ccp, { wallet, identity: appAdmin, discovery: gatewayDiscovery });
-
-        // Get the CA client object from the gateway for interacting with the CA.
-        const ca = gateway.getClient().getCertificateAuthority();
-        const adminIdentity = gateway.getCurrentIdentity();
-
-        // Register the user, enroll the user, and import the new identity into the wallet.
-        const secret = await ca.register({ affiliation: 'org1.department1', enrollmentID: RetailerName, role: 'client' }, adminIdentity);
-        const enrollment = await ca.enroll({ enrollmentID: RetailerName, enrollmentSecret: secret });
-        const userIdentity = X509WalletMixin.createIdentity(orgMSPID, enrollment.certificate, enrollment.key.toBytes());
-        wallet.import(RetailerName, userIdentity);
-        console.log('Successfully registered and enrolled admin user ' + RetailerName + ' and imported it into the wallet');
-                    
-        // Disconnect from the gateway.
-        await gateway.disconnect();
-        console.log('admin user admin disconnected');
-
-    } catch (err) {
-        //print and return error
-        console.log(err);
-        let error = {};
-        error.error = err.message;
-        return error;
-    }
-
-    await sleep(2000);
-
-    try {
-        // Create a new gateway for connecting to our peer node.
-        const gateway2 = new Gateway();
-        await gateway2.connect(ccp, { wallet, identity: RetailerName, discovery: gatewayDiscovery });
-
-        // Get the network (channel) our contract is deployed to.
-        const network = await gateway2.getNetwork('mychannel');
-
-        // Get the contract from the network.
-        const contract = network.getContract('anticounterfeiting');
-
-        let countR = await contract.evaluateTransaction('CountAllRetailers');
-        countR = JSON.parse(countR.toString());
-        countR = "R" + (countR+1);
-
-        let retailer = {};
-        retailer.id = countR;
-        retailer.name = RetailerName;
-        retailer.password = password;
-        retailer.email = email;
-        retailer.phoneNumber = phoneNumber;
-        retailer.address = address;
-        retailer.zipCode = zipCode;
-        retailer.place = place;
-
-        // Submit the specified transaction.
-        console.log('\nSubmit Create Retailer transaction.');
-        const createRetailerResponse = await contract.submitTransaction('CreateRetailer', JSON.stringify(retailer));
-        console.log('createRetailerResponse: ');
-        console.log(JSON.parse(createRetailerResponse.toString()));
-
-        console.log('\nGet retailer state ');
-        const retailerResponse = await contract.evaluateTransaction('GetState', RetailerName);
-        console.log('retailerResponse.parse_response: ');
-        console.log(JSON.parse(retailerResponse.toString()));
-
-        // Disconnect from the gateway.
-        await gateway2.disconnect();
-
-        return true;
-    }
-    catch (err) {
-        //print and return error
-        console.log(err);
-        let error = {};
-        error.error = err.message;
-        return error;
-    }
-
-},
+    },
 
     /*
   * Create Manufacturer participant and import card for identity
@@ -300,7 +300,7 @@ module.exports = {
             const userIdentity = X509WalletMixin.createIdentity(orgMSPID, enrollment.certificate, enrollment.key.toBytes());
             wallet.import(manufacturerName, userIdentity);
             console.log('Successfully registered and enrolled admin user ' + manufacturerName + ' and imported it into the wallet');
-                        
+
             // Disconnect from the gateway.
             await gateway.disconnect();
             console.log('admin user admin disconnected');
@@ -326,12 +326,12 @@ module.exports = {
             // Get the contract from the network.
             const contract = network.getContract('anticounterfeiting');
 
-         //   let countM = await contract.evaluateTransaction('CountAllManufacturers');
-         //   countM = JSON.parse(countM.toString());
-         //   countM = "M" + (countM+1);
+            //   let countM = await contract.evaluateTransaction('CountAllManufacturers');
+            //   countM = JSON.parse(countM.toString());
+            //   countM = "M" + (countM+1);
 
             let manufacturer = {};
-        //    manufacturer.id = countM;
+            //    manufacturer.id = countM;
             manufacturer.name = manufacturerName;
             manufacturer.password = password;
             manufacturer.email = email;
@@ -516,24 +516,24 @@ module.exports = {
 
             let checkExistence = await contract.evaluateTransaction('CheckWatchExistence', cardId, watchId);
             checkExistence = JSON.parse(checkExistence.toString());
-            if (checkExistence === 0){
-            let newWatch = {};
-            newWatch.owner = cardId;
-            newWatch.manufacturer = cardId;
-            newWatch.watchId = watchId;
-            newWatch.model = model;
-            newWatch.color = color;
-            // Submit the specified transaction.
-            // createWatch transaction 
-            result = await contract.submitTransaction('CreateWatch', JSON.stringify(newWatch));
-            console.log(JSON.parse(result.toString()));
-            console.log('Transaction has been submitted');
+            if (checkExistence === 0) {
+                let newWatch = {};
+                newWatch.owner = cardId;
+                newWatch.manufacturer = cardId;
+                newWatch.watchId = watchId;
+                newWatch.model = model;
+                newWatch.color = color;
+                // Submit the specified transaction.
+                // createWatch transaction 
+                result = await contract.submitTransaction('CreateWatch', JSON.stringify(newWatch));
+                console.log(JSON.parse(result.toString()));
+                console.log('Transaction has been submitted');
             } else {
-            let err = 'A watch with this ID from that manufacturer exists already!';
+                let err = 'A watch with this ID from that manufacturer exists already!';
                 console.log(err);
                 response.error = err;
                 return response;
-            }  
+            }
             // Disconnect from the gateway.
             await gateway.disconnect();
 
@@ -585,58 +585,138 @@ module.exports = {
         }
     },
 
-    // query all cars transaction
-    queryMyWatches: async function (userId) {
-
-        // Create a new file system based wallet for managing identities.
-        const walletPath = path.join(process.cwd(), '/wallet');
-        const wallet = new FileSystemWallet(walletPath);
-        console.log(`Wallet path: ${walletPath}`);
-    
-    try {
-        // Create a new gateway for connecting to our peer node.
-        const gateway2 = new Gateway();
-        await gateway2.connect(ccp, { wallet, identity: userId, discovery: gatewayDiscovery });
-    
-        // Get the network (channel) our contract is deployed to.
-        const network = await gateway2.getNetwork('mychannel');
-    
-        // Get the contract from the network.
-        const contract = network.getContract('anticounterfeiting');
-
-        console.log(`\nGet watches transactions state for ${userId}`);
-        let result = await contract.evaluateTransaction('QueryMyWatches', userId);
-        result = JSON.parse(result.toString());
-        console.log(result);
-
-        // Disconnect from the gateway.
-        await gateway2.disconnect();
-
-        return result;
-
-    } catch (error) {
-        console.error(`Failed to evaluate transaction: ${error}`);
-        response.error = error.message;
-        return response;
-        }
-    },
-
-    // query all cars transaction
-    queryAllWatches: async function (cardId, userType, userId) {
+    // change watch owner transaction
+    verifyRetrailer: async function (manufacturerName, retrailerName) {
+        let response = {};
+        try {
 
             // Create a new file system based wallet for managing identities.
             const walletPath = path.join(process.cwd(), '/wallet');
             const wallet = new FileSystemWallet(walletPath);
             console.log(`Wallet path: ${walletPath}`);
-        
+
+            // Create a new gateway for connecting to our peer node.
+            const gateway = new Gateway();
+            await gateway.connect(ccp, { wallet, identity: manufacturerName, discovery: gatewayDiscovery });
+
+            // Get the network (channel) our contract is deployed to.
+            const network = await gateway.getNetwork('mychannel');
+
+            // Get the contract from the network.
+            const contract = network.getContract('anticounterfeiting');
+
+            // Submit the specified transaction.
+            // changeCarOwner transaction - requires 2 args , ex: ('changeCarOwner', 'CAR10', 'Dave')
+            await contract.submitTransaction('AddVerifiedRetailer', manufacturerName, retrailerName);
+            console.log('Transaction has been submitted');
+
+            // Disconnect from the gateway.
+            await gateway.disconnect();
+
+            response.msg = 'AddVerifiedRetailer Transaction has been submitted';
+            return response;
+
+        } catch (error) {
+            console.error(`Failed to submit transaction: ${error}`);
+            response.error = error.message;
+            return response;
+        }
+    },
+
+    // query all cars transaction
+    getVerifiedRetrailers: async function (manufacturerName) {
+        let response = {};
+
+        // Create a new file system based wallet for managing identities.
+        const walletPath = path.join(process.cwd(), '/wallet');
+        const wallet = new FileSystemWallet(walletPath);
+        console.log(`Wallet path: ${walletPath}`);
+
+        try {
+            // Create a new gateway for connecting to our peer node.
+            const gateway2 = new Gateway();
+            await gateway2.connect(ccp, { wallet, identity: manufacturerName, discovery: gatewayDiscovery });
+
+            // Get the network (channel) our contract is deployed to.
+            const network = await gateway2.getNetwork('mychannel');
+
+            // Get the contract from the network.
+            const contract = network.getContract('anticounterfeiting');
+
+            console.log(`\nGet watches transactions state for ${manufacturerName}`);
+            let result = await contract.evaluateTransaction('GetVerifyRetailers', manufacturerName);
+            if (result.length != 0) {
+                result = JSON.parse(result.toString());
+                console.log(result);
+            } else { 
+                result = []; 
+            }
+            // Disconnect from the gateway.
+            await gateway2.disconnect();
+
+            return result;
+
+        } catch (error) {
+            console.error(`Failed to evaluate transaction: ${error}`);
+            response.error = error.message;
+            return response;
+        }
+    },
+
+    // query all cars transaction
+    queryMyWatches: async function (userId) {
+        let response = {};
+
+        // Create a new file system based wallet for managing identities.
+        const walletPath = path.join(process.cwd(), '/wallet');
+        const wallet = new FileSystemWallet(walletPath);
+        console.log(`Wallet path: ${walletPath}`);
+
+        try {
+            // Create a new gateway for connecting to our peer node.
+            const gateway2 = new Gateway();
+            await gateway2.connect(ccp, { wallet, identity: userId, discovery: gatewayDiscovery });
+
+            // Get the network (channel) our contract is deployed to.
+            const network = await gateway2.getNetwork('mychannel');
+
+            // Get the contract from the network.
+            const contract = network.getContract('anticounterfeiting');
+
+            console.log(`\nGet watches transactions state for ${userId}`);
+            let result = await contract.evaluateTransaction('QueryMyWatches', userId);
+            result = JSON.parse(result.toString());
+            console.log(result);
+
+            // Disconnect from the gateway.
+            await gateway2.disconnect();
+
+            return result;
+
+        } catch (error) {
+            console.error(`Failed to evaluate transaction: ${error}`);
+            response.error = error.message;
+            return response;
+        }
+    },
+
+    // query all cars transaction
+    queryAllWatches: async function (cardId, userType, userId) {
+        let response = {};
+
+        // Create a new file system based wallet for managing identities.
+        const walletPath = path.join(process.cwd(), '/wallet');
+        const wallet = new FileSystemWallet(walletPath);
+        console.log(`Wallet path: ${walletPath}`);
+
         try {
             // Create a new gateway for connecting to our peer node.
             const gateway2 = new Gateway();
             await gateway2.connect(ccp, { wallet, identity: cardId, discovery: gatewayDiscovery });
-        
+
             // Get the network (channel) our contract is deployed to.
             const network = await gateway2.getNetwork('mychannel');
-        
+
             // Get the contract from the network.
             const contract = network.getContract('anticounterfeiting');
 
@@ -658,41 +738,41 @@ module.exports = {
     },
 
     // query all cars transaction
-    countAllManufacturers: async function(cardId) {
+    countAllManufacturers: async function (cardId) {
 
-    let response = {};
-    try {
-        console.log('countAllManufacturers');
+        let response = {};
+        try {
+            console.log('countAllManufacturers');
 
-        // Create a new file system based wallet for managing identities.
-        const walletPath = path.join(process.cwd(), '/wallet');
-        const wallet = new FileSystemWallet(walletPath);
-        console.log(`Wallet path: ${walletPath}`);
+            // Create a new file system based wallet for managing identities.
+            const walletPath = path.join(process.cwd(), '/wallet');
+            const wallet = new FileSystemWallet(walletPath);
+            console.log(`Wallet path: ${walletPath}`);
 
-        // Create a new gateway for connecting to our peer node.
-        const gateway = new Gateway();
-        await gateway.connect(ccp, { wallet, identity: cardId, discovery: gatewayDiscovery });
+            // Create a new gateway for connecting to our peer node.
+            const gateway = new Gateway();
+            await gateway.connect(ccp, { wallet, identity: cardId, discovery: gatewayDiscovery });
 
-        // Get the network (channel) our contract is deployed to.
-        const network = await gateway.getNetwork('mychannel');
+            // Get the network (channel) our contract is deployed to.
+            const network = await gateway.getNetwork('mychannel');
 
-        // Get the contract from the network.
-        const contract = network.getContract('anticounterfeiting');
+            // Get the contract from the network.
+            const contract = network.getContract('anticounterfeiting');
 
-        // Evaluate the specified transaction.
-        // countAllManufacturers transaction - requires no arguments, ex: ('countAllManufacturers')
-        const result = await contract.evaluateTransaction('CountAllManufacturers');
-        //console.log('check6');
-        //console.log(`Transaction has been evaluated, result is: ${result.toString()}`);
+            // Evaluate the specified transaction.
+            // countAllManufacturers transaction - requires no arguments, ex: ('countAllManufacturers')
+            const result = await contract.evaluateTransaction('CountAllManufacturers');
+            //console.log('check6');
+            //console.log(`Transaction has been evaluated, result is: ${result.toString()}`);
 
-        return result;
+            return result;
 
-    } catch (error) {
-        console.error(`Failed to evaluate transaction: ${error}`);
-        response.error = error.message;
-        return response;
+        } catch (error) {
+            console.error(`Failed to evaluate transaction: ${error}`);
+            response.error = error.message;
+            return response;
+        }
     }
-}
 
 
 };
