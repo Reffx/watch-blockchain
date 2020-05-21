@@ -276,7 +276,7 @@ app.post('/api/manufacturerData', function (req, res) {
         })
         .then(() => {
             //get EarnPoints transactions from the network
-            network.queryAllWatches(manufacturerName, 'manufacturer', manufacturerName)
+            network.queryAllWatches(manufacturerName)
                 .then((queryAllWatchesResults) => {
                     //return error if error in response
                     if (typeof queryAllWatchesResults === 'object' && 'error' in queryAllWatchesResults && queryAllWatchesResults.error !== null) {
@@ -337,6 +337,84 @@ app.post('/api/manufacturerData', function (req, res) {
                 });
         });
 });
+
+//post call to retrieve manufacturer data and transactions data from the network
+app.post('/api/retailerData', function (req, res) {
+
+    //declare variables to retrieve from request
+    let retailerName = req.body.retailerName;
+    let password = req.body.password;
+
+    //print variables
+    console.log('retailerData using param - ' + ' retailerName: ' + retailerName + ' password: ' + password);
+
+    //declare return object
+    let returnData = {};
+
+    //get manufacturer data from network
+    network.retailerData(retailerName, password)
+        .then((retailer) => {
+            //return error if error in response
+            if (typeof retailer === 'object' && 'error' in retailer && retailer.error !== null) {
+                res.json({
+                    error: manufacturer.error
+                });
+            } else {
+                //else add manufacturer data to return object
+                returnData.name = retailer.name;
+                returnData.email = retailer.email;
+            }
+
+        })
+        .then(() => {
+            //get EarnPoints transactions from the network
+            network.queryAllWatches(retailerName)
+                .then((queryAllWatchesResults) => {
+                    //return error if error in response
+                    if (typeof queryAllWatchesResults === 'object' && 'error' in queryAllWatchesResults && queryAllWatchesResults.error !== null) {
+                        res.json({
+                            error: queryAllWatchesResults.error
+                        });
+                    } else {
+                        //else add transaction data to return object
+                        returnData.queryAllWatchesResults = queryAllWatchesResults;
+                    }
+                })
+                .then(() => {
+                    //get EarnPoints transactions from the network
+                    network.queryMyWatches(retailerName)
+                        .then((queryMyWatchesResults) => {
+                            //return error if error in response
+                            if (typeof queryMyWatchesResults === 'object' && 'error' in queryMyWatchesResults && queryMyWatchesResults.error !== null) {
+                                res.json({
+                                    error: queryMyWatchesResults.error
+                                });
+                            } else {
+                                //else add transaction data to return object
+                                returnData.queryMyWatchesResults = queryMyWatchesResults;
+                            }
+                        })
+                        .then(() => {
+                            //get EarnPoints transactions from the network
+                            network.countAllRetailers(retailerName)
+                                .then((countRetailersResults) => {
+                                    //return error if error in response
+                                    if (typeof countRetailersResults === 'object' && 'error' in countRetailersResults && countRetailersResults.error !== null) {
+                                        res.json({
+                                            error: countRetailersResults.error
+                                        });
+                                    } else {
+                                        //else add transaction data to return object
+                                        returnData.countRetailersResults = countRetailersResults;
+                                        //return returnData
+                                        res.json(returnData);
+                                    }
+                                });
+                        });
+                });
+        });
+});
+
 
 app.post('/api/createWatch', (req, res) => {
     console.log(req.body);
