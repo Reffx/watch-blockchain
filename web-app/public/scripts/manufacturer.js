@@ -80,9 +80,10 @@ function updateManufacturer() {
                     let str = '';
                     let transactionData = data.getVerifiedRetailersResults;
                     console.log(data.getVerifiedRetailersResults);
-
+                    if (transactionData.length != 0){
                     for (let i = 0; i < transactionData.retailerList.length; i++) {
-                        str = str + '<p>RetailerName: ' + transactionData.retailerList.retailerName[i] + '<br /></p><br>';
+                        str = str + '<p>Your verified Retailers: ' + transactionData.retailerList[i] + '<br /></p><br>';
+                     }
                     }
                     return str;
                 });
