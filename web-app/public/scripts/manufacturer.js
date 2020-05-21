@@ -76,13 +76,13 @@ function updateManufacturer() {
                 });
 
                 //update use points transaction
-                $('.verifiedRetrailersBox').html(function () {
+                $('.verifiedRetailersBox').html(function () {
                     let str = '';
-                    let transactionData = data.getVerifiedRetrailersResults;
-                    console.log(data.getVerifiedRetrailersResults);
+                    let transactionData = data.getVerifiedRetailersResults;
+                    console.log(data.getVerifiedRetailersResults);
 
-                    for (let i = 0; i < transactionData.length; i++) {
-                        str = str + '<p>RetrailerName: ' + transactionData[i].retrailerName + '<br /></p><br>';
+                    for (let i = 0; i < transactionData.retailerList.length; i++) {
+                        str = str + '<p>RetailerName: ' + transactionData.retailerList.retailerName[i] + '<br /></p><br>';
                     }
                     return str;
                 });
@@ -219,7 +219,7 @@ $('.verify-retailer').click(function () {
     let formManufacturerName = $('.manufacturerName input').val();
 
     //create json data
-    let inputData = '{' + '"retrailerName" : "' + formVerifyRetailer + '", ' + '"manufacturerName" : "' + formManufacturerName + '"}';
+    let inputData = '{' + '"retailerName" : "' + formVerifyRetailer + '", ' + '"manufacturerName" : "' + formManufacturerName + '"}';
     console.log(inputData);
 
     //make ajax call

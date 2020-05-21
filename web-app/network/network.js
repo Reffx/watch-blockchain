@@ -586,7 +586,7 @@ module.exports = {
     },
 
     // change watch owner transaction
-    verifyRetrailer: async function (manufacturerName, retrailerName) {
+    verifyRetailer: async function (manufacturerName, retailerName) {
         let response = {};
         try {
 
@@ -607,7 +607,7 @@ module.exports = {
 
             // Submit the specified transaction.
             // changeCarOwner transaction - requires 2 args , ex: ('changeCarOwner', 'CAR10', 'Dave')
-            await contract.submitTransaction('AddVerifiedRetailer', manufacturerName, retrailerName);
+            await contract.submitTransaction('AddVerifiedRetailer', manufacturerName, retailerName);
             console.log('Transaction has been submitted');
 
             // Disconnect from the gateway.
@@ -624,7 +624,7 @@ module.exports = {
     },
 
     // query all cars transaction
-    getVerifiedRetrailers: async function (manufacturerName) {
+    getVerifiedRetailers: async function (manufacturerName) {
         let response = {};
 
         // Create a new file system based wallet for managing identities.

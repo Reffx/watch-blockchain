@@ -304,16 +304,16 @@ app.post('/api/manufacturerData', function (req, res) {
                         })
                         .then(() => {
                             //get EarnPoints transactions from the network
-                            network.getVerifiedRetrailers(manufacturerName)
-                                .then((getVerifiedRetrailersResults) => {
+                            network.getVerifiedRetailers(manufacturerName)
+                                .then((getVerifiedRetailersResults) => {
                                     //return error if error in response
-                                    if (typeof getVerifiedRetrailersResults === 'object' && 'error' in getVerifiedRetrailersResults && getVerifiedRetrailersResults.error !== null) {
+                                    if (typeof getVerifiedRetailersResults === 'object' && 'error' in getVerifiedRetailersResults && getVerifiedRetailersResults.error !== null) {
                                         res.json({
-                                            error: getVerifiedRetrailersResults.error
+                                            error: getVerifiedRetailersResults.error
                                         });
                                     } else {
                                         //else add transaction data to return object
-                                        returnData.getVerifiedRetrailersResults = getVerifiedRetrailersResults;
+                                        returnData.getVerifiedRetailersResults = getVerifiedRetailersResults;
                                     }
                                 })
                                 .then(() => {
@@ -354,7 +354,7 @@ app.post('/api/changeWatchOwner', (req, res) => {
 });
 
 app.post('/api/verifyRetailer', (req, res) => {
-    network.verifyRetrailer(req.body.manufacturerName, req.body.retrailerName)
+    network.verifyRetailer(req.body.manufacturerName, req.body.retailerName)
         .then((response) => {
             res.send(response);
         });

@@ -116,19 +116,19 @@ class AntiCounterfeiting extends Contract {
         } else {
             let newTransaction = {};
             newTransaction.timestamp = new Date((ctx.stub.txTimestamp.seconds.low * 1000)).toGMTString();
-            newTransaction.retrailerList = [];
-            newTransaction.retrailerList.push(retailerName);
+            newTransaction.retailerList = [];
+            newTransaction.retailerList.push(retailerName);
             verifiedRetailersTransactions.push(newTransaction);
             await ctx.stub.putState(manufacturerName + "-verifiedRetailers", Buffer.from(JSON.stringify(verifiedRetailersTransactions)));
             return JSON.stringify(verifiedRetailersTransactions);
         }
 
-        let currentRetrailerList = [...verifiedRetailersTransactions[verifiedRetailersTransactions.length - 1].retrailerList];
-        currentRetrailerList.push(retailerName);
+        let currentRetailerList = [...verifiedRetailersTransactions[verifiedRetailersTransactions.length - 1].retailerList];
+        currentRetailerList.push(retailerName);
 
         let newTransaction = {};
         newTransaction.timestamp = new Date((ctx.stub.txTimestamp.seconds.low * 1000)).toGMTString();
-        newTransaction.retrailerList = currentRetrailerList;
+        newTransaction.retailerList = currentRetailerList;
 
         transactions.push(newTransaction);
         await ctx.stub.putState(manufacturerName + "-verifiedRetailers", Buffer.from(JSON.stringify(transactions))); //push 
