@@ -69,7 +69,7 @@ class AntiCounterfeiting extends Contract {
         return JSON.stringify(retailer);
     }
 
-    // Add a manufacturer on the ledger, and add it to the all-manufacturers list
+    // Get latest information about Manufacturer
     async GetLatestManufacturerInfo(ctx, manufacturerName) {
         let transactions = await ctx.stub.getState(manufacturerName);
         transactions = JSON.parse(transactions);
@@ -80,6 +80,21 @@ class AntiCounterfeiting extends Contract {
         }
 
         manuInformation = manuInformation[manuInformation.length - 1];
+
+        return JSON.stringify(transactions);
+    }
+
+    // Get latest information about retailer
+    async GetLatestRetailerInfo(ctx, retailerName) {
+        let transactions = await ctx.stub.getState(retailerName);
+        transactions = JSON.parse(transactions);
+
+        let retaInformation = [];
+        for (let c of transactions) {
+            retaInformation.push(c);
+        }
+
+        retaInformation = retaInformation[retaInformation.length - 1];
 
         return JSON.stringify(transactions);
     }
@@ -311,7 +326,7 @@ class AntiCounterfeiting extends Contract {
         return JSON.stringify(allRecentWatchesTransactions);
     }
 
-    async QueryAllWatches(ctx, userType, userId) {
+    async QueryAllWatches(ctx) {
         let transactions = await ctx.stub.getState(allWatchesTransactionKey);
         transactions = JSON.parse(transactions);
         let userTransactions = [];
