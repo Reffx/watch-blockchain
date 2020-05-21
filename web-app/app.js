@@ -304,19 +304,34 @@ app.post('/api/manufacturerData', function (req, res) {
                         })
                         .then(() => {
                             //get EarnPoints transactions from the network
-                            network.countAllManufacturers(manufacturerName)
-                                .then((countManufacturersResults) => {
+                            network.getVerifiedRetrailers(manufacturerName)
+                                .then((getVerifiedRetrailersResults) => {
                                     //return error if error in response
-                                    if (typeof countManufacturersResults === 'object' && 'error' in countManufacturersResults && countManufacturersResults.error !== null) {
+                                    if (typeof getVerifiedRetrailersResults === 'object' && 'error' in getVerifiedRetrailersResults && getVerifiedRetrailersResults.error !== null) {
                                         res.json({
-                                            error: countManufacturersResults.error
+                                            error: getVerifiedRetrailersResults.error
                                         });
                                     } else {
                                         //else add transaction data to return object
-                                        returnData.countManufacturersResults = countManufacturersResults;
-                                        //return returnData
-                                        res.json(returnData);
+                                        returnData.getVerifiedRetrailersResults = getVerifiedRetrailersResults;
                                     }
+                                })
+                                .then(() => {
+                                    //get EarnPoints transactions from the network
+                                    network.countAllManufacturers(manufacturerName)
+                                        .then((countManufacturersResults) => {
+                                            //return error if error in response
+                                            if (typeof countManufacturersResults === 'object' && 'error' in countManufacturersResults && countManufacturersResults.error !== null) {
+                                                res.json({
+                                                    error: countManufacturersResults.error
+                                                });
+                                            } else {
+                                                //else add transaction data to return object
+                                                returnData.countManufacturersResults = countManufacturersResults;
+                                                //return returnData
+                                                res.json(returnData);
+                                            }
+                                        });
                                 });
                         });
                 });
@@ -333,6 +348,13 @@ app.post('/api/createWatch', (req, res) => {
 
 app.post('/api/changeWatchOwner', (req, res) => {
     network.changeWatchOwner(req.body.watchId, req.body.oldOwner, req.body.newOwner)
+        .then((response) => {
+            res.send(response);
+        });
+});
+
+app.post('/api/verifyRetailer', (req, res) => {
+    network.verifyRetrailer(req.body.manufacturerName, req.body.retrailerName)
         .then((response) => {
             res.send(response);
         });
