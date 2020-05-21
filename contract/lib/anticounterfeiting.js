@@ -123,7 +123,7 @@ class AntiCounterfeiting extends Contract {
             return JSON.stringify(verifiedRetailersTransactions);
         }
 
-        let currentRetrailerList = [...verifiedRetailersTransactions[verifiedRetailersTransactions.length - 1].retailerList];
+        let currentRetrailerList = [...verifiedRetailersTransactions[verifiedRetailersTransactions.length - 1].retrailerList];
         currentRetrailerList.push(retailerName);
 
         let newTransaction = {};
