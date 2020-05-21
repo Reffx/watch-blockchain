@@ -80,14 +80,14 @@ function updateManufacturer() {
                     let str = '';
                     let transactionData = data.getVerifiedRetailersResults;
                     console.log(data.getVerifiedRetailersResults);
-                    if (transactionData.length != 0){
-                    for (let i = 0; i < transactionData.retailerList.length; i++) {
-                        str = str + '<p>Your verified Retailers: ' + transactionData.retailerList[i] + '<br /></p><br>';
-                     }
+                    if (transactionData.length != 0) {
+                        for (let i = 0; i < transactionData.retailerList.length; i++) {
+                            str = str + '<p>Your verified Retailers: ' + transactionData.retailerList[i] + '<br /></p><br>';
+                        }
                     }
                     return str;
                 });
-                
+
 
                 //remove login section
                 document.getElementById('loginSection').style.display = 'none';
@@ -256,4 +256,51 @@ $('.verify-retailer').click(function () {
             console.log(jqXHR);
         }
     });
+});
+
+//check user input and call server
+$('.unverify-retailer').click(function () {
+
+    //get user input data
+    let formVerifyRetailer = $('.unverify-retailer-id input').val();
+    let formManufacturerName = $('.manufacturerName input').val();
+
+    //create json data
+    let inputData = '{' + '"retailerName" : "' + formVerifyRetailer + '", ' + '"manufacturerName" : "' + formManufacturerName + '"}';
+    console.log(inputData);
+
+    //make ajax call
+    $.ajax({
+        type: 'POST',
+        url: apiUrl + 'unverifyRetailer',
+        data: inputData,
+        dataType: 'json',
+        contentType: 'application/json',
+        beforeSend: function () {
+            //display loading
+            document.getElementById('loader').style.display = 'block';
+        },
+        success: function (data) {
+
+            document.getElementById('loader').style.display = 'none';
+            //check data for error
+            if (data.error) {
+                alert(data.error);
+                return;
+            } else {
+                //update member page and notify successful transaction
+                // createWatch();
+                alert('Transaction successful');
+                updateManufacturer();
+            }
+
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            alert('Error: Try again');
+            console.log(errorThrown);
+            console.log(textStatus);
+            console.log(jqXHR);
+        }
+    });
+
 });
