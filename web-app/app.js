@@ -360,6 +360,13 @@ app.post('/api/verifyRetailer', (req, res) => {
         });
 });
 
+app.post('/api/unverifyRetailer', (req, res) => {
+    network.unverifyRetailer(req.body.manufacturerName, req.body.retailerName)
+        .then((response) => {
+            res.send(response);
+        });
+});
+
 //declare port
 let port = process.env.PORT || 8000;
 if (process.env.VCAP_APPLICATION) {
