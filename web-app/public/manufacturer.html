@@ -6,7 +6,8 @@
   <title>Anti Counterfeiting Program</title>
   <base href="/">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css"
+    integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
   <link rel="stylesheet" href="stylesheets/style.css">
 </head>
 
@@ -14,9 +15,10 @@
 
   <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
     <a class="navbar-brand" href="/home">Anti Counterfeiting Program</a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault"
+      aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
 
     <div class="collapse navbar-collapse" id="navbarsExampleDefault">
       <ul class="navbar-nav mr-auto">
@@ -29,10 +31,12 @@
         </li>
 
         <li class="nav-item text-nowrap dropdown">
-          <a class="nav-link dropdown-toggle " href="#" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Sign-in</a>
+          <a class="nav-link dropdown-toggle " href="#" id="dropdown01" data-toggle="dropdown" aria-haspopup="true"
+            aria-expanded="false">Sign-in</a>
           <div class="dropdown-menu" aria-labelledby="dropdown01">
             <a class="dropdown-item" href="/member">Member</a>
             <a class="dropdown-item" href="/manufacturer">Manufacturer</a>
+            <a class="dropdown-item" href="/retailer">Retailer</a>
           </div>
         </li>
 
@@ -87,16 +91,24 @@
 
         <ul class="nav nav-tabs" id="myTab" role="tablist">
           <li class="nav-item tab-width">
-            <a class="nav-link active" id="dashboard-tab" data-toggle="tab" href="#dashboard" role="tab" aria-controls="earn" aria-selected="true">Dashboard</a>
+            <a class="nav-link active" id="dashboard-tab" data-toggle="tab" href="#dashboard" role="tab"
+              aria-controls="earn" aria-selected="true">Dashboard</a>
           </li>
           <li class="nav-item tab-width">
-            <a class="nav-link" id="createWatch-tab" data-toggle="tab" href="#createWatch" role="tab" aria-controls="createWatch2" aria-selected="false">Create Watch</a>
+            <a class="nav-link" id="createWatch-tab" data-toggle="tab" href="#createWatch" role="tab"
+              aria-controls="createWatch2" aria-selected="false">Create Watch</a>
           </li>
           <li class="nav-item tab-width">
-            <a class="nav-link" id="sellWatch-tab" data-toggle="tab" href="#sellWatch" role="tab" aria-controls="sellWatch2" aria-selected="false">Sell Watch</a>
+            <a class="nav-link" id="sellWatch-tab" data-toggle="tab" href="#sellWatch" role="tab"
+              aria-controls="sellWatch2" aria-selected="false">Sell Watch</a>
           </li>
           <li class="nav-item tab-width">
-            <a class="nav-link" id="transactions-tab" data-toggle="tab" href="#transactions" role="tab" aria-controls="transactions" aria-selected="false">Transactions</a>
+            <a class="nav-link" id="verifyRetailers-tab" data-toggle="tab" href="#verifyRetailers" role="tab"
+              aria-controls="verifyRetailers2" aria-selected="false">Verify Retailers</a>
+          </li>
+          <li class="nav-item tab-width">
+            <a class="nav-link" id="transactions-tab" data-toggle="tab" href="#transactions" role="tab"
+              aria-controls="transactions" aria-selected="false">Transactions</a>
           </li>
         </ul>
       </div>
@@ -115,12 +127,12 @@
                 <h2>Create watch!!!</h2>
                 <br>
                 <div class="watchid-id ">
-                  <p> Enter watchid-id 
+                  <p> Enter watchid-id
                     <input>
                   </p>
                 </div>
                 <div class="model-id ">
-                  <p> Enter model-id 
+                  <p> Enter model-id
                     <input>
                   </p>
                 </div>
@@ -141,7 +153,7 @@
                 <h2>Sell watch!!!</h2>
                 <br>
                 <div class="sell-watchid-id">
-                  <p> Enter watchid-id 
+                  <p> Enter watchid-id
                     <input>
                   </p>
                 </div>
@@ -155,27 +167,65 @@
             </div>
           </div>
 
+          <div class="tab-pane fade" id="verifyRetailers" role="tabpanel" aria-labelledby="verifyRetailers-tab">
+            <br>
+            <div class="row" style="justify-content: center;">
+                <div class="col-lg-6 text-center">
+                  <div class="jumbotron" style="display:block;">
+                    <h2>Verify Retailer!!!</h2>
+                    <br>
+                    <div class="verify-retailer-id">
+                      <p> Enter retailer name!
+                        <input>
+                      </p>
+                    </div>
+                    <button class="btn btn-primary verify-retailer">Verify!</button>
+                  </div>
+                </div>
+                <div class="col-lg-6 text-center">
+                  <div class="jumbotron" style="display:block;">
+                    <h2>Unverify Retailer!!!</h2>
+                    <br>
+                    <div class="verify-retailer-id">
+                      <p> Enter retailer name!
+                        <input>
+                      </p>
+                    </div>
+                    <button class="btn btn-primary verify-retailer">Unverify!</button>
+                  </div>
+                </div>
+            </div>
+            <div class="verifiedRetrailersBox"></div>
+
+          </div>
+
+
           <div class="tab-pane fade" id="transactions" role="tabpanel" aria-labelledby="transactions-tab">
             <br>
             <p>View transactions by transaction type </p>
             <br>
             <ul class="nav nav-tabs" id="transactionsTypeTab" role="tablist">
               <li class="nav-item ">
-                <a class="nav-link active" id="points-allocated-tab" data-toggle="tab" href="#points-allocated" role="tab" aria-controls="points-allocated" aria-selected="true">Points Allocated</a>
+                <a class="nav-link active" id="points-allocated-tab" data-toggle="tab" href="#points-allocated"
+                  role="tab" aria-controls="points-allocated" aria-selected="true">Points Allocated</a>
               </li>
               <li class="nav-item ">
-                <a class="nav-link" id="points-redeemed-tab" data-toggle="tab" href="#points-redeemed" role="tab" aria-controls="points-redeemed" aria-selected="false">Points Redeemed</a>
+                <a class="nav-link" id="points-redeemed-tab" data-toggle="tab" href="#points-redeemed" role="tab"
+                  aria-controls="points-redeemed" aria-selected="false">Points Redeemed</a>
               </li>
               <li class="nav-item ">
-                <a class="nav-link" id="myWatches-created-tab" data-toggle="tab" href="#myWatches" role="tab" aria-controls="myWatches" aria-selected="false">My Watches</a>
+                <a class="nav-link" id="myWatches-created-tab" data-toggle="tab" href="#myWatches" role="tab"
+                  aria-controls="myWatches" aria-selected="false">My Watches</a>
               </li>
-             <li class="nav-item ">
-                <a class="nav-link" id="watches-created-tab" data-toggle="tab" href="#watches-created" role="tab" aria-controls="watches-created" aria-selected="false">All Watches (debug)</a>
+              <li class="nav-item ">
+                <a class="nav-link" id="watches-created-tab" data-toggle="tab" href="#watches-created" role="tab"
+                  aria-controls="watches-created" aria-selected="false">All Watches (debug)</a>
               </li>
             </ul>
 
             <div class="tab-content" id="myTabContent">
-             <div class="tab-pane fade show active" id="points-allocated" role="tabpanel" aria-labelledby="points-allocated-tab">
+              <div class="tab-pane fade show active" id="points-allocated" role="tabpanel"
+                aria-labelledby="points-allocated-tab">
                 <br>
                 <h4>Points Allocated Transactions</h4>
                 <br>
@@ -199,13 +249,13 @@
                 <br><br>
               </div>
 
-            <div class="tab-pane fade " id="watches-created" role="tabpanel" aria-labelledby="watches-created-tab">
+              <div class="tab-pane fade " id="watches-created" role="tabpanel" aria-labelledby="watches-created-tab">
                 <br>
                 <h4>Created Watches Transactions</h4>
                 <br>
                 <div class="query-watches-transactions"> </div>
                 <br><br>
-            </div>
+              </div>
 
             </div>
           </div>
@@ -226,7 +276,8 @@
 </html>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js" integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ" crossorigin="anonymous"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"
+  integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"
+  integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous"></script>
 <script src="/scripts/manufacturer.js"></script>
-

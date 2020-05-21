@@ -6,7 +6,7 @@ let apiUrl = location.protocol + '//' + location.host + '/api/';
 function updateManufacturer() {
 
     //get user input data
-    let formManufacturerName= $('.manufacturerName input').val();
+    let formManufacturerName = $('.manufacturerName input').val();
     let formPassword = $('.password input').val();
 
     //create json data
@@ -20,11 +20,11 @@ function updateManufacturer() {
         data: inputData,
         dataType: 'json',
         contentType: 'application/json',
-        beforeSend: function() {
+        beforeSend: function () {
             //display loading
             document.getElementById('loader').style.display = 'block';
         },
-        success: function(data) {
+        success: function (data) {
 
             //remove loader
             document.getElementById('loader').style.display = 'none';
@@ -36,7 +36,7 @@ function updateManufacturer() {
             } else {
 
                 //update heading
-                $('.heading').html(function() {
+                $('.heading').html(function () {
                     let str = '<h2><b> ' + data.name + ' </b></h2>';
                     str = str + '<h2><b> ' + data.email + ' </b></h2>';
 
@@ -44,7 +44,7 @@ function updateManufacturer() {
                 });
 
                 //update dashboard
-                $('.dashboards').html(function() {
+                $('.dashboards').html(function () {
                     let str = '';
                     str = str + '<h5>Total points allocated to customers: ' + data.pointsGiven + ' </h5>';
                     str = str + '<h5>Total points redeemed by customers: ' + data.pointsCollected + ' </h5>';
@@ -52,7 +52,7 @@ function updateManufacturer() {
                 });
 
                 //update use points transaction
-                $('.query-myWatches-transactions').html(function() {
+                $('.query-myWatches-transactions').html(function () {
                     let str = '';
                     let transactionData = data.queryMyWatchesResults;
                     console.log(data.queryMyWatchesResults);
@@ -64,7 +64,7 @@ function updateManufacturer() {
                 });
 
                 //update use points transaction
-                $('.query-watches-transactions').html(function() {
+                $('.query-watches-transactions').html(function () {
                     let str = '';
                     let transactionData = data.queryAllWatchesResults;
                     console.log(data.queryAllWatchesResults);
@@ -75,6 +75,19 @@ function updateManufacturer() {
                     return str;
                 });
 
+                //update use points transaction
+                $('.verifiedRetrailersBox').html(function () {
+                    let str = '';
+                    let transactionData = data.getVerifiedRetrailersResults;
+                    console.log(data.getVerifiedRetrailersResults);
+
+                    for (let i = 0; i < transactionData.length; i++) {
+                        str = str + '<p>RetrailerName: ' + transactionData[i].retrailerName + '<br /></p><br>';
+                    }
+                    return str;
+                });
+                
+
                 //remove login section
                 document.getElementById('loginSection').style.display = 'none';
                 //display transaction section
@@ -82,7 +95,7 @@ function updateManufacturer() {
             }
 
         },
-        error: function(jqXHR, textStatus, errorThrown) {
+        error: function (jqXHR, textStatus, errorThrown) {
             //reload on error
             alert('Error: Try again');
             console.log(errorThrown);
@@ -95,12 +108,12 @@ function updateManufacturer() {
 };
 
 //check user input and call server
-$('.sign-in-manufacturer').click(function() {
+$('.sign-in-manufacturer').click(function () {
     updateManufacturer();
 });
 
 //check user input and call server
-$('.create-watch').click(function() {
+$('.create-watch').click(function () {
 
     //get user input data
     let formWatchId = $('.watchid-id input').val();
@@ -120,11 +133,11 @@ $('.create-watch').click(function() {
         data: inputData,
         dataType: 'json',
         contentType: 'application/json',
-        beforeSend: function() {
+        beforeSend: function () {
             //display loading
             document.getElementById('loader').style.display = 'block';
         },
-        success: function(data) {
+        success: function (data) {
 
             document.getElementById('loader').style.display = 'none';
             //check data for error
@@ -133,14 +146,14 @@ $('.create-watch').click(function() {
                 return;
             } else {
                 //update member page and notify successful transaction
-               // createWatch();
+                // createWatch();
                 alert('Transaction successful');
                 updateManufacturer();
             }
 
 
         },
-        error: function(jqXHR, textStatus, errorThrown) {
+        error: function (jqXHR, textStatus, errorThrown) {
             alert('Error: Try again');
             console.log(errorThrown);
             console.log(textStatus);
@@ -150,7 +163,7 @@ $('.create-watch').click(function() {
 });
 
 //check user input and call server
-$('.sell-watch').click(function() {
+$('.sell-watch').click(function () {
 
     //get user input data
     let formWatchId = $('.sell-watchid-id input').val();
@@ -169,11 +182,11 @@ $('.sell-watch').click(function() {
         data: inputData,
         dataType: 'json',
         contentType: 'application/json',
-        beforeSend: function() {
+        beforeSend: function () {
             //display loading
             document.getElementById('loader').style.display = 'block';
         },
-        success: function(data) {
+        success: function (data) {
 
             document.getElementById('loader').style.display = 'none';
             //check data for error
@@ -182,14 +195,60 @@ $('.sell-watch').click(function() {
                 return;
             } else {
                 //update member page and notify successful transaction
-               // createWatch();
+                // createWatch();
                 alert('Transaction successful');
                 updateManufacturer();
             }
 
 
         },
-        error: function(jqXHR, textStatus, errorThrown) {
+        error: function (jqXHR, textStatus, errorThrown) {
+            alert('Error: Try again');
+            console.log(errorThrown);
+            console.log(textStatus);
+            console.log(jqXHR);
+        }
+    });
+});
+
+//check user input and call server
+$('.verify-retailer').click(function () {
+
+    //get user input data
+    let formVerifyRetailer = $('.verify-retailer-id input').val();
+    let formManufacturerName = $('.manufacturerName input').val();
+
+    //create json data
+    let inputData = '{' + '"retrailerName" : "' + formVerifyRetailer + '", ' + '"manufacturerName" : "' + formManufacturerName + '"}';
+    console.log(inputData);
+
+    //make ajax call
+    $.ajax({
+        type: 'POST',
+        url: apiUrl + 'verifyRetailer',
+        data: inputData,
+        dataType: 'json',
+        contentType: 'application/json',
+        beforeSend: function () {
+            //display loading
+            document.getElementById('loader').style.display = 'block';
+        },
+        success: function (data) {
+
+            document.getElementById('loader').style.display = 'none';
+            //check data for error
+            if (data.error) {
+                alert(data.error);
+                return;
+            } else {
+                //update member page and notify successful transaction
+                // createWatch();
+                alert('Transaction successful');
+                updateManufacturer();
+            }
+
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
             alert('Error: Try again');
             console.log(errorThrown);
             console.log(textStatus);
