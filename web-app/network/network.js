@@ -623,6 +623,44 @@ module.exports = {
         }
     },
 
+     // change watch owner transaction
+     unverifyRetailer: async function (manufacturerName, retailerName) {
+        let response = {};
+        try {
+
+            // Create a new file system based wallet for managing identities.
+            const walletPath = path.join(process.cwd(), '/wallet');
+            const wallet = new FileSystemWallet(walletPath);
+            console.log(`Wallet path: ${walletPath}`);
+
+            // Create a new gateway for connecting to our peer node.
+            const gateway = new Gateway();
+            await gateway.connect(ccp, { wallet, identity: manufacturerName, discovery: gatewayDiscovery });
+
+            // Get the network (channel) our contract is deployed to.
+            const network = await gateway.getNetwork('mychannel');
+
+            // Get the contract from the network.
+            const contract = network.getContract('anticounterfeiting');
+
+            // Submit the specified transaction.
+            // changeCarOwner transaction - requires 2 args , ex: ('changeCarOwner', 'CAR10', 'Dave')
+            await contract.submitTransaction('RemoveVerifiedRetailer', manufacturerName, retailerName);
+            console.log('Transaction has been submitted');
+
+            // Disconnect from the gateway.
+            await gateway.disconnect();
+
+            response.msg = 'AddVerifiedRetailer Transaction has been submitted';
+            return response;
+
+        } catch (error) {
+            console.error(`Failed to submit transaction: ${error}`);
+            response.error = error.message;
+            return response;
+        }
+    },
+
     // query all cars transaction
     getVerifiedRetailers: async function (manufacturerName) {
         let response = {};
