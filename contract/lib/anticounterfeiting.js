@@ -136,11 +136,28 @@ class AntiCounterfeiting extends Contract {
         return JSON.stringify(newTransaction);
     }
 
-    async removeVerifiedRetailer(ctx, manufacturerName, retailerName) {
+    async RemoveVerifiedRetailer(ctx, manufacturerName, retailerName) {
         let transactions = await ctx.stub.getState(manufacturerName + "-verifiedRetailers");
-        //todo
+        let verifiedRetailersTransactions = [];
+        if (transactions.length != 0) {
+            transactions = JSON.parse(transactions);
+            for (let transaction of transactions) {
+                verifiedRetailersTransactions.push(transaction);
+            }
+        }
+        //get last RetailerList and remove retailername
+        let currentRetailerList = [...verifiedRetailersTransactions[verifiedRetailersTransactions.length - 1].retailerList];
+        currentRetailerList.splice(currentRetailerList.indexOf(retailerName), 1);
 
-        return JSON.stringify();
+        let newTransaction = {};
+        newTransaction.timestamp = new Date((ctx.stub.txTimestamp.seconds.low * 1000)).toGMTString();
+        newTransaction.retailerList = currentRetailerList;
+
+        //push new Transaction to the chain
+        transactions.push(newTransaction);
+        await ctx.stub.putState(manufacturerName + "-verifiedRetailers", Buffer.from(JSON.stringify(transactions)));
+
+        return JSON.stringify(newTransaction);
     }
 
     async CreateWatch(ctx, watchInformation) {
