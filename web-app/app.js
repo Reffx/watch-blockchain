@@ -425,7 +425,14 @@ app.post('/api/createWatch', (req, res) => {
 });
 
 app.post('/api/changeWatchOwner', (req, res) => {
-    network.changeWatchOwner(req.body.watchId, req.body.oldOwner, req.body.newOwner)
+    network.changeWatchOwner(req.body.watchId, req.body.manufacturerName, req.body.oldOwner, req.body.newOwner)
+        .then((response) => {
+            res.send(response);
+        });
+});
+
+app.post('/api/addMaintenance', (req, res) => {
+    network.addMaintenance(req.body.retailerName, req.body.watchId, req.body.manufacturerName, req.body.maintenanceInfo)
         .then((response) => {
             res.send(response);
         });
