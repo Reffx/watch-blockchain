@@ -57,7 +57,7 @@ function updateRetailer() {
                     console.log(data.queryMyWatchesResults);
 
                     for (let i = 0; i < transactionData.length; i++) {
-                        str = str + '<p>timeStamp: ' + transactionData[i].timestamp + '<br />owner: ' + transactionData[i].owner + '<br />manufacturer: ' + transactionData[i].manufacturer + '<br />WatchId: ' + transactionData[i].watchId + '<br />model: ' + transactionData[i].model + '<br />color: ' + transactionData[i].color + '<br />transactionID: ' + transactionData[i].transactionId + '</p><br>';
+                        str = str + '<p>timeStamp: ' + transactionData[i].timestamp + '<br />owner: ' + transactionData[i].owner + '<br />manufacturer: ' + transactionData[i].manufacturer + '<br />WatchId: ' + transactionData[i].watchId + '<br />model: ' + transactionData[i].model + '<br />color: ' + transactionData[i].color +  '<br />transactionType: ' + transactionData[i].transactionType + '<br />transactionID: ' + transactionData[i].transactionId + '</p><br>';
                     }
                     return str;
                 });
@@ -69,7 +69,7 @@ function updateRetailer() {
                     console.log(data.queryAllWatchesResults);
 
                     for (let i = 0; i < transactionData.length; i++) {
-                        str = str + '<p>timeStamp: ' + transactionData[i].timestamp + '<br />owner: ' + transactionData[i].owner + '<br />manufacturer: ' + transactionData[i].manufacturer + '<br />WatchId: ' + transactionData[i].watchId + '<br />model: ' + transactionData[i].model + '<br />color: ' + transactionData[i].color + '<br />transactionID: ' + transactionData[i].transactionId + '</p><br>';
+                        str = str + '<p>timeStamp: ' + transactionData[i].timestamp + '<br />owner: ' + transactionData[i].owner + '<br />manufacturer: ' + transactionData[i].manufacturer + '<br />WatchId: ' + transactionData[i].watchId + '<br />model: ' + transactionData[i].model + '<br />color: ' + transactionData[i].color +  '<br />transactionType: ' + transactionData[i].transactionType + '<br />transactionID: ' + transactionData[i].transactionId + '</p><br>';
                     }
                     return str;
                 });
@@ -92,6 +92,55 @@ function updateRetailer() {
         }
     });
 };
+
+//check user input and call server
+$('.add-maintenance').click(function () {
+
+    //get user input data
+    let formRetailerName = $('.retailerName input').val();
+    let formWatchId = $('.maintenance-watchid-id input').val();
+    let formManufacturerName = $('.maintenance-manufacturer-id input').val();
+    let formInfo = $('.maintenance-info-id input').val();
+
+    //create json data
+    let inputData = '{' + '"retailerName" : "' + formRetailerName + '", ' + '"watchId" : "' + formWatchId + '", ' + '"manufacturerName" : "' + formManufacturerName + '", ' + '"maintenanceInfo" : "' + formInfo + '"}';
+    console.log(inputData);
+
+    //make ajax call
+    $.ajax({
+        type: 'POST',
+        url: apiUrl + 'addMaintenance',
+        data: inputData,
+        dataType: 'json',
+        contentType: 'application/json',
+        beforeSend: function () {
+            //display loading
+            document.getElementById('loader').style.display = 'block';
+        },
+        success: function (data) {
+
+            document.getElementById('loader').style.display = 'none';
+            //check data for error
+            if (data.error) {
+                alert(data.error);
+                return;
+            } else {
+                //update member page and notify successful transaction
+                // createWatch();
+                alert('Transaction successful');
+                updateRetailer();
+            }
+
+
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            alert('Error: Try again');
+            console.log(errorThrown);
+            console.log(textStatus);
+            console.log(jqXHR);
+        }
+    });
+});
     
 
 //check user input and call server
