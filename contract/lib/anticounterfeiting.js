@@ -107,26 +107,52 @@ class AntiCounterfeiting extends Contract {
         return JSON.stringify(jsonData);
     }
 
-    async GetVerifyRetailers(ctx, manufacturerName) {
+    async GetVerifyRetailersByManufacturer(ctx, manufacturerName) {
         let transactions = await ctx.stub.getState(manufacturerName + "-verifiedRetailers");
-        if (transactions.length != 0){
-        transactions = JSON.parse(transactions);
-        let verifiedTransactions = [];
-        for (let transaction of transactions) {
-            verifiedTransactions.push(transaction);
+        if (transactions.length != 0) {
+            transactions = JSON.parse(transactions);
+            let verifiedTransactions = [];
+            for (let transaction of transactions) {
+                verifiedTransactions.push(transaction);
+            }
+            let lastVerifiedTransaction = verifiedTransactions[verifiedTransactions.length - 1];
+            return JSON.stringify(lastVerifiedTransaction);
         }
-        let lastVerifiedTransaction = verifiedTransactions[verifiedTransactions.length - 1];
-        return JSON.stringify(lastVerifiedTransaction);
+    }
+
+    async GetVerifyRetailersByRetailers(ctx, retailerName) {
+        let transactions = await ctx.stub.getState(retailerName + "-verifiedByManufacturers");
+        if (transactions.length != 0) {
+            transactions = JSON.parse(transactions);
+            let verifiedTransactions = [];
+            for (let transaction of transactions) {
+                verifiedTransactions.push(transaction);
+            }
+            let lastVerifiedTransaction = verifiedTransactions[verifiedTransactions.length - 1];
+            return JSON.stringify(lastVerifiedTransaction);
         }
     }
 
     async AddVerifiedRetailer(ctx, manufacturerName, retailerName) {
+        //byManufacturer
         let transactions = await ctx.stub.getState(manufacturerName + "-verifiedRetailers");
         let verifiedRetailersTransactions = [];
         if (transactions.length != 0) {
             transactions = JSON.parse(transactions);
             for (let transaction of transactions) {
                 verifiedRetailersTransactions.push(transaction);
+            }
+            let currentRetailerList = [...verifiedRetailersTransactions[verifiedRetailersTransactions.length - 1].retailerList];
+            let index = currentRetailerList.indexOf(retailerName);
+            if (index === -1) {
+                currentRetailerList.push(retailerName);
+
+                let newTransaction = {};
+                newTransaction.timestamp = new Date((ctx.stub.txTimestamp.seconds.low * 1000)).toGMTString();
+                newTransaction.retailerList = currentRetailerList;
+
+                transactions.push(newTransaction);
+                await ctx.stub.putState(manufacturerName + "-verifiedRetailers", Buffer.from(JSON.stringify(transactions))); //push 
             }
         } else {
             let newTransaction = {};
@@ -135,23 +161,40 @@ class AntiCounterfeiting extends Contract {
             newTransaction.retailerList.push(retailerName);
             verifiedRetailersTransactions.push(newTransaction);
             await ctx.stub.putState(manufacturerName + "-verifiedRetailers", Buffer.from(JSON.stringify(verifiedRetailersTransactions)));
-            return JSON.stringify(verifiedRetailersTransactions);
         }
 
-        let currentRetailerList = [...verifiedRetailersTransactions[verifiedRetailersTransactions.length - 1].retailerList];
-        currentRetailerList.push(retailerName);
+        //byRetailer
+        let transactions2 = await ctx.stub.getState(retailerName + "-verifiedByManufacturers");
+        let verifiedRetailersTransactions2 = [];
+        if (transactions2.length != 0) {
+            transactions2 = JSON.parse(transactions2);
+            for (let transaction of transactions2) {
+                verifiedRetailersTransactions2.push(transaction);
+            }
+            let currentManufacturerList = [...verifiedRetailersTransactions2[verifiedRetailersTransactions2.length - 1].manufacturerList];
+            let index = currentManufacturerList.indexOf(manufacturerName);
+            if (index === -1) {
+                currentManufacturerList.push(manufacturerName);
 
-        let newTransaction = {};
-        newTransaction.timestamp = new Date((ctx.stub.txTimestamp.seconds.low * 1000)).toGMTString();
-        newTransaction.retailerList = currentRetailerList;
+                let newTransaction2 = {};
+                newTransaction2.timestamp = new Date((ctx.stub.txTimestamp.seconds.low * 1000)).toGMTString();
+                newTransaction2.manufacturerList = currentManufacturerList;
 
-        transactions.push(newTransaction);
-        await ctx.stub.putState(manufacturerName + "-verifiedRetailers", Buffer.from(JSON.stringify(transactions))); //push 
-
-        return JSON.stringify(newTransaction);
+                transactions2.push(newTransaction2);
+                await ctx.stub.putState(retailerName + "-verifiedByManufacturers", Buffer.from(JSON.stringify(transactions2))); //push 
+            }
+        } else {
+            let newTransaction2 = {};
+            newTransaction2.timestamp = new Date((ctx.stub.txTimestamp.seconds.low * 1000)).toGMTString();
+            newTransaction2.manufacturerList = [];
+            newTransaction2.manufacturerList.push(manufacturerName);
+            verifiedRetailersTransactions2.push(newTransaction2);
+            await ctx.stub.putState(retailerName + "-verifiedByManufacturers", Buffer.from(JSON.stringify(verifiedRetailersTransactions2)));
+        }
     }
 
     async RemoveVerifiedRetailer(ctx, manufacturerName, retailerName) {
+        //Remove by manufacturer chain
         let transactions = await ctx.stub.getState(manufacturerName + "-verifiedRetailers");
         let verifiedRetailersTransactions = [];
         if (transactions.length != 0) {
@@ -159,20 +202,45 @@ class AntiCounterfeiting extends Contract {
             for (let transaction of transactions) {
                 verifiedRetailersTransactions.push(transaction);
             }
+            //get last RetailerList and remove retailername
+            let currentRetailerList = [...verifiedRetailersTransactions[verifiedRetailersTransactions.length - 1].retailerList];
+            let index = currentRetailerList.indexOf(retailerName);
+            if (index != -1) {
+                currentRetailerList.splice(currentRetailerList.indexOf(retailerName), 1);
+
+                let newTransaction = {};
+                newTransaction.timestamp = new Date((ctx.stub.txTimestamp.seconds.low * 1000)).toGMTString();
+                newTransaction.retailerList = currentRetailerList;
+
+                //push new Transaction to the chain
+                transactions.push(newTransaction);
+                await ctx.stub.putState(manufacturerName + "-verifiedRetailers", Buffer.from(JSON.stringify(transactions)));
+            }
         }
-        //get last RetailerList and remove retailername
-        let currentRetailerList = [...verifiedRetailersTransactions[verifiedRetailersTransactions.length - 1].retailerList];
-        currentRetailerList.splice(currentRetailerList.indexOf(retailerName), 1);
+        //Remove by retailer chain
+        let transactions2 = await ctx.stub.getState(retailerName + "-verifiedByManufacturers");
+        let verifiedRetailersTransactions2 = [];
+        if (transactions2.length != 0) {
+            transactions2 = JSON.parse(transactions2);
+            for (let transaction of transactions2) {
+                verifiedRetailersTransactions2.push(transaction);
+            }
+            //get last RetailerList and remove retailername
+            let currentManufacturerList = [...verifiedRetailersTransactions2[verifiedRetailersTransactions2.length - 1].manufacturerList];
+            let index = currentManufacturerList.indexOf(manufacturerName);
+            if (index != -1) {
+                currentManufacturerList.splice(currentManufacturerList.indexOf(manufacturerName), 1);
 
-        let newTransaction = {};
-        newTransaction.timestamp = new Date((ctx.stub.txTimestamp.seconds.low * 1000)).toGMTString();
-        newTransaction.retailerList = currentRetailerList;
+                let newTransaction2 = {};
+                newTransaction2.timestamp = new Date((ctx.stub.txTimestamp.seconds.low * 1000)).toGMTString();
+                newTransaction2.manufacturerList = currentManufacturerList;
 
-        //push new Transaction to the chain
-        transactions.push(newTransaction);
-        await ctx.stub.putState(manufacturerName + "-verifiedRetailers", Buffer.from(JSON.stringify(transactions)));
+                //push new Transaction to the chain
+                transactions2.push(newTransaction2);
+                await ctx.stub.putState(retailerName + "-verifiedByManufacturers", Buffer.from(JSON.stringify(transactions2)));
+            }
+        }
 
-        return JSON.stringify(newTransaction);
     }
 
     async CreateWatch(ctx, watchInformation) {
@@ -260,24 +328,24 @@ class AntiCounterfeiting extends Contract {
         let allRecentWatchesTransactions = [];
 
         for (let transaction of transactions) {
-                allRecentWatchesTransactions.push(transaction);
+            allRecentWatchesTransactions.push(transaction);
         }
 
-        let oldTransaction = allRecentWatchesTransactions[allRecentWatchesTransactions.length-1];
+        let oldTransaction = allRecentWatchesTransactions[allRecentWatchesTransactions.length - 1];
 
         let newTransaction = {};
-            newTransaction.watchId = oldTransaction.watchId;
-            newTransaction.manufacturer = oldTransaction.manufacturer;
-            newTransaction.model = oldTransaction.model;
-            newTransaction.color = oldTransaction.color;
-            newTransaction.owner = oldTransaction.owner;
-            newTransaction.transactionType = "maintenanceEvent";
-            newTransaction.info = maintenanceInfo;
-            newTransaction.timestamp = new Date((ctx.stub.txTimestamp.seconds.low * 1000)).toGMTString();
-            newTransaction.transactionId = ctx.stub.txId;
-            //push new Transaction to chain
-            transactions.push(newTransaction);
-            allWatchesTransaction.push(newTransaction);
+        newTransaction.watchId = oldTransaction.watchId;
+        newTransaction.manufacturer = oldTransaction.manufacturer;
+        newTransaction.model = oldTransaction.model;
+        newTransaction.color = oldTransaction.color;
+        newTransaction.owner = oldTransaction.owner;
+        newTransaction.transactionType = "maintenanceEvent";
+        newTransaction.info = maintenanceInfo;
+        newTransaction.timestamp = new Date((ctx.stub.txTimestamp.seconds.low * 1000)).toGMTString();
+        newTransaction.transactionId = ctx.stub.txId;
+        //push new Transaction to chain
+        transactions.push(newTransaction);
+        allWatchesTransaction.push(newTransaction);
 
         //submit new chain
         await ctx.stub.putState(manufacturerName + "-" + watchId, Buffer.from(JSON.stringify(transactions)));
@@ -355,7 +423,7 @@ class AntiCounterfeiting extends Contract {
 
         function contains(trx) {
             for (let text of allRecentWatchesTransactions) {
-                if (trx.owner === text) {
+                if (trx.owner === text.owner) {
                     return true;
                 }
             }
@@ -408,7 +476,7 @@ class AntiCounterfeiting extends Contract {
             return JSON.stringify(countRetailers);
         }
     }
-    
+
 }
 
 module.exports = AntiCounterfeiting;
