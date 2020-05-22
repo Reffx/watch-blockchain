@@ -246,6 +246,46 @@ class AntiCounterfeiting extends Contract {
         return JSON.stringify(newTransaction);
     }
 
+    async AddMaintenanceEvent(ctx, watchId, manufacturerName, maintenanceInfo) {
+        console.info('============= START : addMaintenance ===========');
+        //get chain for all Watches key
+        let allWatchesTransaction = await ctx.stub.getState(allWatchesTransactionKey);
+        allWatchesTransaction = JSON.parse(allWatchesTransaction);
+
+        // get chain for specific watch
+        let transactions = await ctx.stub.getState(manufacturerName + "-" + watchId);
+        transactions = JSON.parse(transactions);
+
+        //logic
+        let allRecentWatchesTransactions = [];
+
+        for (let transaction of transactions) {
+                allRecentWatchesTransactions.push(transaction);
+        }
+
+        let oldTransaction = allRecentWatchesTransactions[allRecentWatchesTransactions.length-1];
+
+        let newTransaction = {};
+            newTransaction.watchId = oldTransaction.watchId;
+            newTransaction.manufacturer = oldTransaction.manufacturer;
+            newTransaction.model = oldTransaction.model;
+            newTransaction.color = oldTransaction.color;
+            newTransaction.owner = oldTransaction.owner;
+            newTransaction.transactionType = "maintenanceEvent";
+            newTransaction.info = maintenanceInfo;
+            newTransaction.timestamp = new Date((ctx.stub.txTimestamp.seconds.low * 1000)).toGMTString();
+            newTransaction.transactionId = ctx.stub.txId;
+            //push new Transaction to chain
+            transactions.push(newTransaction);
+            allWatchesTransaction.push(newTransaction);
+
+        //submit new chain
+        await ctx.stub.putState(manufacturerName + "-" + watchId, Buffer.from(JSON.stringify(transactions)));
+        await ctx.stub.putState(allWatchesTransactionKey, Buffer.from(JSON.stringify(allWatchesTransaction)));
+        console.info('============= END : addMaintenance ===========');
+        return JSON.stringify(newTransaction);
+    }
+
     async QuerySingleWatch(ctx, manufacturerName, watchId) {
         console.info('============= START : Query Single Watch ===========');
         let transactions = await ctx.stub.getState(manufacturerName + "-" + watchId);
