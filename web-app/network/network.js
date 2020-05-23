@@ -27,14 +27,14 @@ module.exports = {
 
     /*
   * Create Member participant and import card for identity
-  * @param {String} cardId Import card id for member
-  * @param {String} accountNumber Member account number as identifier on network
+  * @param {String} memberName as identifier on network
+  *   * @param {String} password for member
   * @param {String} firstName Member first name
   * @param {String} lastName Member last name
   * @param {String} phoneNumber Member phone number
   * @param {String} email Member email
   */
-    registerMember: async function (cardId, accountNumber, firstName, lastName, email, phoneNumber) {
+    registerMember: async function (memberName, password, firstName, lastName, email, phoneNumber) {
 
         // Create a new file system based wallet for managing identities.
         const walletPath = path.join(process.cwd(), '/wallet');
@@ -47,9 +47,9 @@ module.exports = {
 
 
             // Check to see if we've already enrolled the user.
-            const userExists = await wallet.exists(cardId);
+            const userExists = await wallet.exists(memberName);
             if (userExists) {
-                let err = `An identity for the user ${cardId} already exists in the wallet`;
+                let err = `An identity for the user ${memberName} already exists in the wallet`;
                 console.log(err);
                 response.error = err;
                 return response;
@@ -73,11 +73,11 @@ module.exports = {
             const adminIdentity = gateway.getCurrentIdentity();
 
             // Register the user, enroll the user, and import the new identity into the wallet.
-            const secret = await ca.register({ affiliation: 'org1.department1', enrollmentID: cardId, role: 'client' }, adminIdentity);
-            const enrollment = await ca.enroll({ enrollmentID: cardId, enrollmentSecret: secret });
+            const secret = await ca.register({ affiliation: 'org1.department1', enrollmentID: memberName, role: 'client' }, adminIdentity);
+            const enrollment = await ca.enroll({ enrollmentID: memberName, enrollmentSecret: secret });
             const userIdentity = X509WalletMixin.createIdentity(orgMSPID, enrollment.certificate, enrollment.key.toBytes());
-            wallet.import(cardId, userIdentity);
-            console.log('Successfully registered and enrolled admin user ' + cardId + ' and imported it into the wallet');
+            wallet.import(memberName, userIdentity);
+            console.log('Successfully registered and enrolled admin user ' + memberName + ' and imported it into the wallet');
 
             // Disconnect from the gateway.
             await gateway.disconnect();
@@ -96,7 +96,7 @@ module.exports = {
         try {
             // Create a new gateway for connecting to our peer node.
             const gateway2 = new Gateway();
-            await gateway2.connect(ccp, { wallet, identity: cardId, discovery: gatewayDiscovery });
+            await gateway2.connect(ccp, { wallet, identity: memberName, discovery: gatewayDiscovery });
 
             // Get the network (channel) our contract is deployed to.
             const network = await gateway2.getNetwork('mychannel');
@@ -105,12 +105,12 @@ module.exports = {
             const contract = network.getContract('anticounterfeiting');
 
             let member = {};
-            member.accountNumber = accountNumber;
+            member.name = memberName;
+            member.password = password;
             member.firstName = firstName;
             member.lastName = lastName;
             member.email = email;
             member.phoneNumber = phoneNumber;
-            member.points = 0;
 
             // Submit the specified transaction.
             console.log('\nSubmit Create Member transaction.');
@@ -119,7 +119,7 @@ module.exports = {
             console.log(JSON.parse(createMemberResponse.toString()));
 
             console.log('\nGet member state ');
-            const memberResponse = await contract.evaluateTransaction('GetState', accountNumber);
+            const memberResponse = await contract.evaluateTransaction('GetState', memberName);
             console.log('memberResponse.parse_response: ');
             console.log(JSON.parse(memberResponse.toString()));
 
@@ -143,7 +143,7 @@ module.exports = {
 * @param {String} email Retailer Id as identifier on network
 * @param {String} name Retailer name
 */
-    registerRetailer: async function (RetailerName, password, email, phoneNumber, address, zipCode, place) {
+    registerRetailer: async function (retailerName, password, email, phoneNumber, address, zipCode, place) {
 
         // Create a new file system based wallet for managing identities.
         const walletPath = path.join(process.cwd(), '/wallet');
@@ -154,9 +154,9 @@ module.exports = {
             let response = {};
 
             // Check to see if we've already enrolled the user.
-            const userExists = await wallet.exists(RetailerName);
+            const userExists = await wallet.exists(retailerName);
             if (userExists) {
-                let err = `An identity for the user ${RetailerName} already exists in the wallet`;
+                let err = `An identity for the user ${retailerName} already exists in the wallet`;
                 console.log(err);
                 response.error = err;
                 return response;
@@ -180,11 +180,11 @@ module.exports = {
             const adminIdentity = gateway.getCurrentIdentity();
 
             // Register the user, enroll the user, and import the new identity into the wallet.
-            const secret = await ca.register({ affiliation: 'org1.department1', enrollmentID: RetailerName, role: 'client' }, adminIdentity);
-            const enrollment = await ca.enroll({ enrollmentID: RetailerName, enrollmentSecret: secret });
+            const secret = await ca.register({ affiliation: 'org1.department1', enrollmentID: retailerName, role: 'client' }, adminIdentity);
+            const enrollment = await ca.enroll({ enrollmentID: retailerName, enrollmentSecret: secret });
             const userIdentity = X509WalletMixin.createIdentity(orgMSPID, enrollment.certificate, enrollment.key.toBytes());
-            wallet.import(RetailerName, userIdentity);
-            console.log('Successfully registered and enrolled admin user ' + RetailerName + ' and imported it into the wallet');
+            wallet.import(retailerName, userIdentity);
+            console.log('Successfully registered and enrolled admin user ' + retailerName + ' and imported it into the wallet');
 
             // Disconnect from the gateway.
             await gateway.disconnect();
@@ -203,7 +203,7 @@ module.exports = {
         try {
             // Create a new gateway for connecting to our peer node.
             const gateway2 = new Gateway();
-            await gateway2.connect(ccp, { wallet, identity: RetailerName, discovery: gatewayDiscovery });
+            await gateway2.connect(ccp, { wallet, identity: retailerName, discovery: gatewayDiscovery });
 
             // Get the network (channel) our contract is deployed to.
             const network = await gateway2.getNetwork('mychannel');
@@ -217,7 +217,7 @@ module.exports = {
 
             let retailer = {};
             retailer.id = countR;
-            retailer.name = RetailerName;
+            retailer.name = retailerName;
             retailer.password = password;
             retailer.email = email;
             retailer.phoneNumber = phoneNumber;
@@ -232,7 +232,7 @@ module.exports = {
             console.log(JSON.parse(createRetailerResponse.toString()));
 
             console.log('\nGet retailer state ');
-            const retailerResponse = await contract.evaluateTransaction('GetState', RetailerName);
+            const retailerResponse = await contract.evaluateTransaction('GetState', retailerName);
             console.log('retailerResponse.parse_response: ');
             console.log(JSON.parse(retailerResponse.toString()));
 
@@ -368,10 +368,10 @@ module.exports = {
 
     /*
   * Get Member data
-  * @param {String} cardId Card id to connect to network
-  * @param {String} accountNumber Account number of member
+  * @param {String} password to connect to network
+  * @param {String} memberName of member
   */
-    memberData: async function (cardId, accountNumber) {
+    memberData: async function (memberName) {
 
         // Create a new file system based wallet for managing identities.
         const walletPath = path.join(process.cwd(), '/wallet');
@@ -381,7 +381,7 @@ module.exports = {
         try {
             // Create a new gateway for connecting to our peer node.
             const gateway2 = new Gateway();
-            await gateway2.connect(ccp, { wallet, identity: cardId, discovery: gatewayDiscovery });
+            await gateway2.connect(ccp, { wallet, identity: memberName, discovery: gatewayDiscovery });
 
             // Get the network (channel) our contract is deployed to.
             const network = await gateway2.getNetwork('mychannel');
@@ -390,14 +390,15 @@ module.exports = {
             const contract = network.getContract('anticounterfeiting');
 
             console.log('\nGet member state ');
-            let member = await contract.submitTransaction('GetState', accountNumber);
+            let member = await contract.submitTransaction('GetState', memberName);
             member = JSON.parse(member.toString());
             console.log(member);
+            let latestMemberInfo = member[0];
 
             // Disconnect from the gateway.
             await gateway2.disconnect();
 
-            return member;
+            return latestMemberInfo;
         }
         catch (err) {
             //print and return error
@@ -411,10 +412,9 @@ module.exports = {
 
     /*
   * Get Manufacturer data
-  * @param {String} cardId Card id to connect to network
   * @param {String} manufacturerId Manufacturer Id of manufacturer
   */
-    manufacturerData: async function (manufacturerName, password) {
+    manufacturerData: async function (manufacturerName) {
         //todo: check pw before
 
         // Create a new file system based wallet for managing identities.
@@ -455,10 +455,9 @@ module.exports = {
 
     /*
 * Get Retailer data
-* @param {String} cardId Card id to connect to network
 * @param {String} retailerId retailer Id of retailerName
 */
-    retailerData: async function (retailerName, password) {
+    retailerData: async function (retailerName) {
         //todo: check pw before
 
         // Create a new file system based wallet for managing identities.
@@ -499,7 +498,6 @@ module.exports = {
 
     /*
   * Get all manufacturers data
-  * @param {String} cardId Card id to connect to network
   */
     allManufacturersInfo: async function (cardId) {
 

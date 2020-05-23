@@ -63,18 +63,18 @@ app.get('/about', function (req, res) {
 app.post('/api/registerMember', function (req, res) {
 
     //declare variables to retrieve from request
-    let accountNumber = req.body.accountnumber;
-    let cardId = req.body.cardid;
+    let memberName = req.body.memberName;
+    let password = req.body.password;
     let firstName = req.body.firstname;
     let lastName = req.body.lastname;
     let email = req.body.email;
     let phoneNumber = req.body.phonenumber;
 
     //print variables
-    console.log('Using param - firstname: ' + firstName + ' lastname: ' + lastName + ' email: ' + email + ' phonenumber: ' + phoneNumber + ' accountNumber: ' + accountNumber + ' cardId: ' + cardId);
+    console.log('Using param - firstname: ' + firstName + ' lastname: ' + lastName + ' email: ' + email + ' phonenumber: ' + phoneNumber + ' memberName: ' + memberName + ' password: ' + password);
 
     //validate member registration fields
-    validate.validateMemberRegistration(cardId, accountNumber, firstName, lastName, email, phoneNumber)
+    validate.validateMemberRegistration(memberName, password, firstName, lastName, email, phoneNumber)
         .then((response) => {
             //return error if error in response
             if (typeof response === 'object' && 'error' in response && response.error !== null) {
@@ -84,7 +84,7 @@ app.post('/api/registerMember', function (req, res) {
                 return;
             } else {
                 //else register member on the network
-                network.registerMember(cardId, accountNumber, firstName, lastName, email, phoneNumber)
+                network.registerMember(memberName, password, firstName, lastName, email, phoneNumber)
                     .then((response) => {
                         //return error if error in response
                         if (typeof response === 'object' && 'error' in response && response.error !== null) {
@@ -100,8 +100,6 @@ app.post('/api/registerMember', function (req, res) {
                     });
             }
         });
-
-
 });
 
 //post call to register retailer on the network
@@ -198,17 +196,17 @@ app.post('/api/registerManufacturer', function (req, res) {
 app.post('/api/memberData', function (req, res) {
 
     //declare variables to retrieve from request
-    let accountNumber = req.body.accountnumber;
-    let cardId = req.body.cardid;
+    let memberName = req.body.memberName;
+    let password = req.body.password;
 
     //print variables
-    console.log('memberData using param - ' + ' accountNumber: ' + accountNumber + ' cardId: ' + cardId);
+    console.log('memberData using param - ' + ' memberName: ' + memberName + ' password: ' + password);
 
     //declare return object
     let returnData = {};
 
     //get member data from network
-    network.memberData(cardId, accountNumber)
+    network.memberData(memberName)
         .then((member) => {
             //return error if error in response
             if (typeof member === 'object' && 'error' in member && member.error !== null) {
@@ -217,7 +215,7 @@ app.post('/api/memberData', function (req, res) {
                 });
             } else {
                 //else add member data to return object
-                returnData.accountNumber = member.accountNumber;
+                returnData.name = member.name;
                 returnData.firstName = member.firstName;
                 returnData.lastName = member.lastName;
                 returnData.phoneNumber = member.phoneNumber;
@@ -227,7 +225,7 @@ app.post('/api/memberData', function (req, res) {
         })
         .then(() => {
             //get manufacturers to transact with from the network
-            network.allManufacturersInfo(cardId)
+            network.allManufacturersInfo(memberName)
                 .then((manufacturersInfo) => {
                     //return error if error in response
                     if (typeof manufacturersInfo === 'object' && 'error' in manufacturersInfo && manufacturersInfo.error !== null) {
@@ -260,7 +258,7 @@ app.post('/api/manufacturerData', function (req, res) {
     let returnData = {};
 
     //get manufacturer data from network
-    network.manufacturerData(manufacturerName, password)
+    network.manufacturerData(manufacturerName)
         .then((manufacturer) => {
             //return error if error in response
             if (typeof manufacturer === 'object' && 'error' in manufacturer && manufacturer.error !== null) {
@@ -352,7 +350,7 @@ app.post('/api/retailerData', function (req, res) {
     let returnData = {};
 
     //get manufacturer data from network
-    network.retailerData(retailerName, password)
+    network.retailerData(retailerName)
         .then((retailer) => {
             //return error if error in response
             if (typeof retailer === 'object' && 'error' in retailer && retailer.error !== null) {
