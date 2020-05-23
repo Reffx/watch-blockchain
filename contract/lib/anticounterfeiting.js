@@ -399,39 +399,36 @@ class AntiCounterfeiting extends Contract {
 
     }
 
-    async QueryMyWatches(ctx, currentOwner) {
+    async GetMyWatches(ctx, currentOwner) {
         console.info('============= START : Query Single Watch ===========');
         let transactions = await ctx.stub.getState(allWatchesTransactionKey);
         transactions = JSON.parse(transactions);
-        let allRecentWatchesTransactions = [];
+        let allWatchesTransactions = [];
 
         for (let transaction of transactions) {
-            if (transaction.owner === currentOwner && !contains(transaction)) {
-                let watchChain = await ctx.stub.getState(transaction.manufacturer + "-" + transaction.watchId);
-                watchChain = JSON.parse(watchChain);
-                for (let i = watchChain.length; i > 0; i--) {
-                    if (watchChain[i - 1].transactionType === "newWatchOwner") {
-                        if (watchChain[i - 1].owner === currentOwner) {
-                            allRecentWatchesTransactions.push(watchChain[i - 1]);
-                        } else {
-                            break;
-                        }
-                    }
-                }
+            transaction.uniqueId = transaction.manufacturer+transaction.watchId;
+            allWatchesTransactions.push(transaction);
+            }
+        
+        // filter regarding newest owner for each watch
+        let uniqueNewWatchesId = [];
+        let uniqueNewWatchesTransactions = [];
+        for (let i = allWatchesTransactions.length; i > 0; i--){
+            if (allWatchesTransactions[i-1].transactionType === "newWatchOwner" && (uniqueNewWatchesId.indexOf(allWatchesTransactions[i].uniqueId) === -1)){
+                uniqueNewWatchesId.push(allWatchesTransactions[i].uniqueId);
+                uniqueNewWatchesTransactions.push(allWatchesTransactions[i]);
+            }
+        }
+    
+        //filter regarding owner
+        let result = [];
+        for (let trans of uniqueNewWatchesTransactions){
+            if (trans.owner === currentOwner){
+                result.push(trans);
             }
         }
 
-        function contains(trx) {
-            for (let text of allRecentWatchesTransactions) {
-                if (trx.owner === text.owner) {
-                    return true;
-                }
-            }
-            return false;
-        }
-
-        console.info('============= END : Query Single Watch ===========');
-        return JSON.stringify(allRecentWatchesTransactions);
+        return JSON.stringify(result);
     }
 
     async QueryAllWatches(ctx) {
