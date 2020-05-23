@@ -304,7 +304,7 @@ app.post('/api/manufacturerData', function (req, res) {
                         })
                         .then(() => {
                             //get EarnPoints transactions from the network
-                            network.getVerifiedRetailers(manufacturerName)
+                            network.getVerifiedRetailersByManufacturer(manufacturerName)
                                 .then((getVerifiedRetailersResults) => {
                                     //return error if error in response
                                     if (typeof getVerifiedRetailersResults === 'object' && 'error' in getVerifiedRetailersResults && getVerifiedRetailersResults.error !== null) {
@@ -396,19 +396,34 @@ app.post('/api/retailerData', function (req, res) {
                         })
                         .then(() => {
                             //get EarnPoints transactions from the network
-                            network.countAllRetailers(retailerName)
-                                .then((countRetailersResults) => {
+                            network.getVerifiedRetailersByRetailer(retailerName, retailerName)
+                                .then((getManufacturersByVerifiedRetailerResults) => {
                                     //return error if error in response
-                                    if (typeof countRetailersResults === 'object' && 'error' in countRetailersResults && countRetailersResults.error !== null) {
+                                    if (typeof getManufacturersByVerifiedRetailerResults === 'object' && 'error' in getManufacturersByVerifiedRetailerResults && getManufacturersByVerifiedRetailerResults.error !== null) {
                                         res.json({
-                                            error: countRetailersResults.error
+                                            error: getManufacturersByVerifiedRetailerResults.error
                                         });
                                     } else {
                                         //else add transaction data to return object
-                                        returnData.countRetailersResults = countRetailersResults;
-                                        //return returnData
-                                        res.json(returnData);
+                                        returnData.getManufacturersByVerifiedRetailerResults = getManufacturersByVerifiedRetailerResults;
                                     }
+                                })
+                                .then(() => {
+                                    //get EarnPoints transactions from the network
+                                    network.countAllRetailers(retailerName)
+                                        .then((countRetailersResults) => {
+                                            //return error if error in response
+                                            if (typeof countRetailersResults === 'object' && 'error' in countRetailersResults && countRetailersResults.error !== null) {
+                                                res.json({
+                                                    error: countRetailersResults.error
+                                                });
+                                            } else {
+                                                //else add transaction data to return object
+                                                returnData.countRetailersResults = countRetailersResults;
+                                                //return returnData
+                                                res.json(returnData);
+                                            }
+                                        });
                                 });
                         });
                 });

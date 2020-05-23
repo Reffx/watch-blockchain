@@ -120,7 +120,7 @@ class AntiCounterfeiting extends Contract {
         }
     }
 
-    async GetVerifyRetailersByRetailers(ctx, retailerName) {
+    async GetVerifyRetailersByRetailer(ctx, retailerName) {
         let transactions = await ctx.stub.getState(retailerName + "-verifiedByManufacturers");
         if (transactions.length != 0) {
             transactions = JSON.parse(transactions);

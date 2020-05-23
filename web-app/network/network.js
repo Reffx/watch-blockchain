@@ -743,8 +743,8 @@ module.exports = {
         }
     },
 
-    // query all cars transaction
-    getVerifiedRetailers: async function (manufacturerName) {
+    // query all Retailers that are verified by a specific manufacturer
+    getVerifiedRetailersByManufacturer: async function (manufacturerName) {
         let response = {};
 
         // Create a new file system based wallet for managing identities.
@@ -763,8 +763,48 @@ module.exports = {
             // Get the contract from the network.
             const contract = network.getContract('anticounterfeiting');
 
-            console.log(`\nGet watches transactions state for ${manufacturerName}`);
-            let result = await contract.evaluateTransaction('GetVerifyRetailers', manufacturerName);
+            console.log(`\nGet all retailers that are verified by ${manufacturerName}`);
+            let result = await contract.evaluateTransaction('GetVerifyRetailersByManufacturer', manufacturerName);
+            if (result.length != 0) {
+                result = JSON.parse(result.toString());
+                console.log(result);
+            } else {
+                result = [];
+            }
+            // Disconnect from the gateway.
+            await gateway2.disconnect();
+
+            return result;
+
+        } catch (error) {
+            console.error(`Failed to evaluate transaction: ${error}`);
+            response.error = error.message;
+            return response;
+        }
+    },
+
+     // query all Manufacturers that verified a specific retailer
+     getVerifiedRetailersByRetailer: async function (user, retailerName) {
+        let response = {};
+
+        // Create a new file system based wallet for managing identities.
+        const walletPath = path.join(process.cwd(), '/wallet');
+        const wallet = new FileSystemWallet(walletPath);
+        console.log(`Wallet path: ${walletPath}`);
+
+        try {
+            // Create a new gateway for connecting to our peer node.
+            const gateway2 = new Gateway();
+            await gateway2.connect(ccp, { wallet, identity: user, discovery: gatewayDiscovery });
+
+            // Get the network (channel) our contract is deployed to.
+            const network = await gateway2.getNetwork('mychannel');
+
+            // Get the contract from the network.
+            const contract = network.getContract('anticounterfeiting');
+
+            console.log(`\nGet all Manufacturers that verified ${retailerName}`);
+            let result = await contract.evaluateTransaction('GetVerifyRetailersByRetailer', retailerName);
             if (result.length != 0) {
                 result = JSON.parse(result.toString());
                 console.log(result);
