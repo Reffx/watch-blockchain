@@ -65,9 +65,9 @@ function updateRetailer() {
                 //update manufacturers dropdown for earn points transaction
                 $('.maintenance-manufacturer-id select').html(function() {
                     let str = '<option value="" disabled="" selected="">select</option>';
-                    let transactionData = data.queryMyWatchesResults;
+                    let transactionData = data.getManufacturersByVerifiedRetailerResults.manufacturerList;
                     for (let i = 0; i < transactionData.length; i++) {
-                        str = str + '<option manufacturer-id=' + transactionData[i].manufacturer + '> ' + transactionData[i].manufacturer + '</option>';
+                        str = str + '<option manufacturer-id=' + transactionData[i] + '> ' + transactionData[i] + '</option>';
                     }
                     return str;
                 });
