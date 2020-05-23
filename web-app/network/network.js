@@ -824,7 +824,7 @@ module.exports = {
     },
 
     // query all cars transaction
-    queryMyWatches: async function (userId) {
+    getMyWatches: async function (userId) {
         let response = {};
 
         // Create a new file system based wallet for managing identities.
@@ -844,7 +844,7 @@ module.exports = {
             const contract = network.getContract('anticounterfeiting');
 
             console.log(`\nGet watches transactions state for ${userId}`);
-            let result = await contract.evaluateTransaction('QueryMyWatches', userId);
+            let result = await contract.evaluateTransaction('GetMyWatches', userId);
             result = JSON.parse(result.toString());
             console.log(result);
 

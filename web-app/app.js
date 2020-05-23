@@ -290,16 +290,16 @@ app.post('/api/manufacturerData', function (req, res) {
                 })
                 .then(() => {
                     //get EarnPoints transactions from the network
-                    network.queryMyWatches(manufacturerName)
-                        .then((queryMyWatchesResults) => {
+                    network.getMyWatches(manufacturerName)
+                        .then((getMyWatchesResults) => {
                             //return error if error in response
-                            if (typeof queryMyWatchesResults === 'object' && 'error' in queryMyWatchesResults && queryMyWatchesResults.error !== null) {
+                            if (typeof getMyWatchesResults === 'object' && 'error' in getMyWatchesResults && getMyWatchesResults.error !== null) {
                                 res.json({
-                                    error: queryMyWatchesResults.error
+                                    error: getMyWatchesResults.error
                                 });
                             } else {
                                 //else add transaction data to return object
-                                returnData.queryMyWatchesResults = queryMyWatchesResults;
+                                returnData.getMyWatchesResults = getMyWatchesResults;
                             }
                         })
                         .then(() => {
@@ -382,16 +382,16 @@ app.post('/api/retailerData', function (req, res) {
                 })
                 .then(() => {
                     //get EarnPoints transactions from the network
-                    network.queryMyWatches(retailerName)
-                        .then((queryMyWatchesResults) => {
+                    network.getMyWatches(retailerName)
+                        .then((getMyWatchesResults) => {
                             //return error if error in response
-                            if (typeof queryMyWatchesResults === 'object' && 'error' in queryMyWatchesResults && queryMyWatchesResults.error !== null) {
+                            if (typeof getMyWatchesResults === 'object' && 'error' in getMyWatchesResults && getMyWatchesResults.error !== null) {
                                 res.json({
-                                    error: queryMyWatchesResults.error
+                                    error: getMyWatchesResults.error
                                 });
                             } else {
                                 //else add transaction data to return object
-                                returnData.queryMyWatchesResults = queryMyWatchesResults;
+                                returnData.getMyWatchesResults = getMyWatchesResults;
                             }
                         })
                         .then(() => {

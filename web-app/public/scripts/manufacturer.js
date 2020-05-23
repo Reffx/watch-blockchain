@@ -54,8 +54,8 @@ function updateManufacturer() {
                 //update use points transaction
                 $('.query-myWatches-transactions').html(function () {
                     let str = '';
-                    let transactionData = data.queryMyWatchesResults;
-                    console.log(data.queryMyWatchesResults);
+                    let transactionData = data.getMyWatchesResults;
+                    console.log(data.getMyWatchesResults);
 
                     for (let i = 0; i < transactionData.length; i++) {
                         str = str + '<p>timeStamp: ' + transactionData[i].timestamp + '<br />owner: ' + transactionData[i].owner + '<br />manufacturer: ' + transactionData[i].manufacturer + '<br />WatchId: ' + transactionData[i].watchId + '<br />model: ' + transactionData[i].model + '<br />color: ' + transactionData[i].color + '<br />transactionType: ' + transactionData[i].transactionType + '<br />transactionID: ' + transactionData[i].transactionId + '</p><br>';
