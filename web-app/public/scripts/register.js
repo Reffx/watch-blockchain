@@ -8,15 +8,15 @@ console.log('at register.js');
 $('.register-member').click(function() {
 
     //get user input data
-    let formAccountNum = $('.account-number input').val();
-    let formCardId = $('.card-id input').val();
+    let formMemberName = $('.memberName input').val();
+    let formPassword = $('.password input').val();
     let formFirstName = $('.first-name input').val();
     let formLastName = $('.last-name input').val();
     let formEmail = $('.email input').val();
     let formPhoneNumber = $('.phone-number input').val();
 
     //create json data
-    let inputData = '{' + '"firstname" : "' + formFirstName + '", ' + '"lastname" : "' + formLastName + '", ' + '"email" : "' + formEmail + '", ' + '"phonenumber" : "' + formPhoneNumber + '", ' + '"accountnumber" : "' + formAccountNum + '", ' + '"cardid" : "' + formCardId + '"}';
+    let inputData = '{' + '"firstname" : "' + formFirstName + '", ' + '"lastname" : "' + formLastName + '", ' + '"email" : "' + formEmail + '", ' + '"phonenumber" : "' + formPhoneNumber + '", ' + '"memberName" : "' + formMemberName + '", ' + '"password" : "' + formPassword + '"}';
     console.log(inputData);
 
     //make ajax call to add the dataset
