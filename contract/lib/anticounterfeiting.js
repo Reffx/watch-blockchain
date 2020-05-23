@@ -30,7 +30,7 @@ class AntiCounterfeiting extends Contract {
         let memberInformation = [];
         memberInformation.push(member);
 
-        await ctx.stub.putState(member.accountNumber, Buffer.from(JSON.stringify(memberInformation)));
+        await ctx.stub.putState(member.name, Buffer.from(JSON.stringify(memberInformation)));
 
         return JSON.stringify(member);
     }
