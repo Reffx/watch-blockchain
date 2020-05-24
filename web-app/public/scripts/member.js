@@ -19,11 +19,11 @@ function updateMember() {
         data: inputData,
         dataType: 'json',
         contentType: 'application/json',
-        beforeSend: function() {
+        beforeSend: function () {
             //display loading
             document.getElementById('loader').style.display = 'block';
         },
-        success: function(data) {
+        success: function (data) {
 
             //remove loader
             document.getElementById('loader').style.display = 'none';
@@ -39,8 +39,8 @@ function updateMember() {
                     let str = '';
                     str = str + '<div class="jumbotron" style="display:block;">';
                     str = str + '<h3>Account information</h3>';
-                    str = str + '<h5>'+ data.name + '</h5>';
-                    str = str + '<h5>'+ data.firstName + " " + data.lastName  + '</h5>';
+                    str = str + '<h5>' + data.name + '</h5>';
+                    str = str + '<h5>' + data.firstName + " " + data.lastName + '</h5>';
                     str = str + '<h5>' + data.email + ' </h5>';
                     str = str + '<h5>' + data.phoneNumber + ' </h5>';
                     str = str + '</div>';
@@ -60,7 +60,7 @@ function updateMember() {
                 });
 
                 //update heading
-                $('.heading').html(function() {
+                $('.heading').html(function () {
                     let str = '<h2><b>' + data.firstName + ' ' + data.lastName + '</b></h2>';
                     str = str + '<h2><b>' + data.name + '</b></h2>';
 
@@ -68,11 +68,11 @@ function updateMember() {
                 });
 
                 //update manufacturers dropdown for earn points transaction
-                $('.sell-myWatch-id select').html(function() {
+                $('.sell-myWatch-id select').html(function () {
                     let str = '<option value="" disabled="" selected="">select</option>';
                     let transactionData = data.getMyWatchesResults;
                     for (let i = 0; i < transactionData.length; i++) {
-                        str = str + '<option sell-my-watch-id=' +transactionData[i].manufacturer + "*+$+*" + transactionData[i].watchId + '> ' + transactionData[i].manufacturer + ": " + transactionData[i].watchId + '</option>';
+                        str = str + '<option sell-my-watch-id=' + transactionData[i].manufacturer + "*+$+*" + transactionData[i].watchId + '> ' + transactionData[i].manufacturer + ": " + transactionData[i].watchId + '</option>';
                     }
                     return str;
                 });
@@ -84,7 +84,7 @@ function updateMember() {
                     console.log(data.queryAllWatchesResults);
 
                     for (let i = 0; i < transactionData.length; i++) {
-                        str = str + '<p>timeStamp: ' + transactionData[i].timestamp + '<br />owner: ' + transactionData[i].owner + '<br />manufacturer: ' + transactionData[i].manufacturer + '<br />WatchId: ' + transactionData[i].watchId + '<br />model: ' + transactionData[i].model + '<br />color: ' + transactionData[i].color +  '<br />transactionType: ' + transactionData[i].transactionType + '<br />transactionID: ' + transactionData[i].transactionId + '</p><br>';
+                        str = str + '<p>timeStamp: ' + transactionData[i].timestamp + '<br />owner: ' + transactionData[i].owner + '<br />Manufacturer: ' + transactionData[i].manufacturer + '<br />WatchId: ' + transactionData[i].watchId + '<br />model: ' + transactionData[i].model + '<br />color: ' + transactionData[i].color + '<br />transactionType: ' + transactionData[i].transactionType + '<br />transactionID: ' + transactionData[i].transactionId + '</p><br>';
                     }
                     return str;
                 });
@@ -94,14 +94,11 @@ function updateMember() {
                     let str = '';
                     let transactionData = data.getMyWatchesResults;
                     console.log(data.getMyWatchesResults);
-
                     for (let i = 0; i < transactionData.length; i++) {
-                        str = str + '<p>timeStamp: ' + transactionData[i].timestamp + '<br />owner: ' + transactionData[i].owner + '<br />manufacturer: ' + transactionData[i].manufacturer + '<br />WatchId: ' + transactionData[i].watchId + '<br />model: ' + transactionData[i].model + '<br />color: ' + transactionData[i].color +  '<br />transactionType: ' + transactionData[i].transactionType + '<br />transactionID: ' + transactionData[i].transactionId + '</p><br>';
+                        str = str + '<p class="myWatch' + i + '" style="margin-bottom:0px;">manufacturer: ' + transactionData[i].manufacturer + '<br />Watch ID: ' + transactionData[i].watchId + '</p> <button class="btn btn-primary" style="margin-top:5px; margin-bottom:5px;" onclick="specificWatchTransactions(' + i + ')">Show transactions</button> <button class="btn btn-primary" style="margin-top:5px; margin-bottom:5px;" onclick="specificVerifiedRetailers(\'' + transactionData[i].manufacturer + '\')">Show verified retailers</button> <br> <hr>';
                     }
                     return str;
                 });
-
-
 
                 //remove login section and display member page
                 document.getElementById('loginSection').style.display = 'none';
@@ -109,27 +106,153 @@ function updateMember() {
             }
 
         },
-        error: function(jqXHR, textStatus, errorThrown) {
+        error: function (jqXHR, textStatus, errorThrown) {
             //reload on error
             alert('Error: Try again');
             console.log(errorThrown);
             console.log(textStatus);
             console.log(jqXHR);
         },
-        complete: function() {
+        complete: function () {
+
+        }
+    });
+}
+
+function specificVerifiedRetailers(manufacturerName){
+
+    //create json data
+    let inputData = '{' + '"manufacturerName" : "' + manufacturerName + '"}';
+    console.log(inputData);
+
+    //make ajax call
+    $.ajax({
+        type: 'POST',
+        url: apiUrl + 'verifiedRetailers',
+        data: inputData,
+        dataType: 'json',
+        contentType: 'application/json',
+        beforeSend: function () {
+            //display loading
+            document.getElementById('loader').style.display = 'block';
+        },
+        success: function (data) {
+
+            //remove loader
+            document.getElementById('loader').style.display = 'none';
+
+            //check data for error
+            if (data.error) {
+                alert(data.error);
+                return;
+            } else {
+
+                //update use points transaction
+                $('.get-myWatches-all-transactions').html(function () {
+                    let str = '';
+                    let transactionData = data.getVerifiedRetailersResults.retailerList;
+                    console.log(data.getMyWatchesResults);
+                    
+                    str = str + '<h3>Retailers verified by ' + manufacturerName + '</h3> <br>';
+                    str = str + '<p class="retailers">';
+                    for (let i = 0; i < transactionData.length; i++) {
+                        str = str  + '<button class="btn" style="background:black; color:white; margin:5px;" onclick="getRetailerInfo(\'' + transactionData[i] + '\')">' + transactionData[i]+  "</button>";
+                    }
+                    str = str + '</p>';
+                    return str;
+                });
+            }
+
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            //reload on error
+            alert('Error: Try again');
+            console.log(errorThrown);
+            console.log(textStatus);
+            console.log(jqXHR);
+        },
+        complete: function () {
+
+        }
+    });
+
+}
+
+function getRetailerInfo(name){
+    var txt = document.getElementById("searchRetailerInput");
+    txt.value = name;
+    document.getElementById("searchRetailerButton").click();
+    $("#searchRetailer-tab").trigger("click");
+}
+
+function specificWatchTransactions(y) {
+
+    //get user input data
+    let name = $('.memberName input').val();
+
+    //create json data
+    let inputData = '{' + '"name" : "' + name + '"}';
+    console.log(inputData);
+
+    //make ajax call
+    $.ajax({
+        type: 'POST',
+        url: apiUrl + 'allMyWatchesTransactions',
+        data: inputData,
+        dataType: 'json',
+        contentType: 'application/json',
+        beforeSend: function () {
+            //display loading
+            document.getElementById('loader').style.display = 'block';
+        },
+        success: function (data) {
+
+            //remove loader
+            document.getElementById('loader').style.display = 'none';
+
+            //check data for error
+            if (data.error) {
+                alert(data.error);
+                return;
+            } else {
+
+                //update use points transaction
+                $('.get-myWatches-all-transactions').html(function () {
+                    let str = '';
+                    let transactionData = data.getMyWatchesAllTransactionsResults[y];
+                    console.log(data.getMyWatchesResults);
+
+                    str = str + '<h3>All transactions of watch ' + transactionData[0].watchId + '</h3>';
+
+                    for (let i = 0; i < transactionData.length; i++) {
+                        str = str + '<p class="myWatch' + i + '">timeStamp: ' + transactionData[i].timestamp + '<br />owner: ' + transactionData[i].owner + '<br />manufacturer: ' + transactionData[i].manufacturer + '<br />WatchId: ' + transactionData[i].watchId + '<br />model: ' + transactionData[i].model + '<br />color: ' + transactionData[i].color + '<br />transactionType: ' + transactionData[i].transactionType + '<br />transactionID: ' + transactionData[i].transactionId + '</p><br>';
+                    }
+                    return str;
+                });
+            }
+
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            //reload on error
+            alert('Error: Try again');
+            console.log(errorThrown);
+            console.log(textStatus);
+            console.log(jqXHR);
+        },
+        complete: function () {
 
         }
     });
 }
 
 //check user input and call server
-$('.sign-in-member').click(function() {
+$('.sign-in-member').click(function () {
     updateMember();
 });
 
 //check user input and call server
-$('.sell-watch').click(function() {
-    
+$('.sell-watch').click(function () {
+
     //select logic
     let formManufacturerAndWatchId = $('.sell-myWatch-id select').find(':selected').attr('sell-my-watch-id');
     if (!formManufacturerAndWatchId) {

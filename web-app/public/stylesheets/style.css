@@ -72,6 +72,9 @@ body {
   letter-spacing: -.05rem;
 }
 
+.myWatchesContainer{
+  display:flex;
+}
 
 
 /* Loader
