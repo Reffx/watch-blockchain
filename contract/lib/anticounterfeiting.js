@@ -414,9 +414,9 @@ class AntiCounterfeiting extends Contract {
         let uniqueNewWatchesId = [];
         let uniqueNewWatchesTransactions = [];
         for (let i = allWatchesTransactions.length; i > 0; i--){
-            if (allWatchesTransactions[i-1].transactionType === "newWatchOwner" && (uniqueNewWatchesId.indexOf(allWatchesTransactions[i].uniqueId) === -1)){
-                uniqueNewWatchesId.push(allWatchesTransactions[i].uniqueId);
-                uniqueNewWatchesTransactions.push(allWatchesTransactions[i]);
+            if (allWatchesTransactions[i-1].transactionType === "newWatchOwner" && (uniqueNewWatchesId.indexOf(allWatchesTransactions[i-1].uniqueId) === -1)){
+                uniqueNewWatchesId.push(allWatchesTransactions[i-1].uniqueId);
+                uniqueNewWatchesTransactions.push(allWatchesTransactions[i-1]);
             }
         }
     
