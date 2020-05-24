@@ -224,22 +224,50 @@ app.post('/api/memberData', function (req, res) {
             }
         })
         .then(() => {
-            //get manufacturers to transact with from the network
-            network.allManufacturersInfo(memberName)
-                .then((manufacturersInfo) => {
+            //get EarnPoints transactions from the network
+            network.queryAllWatches(memberName)
+                .then((queryAllWatchesResults) => {
                     //return error if error in response
-                    if (typeof manufacturersInfo === 'object' && 'error' in manufacturersInfo && manufacturersInfo.error !== null) {
+                    if (typeof queryAllWatchesResults === 'object' && 'error' in queryAllWatchesResults && queryAllWatchesResults.error !== null) {
                         res.json({
-                            error: manufacturersInfo.error
+                            error: queryAllWatchesResults.error
                         });
                     } else {
-                        //else add manufacturers data to return object
-                        returnData.manufacturersData = manufacturersInfo;
+                        //else add transaction data to return object
+                        returnData.queryAllWatchesResults = queryAllWatchesResults;
                     }
+                })
+                .then(() => {
+                    //get EarnPoints transactions from the network
+                    network.getMyWatches(memberName)
+                        .then((getMyWatchesResults) => {
+                            //return error if error in response
+                            if (typeof getMyWatchesResults === 'object' && 'error' in getMyWatchesResults && getMyWatchesResults.error !== null) {
+                                res.json({
+                                    error: getMyWatchesResults.error
+                                });
+                            } else {
+                                //else add transaction data to return object
+                                returnData.getMyWatchesResults = getMyWatchesResults;
+                            }
+                        }).then(() => {
+                            //get manufacturers to transact with from the network
+                            network.allManufacturersInfo(memberName)
+                                .then((manufacturersInfo) => {
+                                    //return error if error in response
+                                    if (typeof manufacturersInfo === 'object' && 'error' in manufacturersInfo && manufacturersInfo.error !== null) {
+                                        res.json({
+                                            error: manufacturersInfo.error
+                                        });
+                                    } else {
+                                        //else add manufacturers data to return object
+                                        returnData.manufacturersData = manufacturersInfo;
+                                    }
 
-                    //return returnData
-                    res.json(returnData);
-
+                                    //return returnData
+                                    res.json(returnData);
+                                });
+                        });
                 });
         });
 });

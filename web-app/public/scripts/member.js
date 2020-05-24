@@ -42,25 +42,41 @@ function updateMember() {
                     return str;
                 });
 
-                // //update manufacturers dropdown for earn points transaction
-                // $('.earn-manufacturer select').html(function() {
-                //     let str = '<option value="" disabled="" selected="">select</option>';
-                //     let manufacturersData = data.manufacturersData;
-                //     for (let i = 0; i < manufacturersData.length; i++) {
-                //         str = str + '<option manufacturer-id=' + manufacturersData[i].id + '> ' + manufacturersData[i].name + '</option>';
-                //     }
-                //     return str;
-                // });
+                //update manufacturers dropdown for earn points transaction
+                $('.sell-myWatch-id select').html(function() {
+                    let str = '<option value="" disabled="" selected="">select</option>';
+                    let transactionData = data.getMyWatchesResults;
+                    for (let i = 0; i < transactionData.length; i++) {
+                        str = str + '<option sell-my-watch-id=' +transactionData[i].manufacturer + "*+$+*" + transactionData[i].watchId + '> ' + transactionData[i].manufacturer + ": " + transactionData[i].watchId + '</option>';
+                    }
+                    return str;
+                });
 
-                // //update manufacturers dropdown for use points transaction
-                // $('.use-manufacturer select').html(function() {
-                //     let str = '<option value="" disabled="" selected="">select</option>';
-                //     let manufacturersData = data.manufacturersData;
-                //     for (let i = 0; i < manufacturersData.length; i++) {
-                //         str = str + '<option manufacturer-id=' + manufacturersData[i].id + '> ' + manufacturersData[i].name + '</option>';
-                //     }
-                //     return str;
-                // });
+                //update use points transaction
+                $('.query-watches-transactions').html(function () {
+                    let str = '';
+                    let transactionData = data.queryAllWatchesResults;
+                    console.log(data.queryAllWatchesResults);
+
+                    for (let i = 0; i < transactionData.length; i++) {
+                        str = str + '<p>timeStamp: ' + transactionData[i].timestamp + '<br />owner: ' + transactionData[i].owner + '<br />manufacturer: ' + transactionData[i].manufacturer + '<br />WatchId: ' + transactionData[i].watchId + '<br />model: ' + transactionData[i].model + '<br />color: ' + transactionData[i].color +  '<br />transactionType: ' + transactionData[i].transactionType + '<br />transactionID: ' + transactionData[i].transactionId + '</p><br>';
+                    }
+                    return str;
+                });
+
+                //update use points transaction
+                $('.query-myWatches-transactions').html(function () {
+                    let str = '';
+                    let transactionData = data.getMyWatchesResults;
+                    console.log(data.getMyWatchesResults);
+
+                    for (let i = 0; i < transactionData.length; i++) {
+                        str = str + '<p>timeStamp: ' + transactionData[i].timestamp + '<br />owner: ' + transactionData[i].owner + '<br />manufacturer: ' + transactionData[i].manufacturer + '<br />WatchId: ' + transactionData[i].watchId + '<br />model: ' + transactionData[i].model + '<br />color: ' + transactionData[i].color +  '<br />transactionType: ' + transactionData[i].transactionType + '<br />transactionID: ' + transactionData[i].transactionId + '</p><br>';
+                    }
+                    return str;
+                });
+
+
 
                 //remove login section and display member page
                 document.getElementById('loginSection').style.display = 'none';
@@ -129,7 +145,7 @@ $('.sell-watch').click(function() {
                 //update member page and notify successful transaction
                 // createWatch();
                 alert('Transaction successful');
-                updateRetailer();
+                updateMember();
             }
 
 

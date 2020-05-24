@@ -102,6 +102,10 @@
               aria-controls="dashboard" aria-selected="true">Dashboard</a>
           </li>
           <li class="nav-item tab-width">
+            <a class="nav-link" id="sellWatch-tab" data-toggle="tab" href="#sellWatch" role="tab"
+              aria-controls="sellWatch2" aria-selected="false">Sell Watch</a>
+          </li>
+          <li class="nav-item tab-width">
             <a class="nav-link" id="transactions-tab" data-toggle="tab" href="#transactions" role="tab"
               aria-controls="transactions" aria-selected="false">Transactions</a>
           </li>
@@ -149,36 +153,34 @@
               <br>
               <ul class="nav nav-tabs" id="transactionsTypeTab" role="tablist">
                 <li class="nav-item ">
-                  <a class="nav-link active" id="points-allocated-tab" data-toggle="tab" href="#points-allocated"
-                    role="tab" aria-controls="points-allocated" aria-selected="true">Points Allocated</a>
+                  <a class="nav-link" id="myWatches-created-tab" data-toggle="tab" href="#myWatches" role="tab"
+                    aria-controls="myWatches" aria-selected="false">My Watches</a>
                 </li>
                 <li class="nav-item ">
-                  <a class="nav-link" id="points-redeemed-tab" data-toggle="tab" href="#points-redeemed" role="tab"
-                    aria-controls="points-redeemed" aria-selected="false">Points Redeemed</a>
+                  <a class="nav-link" id="watches-created-tab" data-toggle="tab" href="#watches-created" role="tab"
+                    aria-controls="watches-created" aria-selected="false">All Watches (debug)</a>
                 </li>
               </ul>
 
               <div class="tab-content" id="myTabContent">
-                <div class="tab-pane fade show active" id="points-allocated" role="tabpanel"
-                  aria-labelledby="points-allocated-tab">
+
+                <div class="tab-pane fade " id="myWatches" role="tabpanel" aria-labelledby="myWatches-created-tab">
                   <br>
-                  <h4>Points Earned Transactions</h4>
+                  <h4>My Watches</h4>
                   <br>
-                  <div class="points-allocated-transactions"> </div>
+                  <div class="query-myWatches-transactions"> </div>
                   <br><br>
                 </div>
 
-                <div class="tab-pane fade " id="points-redeemed" role="tabpanel" aria-labelledby="points-redeemed-tab">
+                <div class="tab-pane fade " id="watches-created" role="tabpanel" aria-labelledby="watches-created-tab">
                   <br>
-                  <h4>Points Redeemed Transactions</h4>
+                  <h4>Created Watches Transactions</h4>
                   <br>
-                  <div class="points-redeemed-transactions"> </div>
+                  <div class="query-watches-transactions"> </div>
                   <br><br>
                 </div>
 
               </div>
-
-              <hr class="featurette-divider">
             </div>
 
 
