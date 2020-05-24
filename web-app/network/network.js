@@ -859,6 +859,117 @@ module.exports = {
     },
 
     // query all cars transaction
+    getWatchSearch: async function (userId, manufacturerName, watchId) {
+        let response = {};
+
+        // Create a new file system based wallet for managing identities.
+        const walletPath = path.join(process.cwd(), '/wallet');
+        const wallet = new FileSystemWallet(walletPath);
+        console.log(`Wallet path: ${walletPath}`);
+
+        try {
+            // Create a new gateway for connecting to our peer node.
+            const gateway2 = new Gateway();
+            await gateway2.connect(ccp, { wallet, identity: userId, discovery: gatewayDiscovery });
+
+            // Get the network (channel) our contract is deployed to.
+            const network = await gateway2.getNetwork('mychannel');
+
+            // Get the contract from the network.
+            const contract = network.getContract('anticounterfeiting');
+
+            console.log(`\nGet watches transactions state for ${userId}`);
+            let result = await contract.evaluateTransaction('QuerySingleWatch', manufacturerName, watchId);
+            result = JSON.parse(result.toString());
+            console.log(result);
+            if (result === 0) {return []}
+            // Disconnect from the gateway.
+            await gateway2.disconnect();
+
+            return result;
+
+        } catch (error) {
+            console.error(`Failed to evaluate transaction: ${error}`);
+            response.error = error.message;
+            return response;
+        }
+    },
+
+    // query all cars transaction
+    getRetailerSearch: async function (userId, retailerName) {
+        let response = {};
+
+        // Create a new file system based wallet for managing identities.
+        const walletPath = path.join(process.cwd(), '/wallet');
+        const wallet = new FileSystemWallet(walletPath);
+        console.log(`Wallet path: ${walletPath}`);
+
+        try {
+            // Create a new gateway for connecting to our peer node.
+            const gateway2 = new Gateway();
+            await gateway2.connect(ccp, { wallet, identity: userId, discovery: gatewayDiscovery });
+
+            // Get the network (channel) our contract is deployed to.
+            const network = await gateway2.getNetwork('mychannel');
+
+            // Get the contract from the network.
+            const contract = network.getContract('anticounterfeiting');
+
+            console.log(`\nGet watches transactions state for ${userId}`);
+            let result = await contract.evaluateTransaction('GetLatestRetailerInfo', retailerName);
+            result = JSON.parse(result.toString());
+            console.log(result);
+            if (result === 0) {return []}
+            // Disconnect from the gateway.
+            await gateway2.disconnect();
+
+            return result;
+
+        } catch (error) {
+            console.error(`Failed to evaluate transaction: ${error}`);
+            response.error = error.message;
+            return response;
+        }
+    },
+
+    // query all cars transaction
+    getMyWatchesAllTransactions: async function (userId) {
+        let response = {};
+
+        // Create a new file system based wallet for managing identities.
+        const walletPath = path.join(process.cwd(), '/wallet');
+        const wallet = new FileSystemWallet(walletPath);
+        console.log(`Wallet path: ${walletPath}`);
+
+        try {
+            // Create a new gateway for connecting to our peer node.
+            const gateway2 = new Gateway();
+            await gateway2.connect(ccp, { wallet, identity: userId, discovery: gatewayDiscovery });
+
+            // Get the network (channel) our contract is deployed to.
+            const network = await gateway2.getNetwork('mychannel');
+
+            // Get the contract from the network.
+            const contract = network.getContract('anticounterfeiting');
+
+            console.log(`\nGet watches transactions state for ${userId}`);
+            let result = await contract.evaluateTransaction('GetMyWatchesAllTransactions', userId);
+            result = JSON.parse(result.toString());
+            console.log(result);
+
+            // Disconnect from the gateway.
+            await gateway2.disconnect();
+
+            return result;
+
+        } catch (error) {
+            console.error(`Failed to evaluate transaction: ${error}`);
+            response.error = error.message;
+            return response;
+        }
+    },
+
+    // query all cars transaction
     queryAllWatches: async function (cardId) {
         let response = {};
 
