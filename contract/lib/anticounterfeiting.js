@@ -72,6 +72,7 @@ class AntiCounterfeiting extends Contract {
     // Get latest information about Manufacturer
     async GetLatestManufacturerInfo(ctx, manufacturerName) {
         let transactions = await ctx.stub.getState(manufacturerName);
+        if (transactions.length != 0) {
         transactions = JSON.parse(transactions);
 
         let manuInformation = [];
@@ -80,23 +81,25 @@ class AntiCounterfeiting extends Contract {
         }
 
         manuInformation = manuInformation[manuInformation.length - 1];
-
-        return JSON.stringify(transactions);
+        return JSON.stringify(manuInformation);
+    } else return JSON.stringify(0);
     }
 
     // Get latest information about retailer
     async GetLatestRetailerInfo(ctx, retailerName) {
         let transactions = await ctx.stub.getState(retailerName);
-        transactions = JSON.parse(transactions);
+        if (transactions.length != 0) {
+            transactions = JSON.parse(transactions);
 
-        let retaInformation = [];
-        for (let c of transactions) {
-            retaInformation.push(c);
-        }
+            let retaInformation = [];
+            for (let c of transactions) {
+                retaInformation.push(c);
+            }
 
-        retaInformation = retaInformation[retaInformation.length - 1];
+            retaInformation = retaInformation[retaInformation.length - 1];
+            return JSON.stringify(retaInformation);
+        } else return JSON.stringify(0);
 
-        return JSON.stringify(transactions);
     }
 
     // get the state from key
