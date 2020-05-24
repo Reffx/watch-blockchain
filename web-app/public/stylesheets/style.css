@@ -32,6 +32,10 @@ body {
   width: 200px;
 }
 
+.tab-content{
+  width: 100%;
+}
+
 .tab-width a {
   color: #acadaf;  
 }
