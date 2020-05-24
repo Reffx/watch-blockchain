@@ -456,6 +456,64 @@ app.post('/api/retailerData', function (req, res) {
         });
 });
 
+//post call to retrieve member data, transactions data and manufacturers to perform transactions with from the network
+app.post('/api/allMyWatchesTransactions', function (req, res) {
+
+    //declare variables to retrieve from request
+    let name = req.body.name;
+
+    //print variables
+    console.log('memberData using param - ' + ' name: ' + name);
+
+    //declare return object
+    let returnData = {};
+
+    //get EarnPoints transactions from the network
+    network.getMyWatchesAllTransactions(name)
+        .then((getMyWatchesAllTransactionsResults) => {
+            //return error if error in response
+            if (typeof getMyWatchesAllTransactionsResults === 'object' && 'error' in getMyWatchesAllTransactionsResults && getMyWatchesAllTransactionsResults.error !== null) {
+                res.json({
+                    error: getMyWatchesAllTransactionsResults.error
+                });
+            } else {
+                //else add transaction data to return object
+                returnData.getMyWatchesAllTransactionsResults = getMyWatchesAllTransactionsResults;
+                res.json(returnData);
+            }
+        })
+
+});
+
+//post call to retrieve member data, transactions data and manufacturers to perform transactions with from the network
+app.post('/api/verifiedRetailers', function (req, res) {
+
+    //declare variables to retrieve from request
+    let manufacturerName = req.body.manufacturerName;
+
+    //print variables
+    console.log('memberData using param - ' + ' manufacturerName: ' + manufacturerName);
+
+    //declare return object
+    let returnData = {};
+
+    //get EarnPoints transactions from the network
+    network.getVerifiedRetailersByManufacturer(manufacturerName)
+        .then((getVerifiedRetailersResults) => {
+            //return error if error in response
+            if (typeof getVerifiedRetailersResults === 'object' && 'error' in getVerifiedRetailersResults && getVerifiedRetailersResults.error !== null) {
+                res.json({
+                    error: getVerifiedRetailersResults.error
+                });
+            } else {
+                //else add transaction data to return object
+                returnData.getVerifiedRetailersResults = getVerifiedRetailersResults;
+                res.json(returnData);
+            }
+        })
+
+});
+
 
 app.post('/api/createWatch', (req, res) => {
     console.log(req.body);
@@ -488,6 +546,20 @@ app.post('/api/verifyRetailer', (req, res) => {
 
 app.post('/api/unverifyRetailer', (req, res) => {
     network.unverifyRetailer(req.body.manufacturerName, req.body.retailerName)
+        .then((response) => {
+            res.send(response);
+        });
+});
+
+app.post('/api/searchWatch', (req, res) => {
+    network.getWatchSearch(req.body.userId, req.body.manufacturerName, req.body.watchId)
+        .then((response) => {
+            res.send(response);
+        });
+});
+
+app.post('/api/searchRetailer', (req, res) => {
+    network.getRetailerSearch(req.body.userId, req.body.retailerName)
         .then((response) => {
             res.send(response);
         });
