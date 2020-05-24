@@ -406,29 +406,74 @@ class AntiCounterfeiting extends Contract {
         let allWatchesTransactions = [];
 
         for (let transaction of transactions) {
-            transaction.uniqueId = transaction.manufacturer+transaction.watchId;
+            transaction.uniqueId = transaction.manufacturer + transaction.watchId;
             allWatchesTransactions.push(transaction);
-            }
-        
+        }
+
         // filter regarding newest owner for each watch
         let uniqueNewWatchesId = [];
         let uniqueNewWatchesTransactions = [];
-        for (let i = allWatchesTransactions.length; i > 0; i--){
-            if (allWatchesTransactions[i-1].transactionType === "newWatchOwner" && (uniqueNewWatchesId.indexOf(allWatchesTransactions[i-1].uniqueId) === -1)){
-                uniqueNewWatchesId.push(allWatchesTransactions[i-1].uniqueId);
-                uniqueNewWatchesTransactions.push(allWatchesTransactions[i-1]);
+        for (let i = allWatchesTransactions.length; i > 0; i--) {
+            if (allWatchesTransactions[i - 1].transactionType === "newWatchOwner" && (uniqueNewWatchesId.indexOf(allWatchesTransactions[i - 1].uniqueId) === -1)) {
+                uniqueNewWatchesId.push(allWatchesTransactions[i - 1].uniqueId);
+                uniqueNewWatchesTransactions.push(allWatchesTransactions[i - 1]);
             }
         }
-    
+
         //filter regarding owner
         let result = [];
-        for (let trans of uniqueNewWatchesTransactions){
-            if (trans.owner === currentOwner){
+        for (let trans of uniqueNewWatchesTransactions) {
+            if (trans.owner === currentOwner) {
                 result.push(trans);
             }
         }
 
         return JSON.stringify(result);
+    }
+
+    async GetMyWatchesAllTransactions(ctx, currentOwner) {
+        console.info('============= START : Query Single Watch ===========');
+        let transactions = await ctx.stub.getState(allWatchesTransactionKey);
+        transactions = JSON.parse(transactions);
+        let allWatchesTransactions = [];
+
+        for (let transaction of transactions) {
+            transaction.uniqueId = transaction.manufacturer + transaction.watchId;
+            allWatchesTransactions.push(transaction);
+        }
+
+        // filter regarding newest owner for each watch
+        let uniqueNewWatchesId = [];
+        let uniqueNewWatchesTransactions = [];
+        for (let i = allWatchesTransactions.length; i > 0; i--) {
+            if (allWatchesTransactions[i - 1].transactionType === "newWatchOwner" && (uniqueNewWatchesId.indexOf(allWatchesTransactions[i - 1].uniqueId) === -1)) {
+                uniqueNewWatchesId.push(allWatchesTransactions[i - 1].uniqueId);
+                uniqueNewWatchesTransactions.push(allWatchesTransactions[i - 1]);
+            }
+        }
+
+        //filter regarding owner
+        let result = [];
+        for (let trans of uniqueNewWatchesTransactions) {
+            if (trans.owner === currentOwner) {
+                result.push(trans);
+            }
+        }
+
+        let resultAllTransactions = [];
+        for (let trans of result) {
+            let transactions = await ctx.stub.getState(trans.manufacturer + "-" + trans.watchId);
+            let userTransactions = [];
+            if (transactions.length !== 0) {
+                transactions = JSON.parse(transactions);
+                for (let transaction of transactions) {
+                    userTransactions.push(transaction);
+                }
+            }
+            resultAllTransactions.push(userTransactions);
+        }
+
+        return JSON.stringify(resultAllTransactions);
     }
 
     async QueryAllWatches(ctx) {
