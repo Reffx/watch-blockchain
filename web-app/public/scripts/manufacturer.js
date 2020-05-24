@@ -88,6 +88,16 @@ function updateManufacturer() {
                     return str;
                 });
 
+                //update manufacturers dropdown for earn points transaction
+                $('.sell-myWatch-id select').html(function() {
+                    let str = '<option value="" disabled="" selected="">select</option>';
+                    let transactionData = data.getMyWatchesResults;
+                    for (let i = 0; i < transactionData.length; i++) {
+                        str = str + '<option sell-my-watch-id=' +transactionData[i].manufacturer + "*+$+*" + transactionData[i].watchId + '> ' + transactionData[i].manufacturer + ": " + transactionData[i].watchId + '</option>';
+                    }
+                    return str;
+                });
+
 
                 //remove login section
                 document.getElementById('loginSection').style.display = 'none';
@@ -166,9 +176,16 @@ $('.create-watch').click(function () {
 //check user input and call server
 $('.sell-watch').click(function () {
 
-    //get user input data
-    let formWatchId = $('.sell-watchid-id input').val();
-    let formManufacturerName = $('.manufacturerName input').val();
+    //select logic
+    let formManufacturerAndWatchId = $('.sell-myWatch-id select').find(':selected').attr('sell-my-watch-id');
+    if (!formManufacturerAndWatchId) {
+        alert('Select watch first');
+        return;
+    }
+    let res = formManufacturerAndWatchId.split("*+$+*");
+
+    let formWatchId = res[1];
+    let formManufacturerName = res[0];
     let formOwner = $('.newOwner-id input').val();
 
 

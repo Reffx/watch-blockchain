@@ -99,9 +99,9 @@
               aria-controls="sellWatch2" aria-selected="false">Sell Watch</a>
           </li>
           <li class="nav-item tab-width">
-                <a class="nav-link" id="recordMaintenance-tab" data-toggle="tab" href="#recordMaintenance" role="tab"
-                  aria-controls="recordMaintenance" aria-selected="false">Add Event</a>
-              </li>
+            <a class="nav-link" id="recordMaintenance-tab" data-toggle="tab" href="#recordMaintenance" role="tab"
+              aria-controls="recordMaintenance" aria-selected="false">Add Event</a>
+          </li>
           <li class="nav-item tab-width">
             <a class="nav-link" id="transactions-tab" data-toggle="tab" href="#transactions" role="tab"
               aria-controls="transactions" aria-selected="false">Transactions</a>
@@ -119,60 +119,62 @@
 
           <div class="tab-pane fade" id="sellWatch" role="tabpanel" aria-labelledby="sellWatch-tab">
             <br>
+            <h2>Sell watch</h2>
             <div class="jumbotron" style="display:block;">
               <div class="container">
-                <h2>Sell watch!!!</h2>
                 <br>
                 <div class="maintenanceManufacturerId-2">
-                  <p> <b>Choose which watch to : </b></p>
-                  <div class="sell-myWatch-id">
-                    <p>
-                      <select class="form-control">
-                                            <option disabled="" selected="" value="disabled">Loading...</option>
-                                        </select>
-                    </p>
+                  <p> <b>Watch certificate transfer </b></p>
+                </div>
+                <div class="sell-myWatch-id" style="display:flex; align-items:baseline">
+                  <label style="width:100px;">Watch </label>
+                  <select class="form-control" style="width:200px">
+                    <option disabled="" selected="" value="disabled">Loading...</option>
+                  </select>
+                </div>
+                <br>
+                <div class="newOwner-id" style="display:flex; flex-wrap: wrap; flex-direction: column;">
+                  <div>
+                    <label style="width:96px;"> Buyer </label>
+                    <input style="align-items:baseline">
                   </div>
                 </div>
-                <div class="newOwner-id">
-                  <p> Enter newOwner
-                    <input>
-                  </p>
-                </div>
-                <button class="btn btn-primary sell-watch">SELL WATCH!!!</button>
+                <br>
+                <button class="btn btn-primary sell-watch">transfer certificate</button>
               </div>
             </div>
           </div>
 
           <div class="tab-pane fade" id="recordMaintenance" role="tabpanel" aria-labelledby="sellWatch-tab">
+            <br>
+            <div class="jumbotron" style="display:block;">
+              <div class="container">
+                <h2>Record maintenance</h2>
                 <br>
-                <div class="jumbotron" style="display:block;">
-                  <div class="container">
-                    <h2>Record maintenance</h2>
-                    <br>
-                    <div class="maintenanceManufacturerId">
-                      <p> <b>Of whose manufacturer is the watch to maintain?</b></p>
-                      <div class="maintenance-manufacturer-id">
-                        <p>
-                          <select class="form-control">
-                                                <option disabled="" selected="" value="disabled">Loading...</option>
-                                            </select>
-                        </p>
-                      </div>
-                    </div>
-                    <div class="maintenance-watchid-id">
-                      <p> Enter watchid-id
-                        <input>
-                      </p>
-                    </div>
-                    <div class="maintenance-info-id">
-                      <p> Maintenance:
-                        <input style="height:90px">
-                      </p>
-                    </div>
-                    <button class="btn btn-primary add-maintenance">Add Event</button>
+                <div class="maintenanceManufacturerId">
+                  <p> <b>Of whose manufacturer is the watch to maintain?</b></p>
+                  <div class="maintenance-manufacturer-id">
+                    <p>
+                      <select class="form-control">
+                        <option disabled="" selected="" value="disabled">Loading...</option>
+                      </select>
+                    </p>
                   </div>
                 </div>
+                <div class="maintenance-watchid-id">
+                  <p> Enter watchid-id
+                    <input>
+                  </p>
+                </div>
+                <div class="maintenance-info-id">
+                  <p> Maintenance:
+                    <input style="height:90px">
+                  </p>
+                </div>
+                <button class="btn btn-primary add-maintenance">Add Event</button>
               </div>
+            </div>
+          </div>
 
           <div class="tab-pane fade" id="transactions" role="tabpanel" aria-labelledby="transactions-tab">
             <br>

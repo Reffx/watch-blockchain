@@ -34,6 +34,31 @@ function updateMember() {
                 return;
             } else {
 
+                //update dashboard
+                $('.dashboards').html(function () {
+                    let str = '';
+                    str = str + '<div class="jumbotron" style="display:block;">';
+                    str = str + '<h3>Account information</h3>';
+                    str = str + '<h5>'+ data.name + '</h5>';
+                    str = str + '<h5>'+ data.firstName + " " + data.lastName  + '</h5>';
+                    str = str + '<h5>' + data.email + ' </h5>';
+                    str = str + '<h5>' + data.phoneNumber + ' </h5>';
+                    str = str + '</div>';
+
+                    let transactionData = data.getMyWatchesResults;
+                    if (transactionData.length > 0) {
+                        str = str + '<div class="jumbotron" style="display:block;">';
+                        str = str + '<h3>My watches</h3>';
+                    }
+                    for (let i = 0; i < transactionData.length; i++) {
+                        str = str + '<h5>' + transactionData[i].manufacturer + ': ' + transactionData[i].watchId + '</h5>';
+                    }
+                    if (transactionData.length > 0) {
+                        str = str + '</div>';
+                    }
+                    return str;
+                });
+
                 //update heading
                 $('.heading').html(function() {
                     let str = '<h2><b>' + data.firstName + ' ' + data.lastName + '</b></h2>';
