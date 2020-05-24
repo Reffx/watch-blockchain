@@ -51,7 +51,7 @@ function updateRetailer() {
                 });
 
                 //update use points transaction
-                $('.query-myWatches-transactions').html(function () {
+                $('.get-myWatches-transactions').html(function () {
                     let str = '';
                     let transactionData = data.getMyWatchesResults;
                     console.log(data.getMyWatchesResults);
