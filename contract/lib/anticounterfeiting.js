@@ -6,6 +6,7 @@ const allRetailersKey = 'all-retailers';
 const earnPointsTransactionsKey = 'earn-points-transactions';
 const usePointsTransactionsKey = 'use-points-transactions';
 const allWatchesTransactionKey = 'all-watches-transactions';
+const allStolenWatchesTransaction = 'all-stolen-watches-transactions';
 
 class AntiCounterfeiting extends Contract {
 
@@ -19,6 +20,7 @@ class AntiCounterfeiting extends Contract {
         await ctx.stub.putState(earnPointsTransactionsKey, Buffer.from(JSON.stringify([])));
         await ctx.stub.putState(usePointsTransactionsKey, Buffer.from(JSON.stringify([])));
         await ctx.stub.putState(allWatchesTransactionKey, Buffer.from(JSON.stringify([])));
+        await ctx.stub.putState(allStolenWatchesTransaction, Buffer.from(JSON.stringify([])));
 
         console.info('============= END : Initialize Ledger ===========');
     }
@@ -319,7 +321,7 @@ class AntiCounterfeiting extends Contract {
         return JSON.stringify(newTransaction);
     }
 
-    async AddMaintenanceEvent(ctx, retailerName, watchId, manufacturerName, maintenanceInfo) {
+    async AddMaintenanceEvent(ctx, executorName, watchId, manufacturerName, maintenanceInfo) {
         console.info('============= START : addMaintenance ===========');
         //get chain for all Watches key
         let allWatchesTransaction = await ctx.stub.getState(allWatchesTransactionKey);
@@ -333,7 +335,7 @@ class AntiCounterfeiting extends Contract {
         let verifiedRetailersTrans = await this.GetVerifyRetailersByManufacturer(ctx, manufacturerName);
         if (verifiedRetailersTrans.length != 0) {
             verifiedRetailersTrans = JSON.parse(verifiedRetailersTrans);
-            if (verifiedRetailersTrans.retailerList.indexOf(retailerName) != -1) {
+            if (verifiedRetailersTrans.retailerList.indexOf(executorName) != -1) {
                 verifiedInformation = 'verified transaction!'
             }
         }
@@ -353,7 +355,7 @@ class AntiCounterfeiting extends Contract {
         newTransaction.model = oldTransaction.model;
         newTransaction.color = oldTransaction.color;
         newTransaction.owner = oldTransaction.owner;
-        newTransaction.transaction_executor = retailerName;
+        newTransaction.transaction_executor = executorName;
         newTransaction.verified_information = verifiedInformation;
         newTransaction.transactionType = "maintenanceEvent";
         newTransaction.info = maintenanceInfo;
@@ -535,6 +537,79 @@ class AntiCounterfeiting extends Contract {
         }
     }
 
+    async ReportStolen(ctx, executorName, watchId) {
+
+        let transactions = await ctx.stub.getState(allStolenWatchesTransaction);
+        let stolenWatchesTransactions = [];
+        transactions = JSON.parse(transactions);
+        let newTransaction = {};
+        for (let transaction of transactions) {
+            stolenWatchesTransactions.push(transaction);
+        }
+        if (stolenWatchesTransactions.length === 0) {
+            let currentStolenWatchesList = [];
+            currentStolenWatchesList.push(watchId);
+            newTransaction.timestamp = new Date((ctx.stub.txTimestamp.seconds.low * 1000)).toGMTString();
+            newTransaction.stolenWatchesList = currentStolenWatchesList;
+
+            transactions.push(newTransaction);
+        } else {
+            let currentStolenWatchesList = [...stolenWatchesTransactions[stolenWatchesTransactions.length - 1].stolenWatchesList];
+            let index = currentStolenWatchesList.indexOf(watchId);
+            if (index === -1) {
+                currentStolenWatchesList.push(watchId);
+
+                newTransaction.timestamp = new Date((ctx.stub.txTimestamp.seconds.low * 1000)).toGMTString();
+                newTransaction.stolenWatchesList = currentStolenWatchesList;
+
+                transactions.push(newTransaction);
+            } else {
+                return;
+            }
+        }
+        await ctx.stub.putState(allStolenWatchesTransaction, Buffer.from(JSON.stringify(transactions))); //push 
+        return JSON.stringify(newTransaction);
+    }
+
+    async GetStolenWatches(ctx, executorName) {
+        let transactions = await ctx.stub.getState(allStolenWatchesTransaction);
+        if (transactions.length != 0) {
+            transactions = JSON.parse(transactions);
+            let stolenWatchesTransactions = [];
+            for (let transaction of transactions) {
+                stolenWatchesTransactions.push(transaction);
+            }
+            let lastStolenWatchesTransaction = stolenWatchesTransactions[stolenWatchesTransactions.length - 1];
+            return JSON.stringify(lastStolenWatchesTransaction);
+        }
+    }
+
+    async RemoveStolenWatch(ctx, executorName, watchId) {
+        //Remove by manufacturer chain
+        let transactions = await ctx.stub.getState(allStolenWatchesTransaction);
+        let stolenWatchesTransactions = [];
+        if (transactions.length != 0) {
+            transactions = JSON.parse(transactions);
+            for (let transaction of transactions) {
+                stolenWatchesTransactions.push(transaction);
+            }
+            //get remove watchId
+            let currentStolenWatchesList = [...stolenWatchesTransactions[stolenWatchesTransactions.length - 1].stolenWatchesList];
+            let index = currentStolenWatchesList.indexOf(watchId);
+            if (index != -1) {
+                currentStolenWatchesList.splice(currentStolenWatchesList.indexOf(watchId), 1);
+
+                let newTransaction = {};
+                newTransaction.timestamp = new Date((ctx.stub.txTimestamp.seconds.low * 1000)).toGMTString();
+                newTransaction.stolenWatchesList = currentStolenWatchesList;
+
+                //push new Transaction to the chain
+                transactions.push(newTransaction);
+                await ctx.stub.putState(allStolenWatchesTransaction, Buffer.from(JSON.stringify(transactions))); //push 
+                return JSON.stringify(newTransaction);
+            }
+        }
+    }
 }
 
 module.exports = AntiCounterfeiting;
