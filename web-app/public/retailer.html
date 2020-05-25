@@ -45,22 +45,22 @@
   </nav>
 
   <div class="jumbotron" id="loginSection" style="display:block;">
-    <div class="container">
-      <h2>Retailer Sign In</h2>
-      <br>
-      <div class="retailerName">
-        <p> Enter Retailer name
-          <input>
-        </p>
+      <div class="container">
+        <h2>Retailer Sign In</h2>
+        <br>
+        <div class="retailerName" style="display:flex;">
+          <p style="width: 180px;"> Enter retailer name
+          </p>
+          <input style="height: 25px;">
+        </div>
+        <div class="password" style="display: flex;">
+          <p style="width: 180px;"> Enter password
+          </p>
+          <input style="height: 25px;">
+        </div>
+        <button class="btn btn-primary sign-in-retailer">SIGN IN</button>
       </div>
-      <div class="password">
-        <p> Enter password
-          <input>
-        </p>
-      </div>
-      <button class="btn btn-primary sign-in-retailer">SIGN IN</button>
     </div>
-  </div>
 
 
   <div id="transactionSection" style="display:none;">
@@ -113,18 +113,18 @@
         <div class="tab-content" id="myTabContent">
           <div class="tab-pane fade show active" id="dashboard" role="tabpanel" aria-labelledby="dashboard-tab">
             <br>
-            <h3>Dashboard</h3>
+            <h1 style="text-align: center;">Dashboard</h1>
             <div class="dashboards"></div>
           </div>
 
           <div class="tab-pane fade" id="sellWatch" role="tabpanel" aria-labelledby="sellWatch-tab">
             <br>
-            <h2>Sell watch</h2>
+            <h1 style="text-align: center;">Sell watch</h1>
             <div class="jumbotron" style="display:block;">
               <div class="container">
                 <br>
                 <div class="maintenanceManufacturerId-2">
-                  <p> <b>Watch certificate transfer </b></p>
+                  <p> <b>Enter certificate transfer details.</b></p>
                 </div>
                 <div class="sell-myWatch-id" style="display:flex; align-items:baseline">
                   <label style="width:100px;">Watch </label>
@@ -147,30 +147,29 @@
 
           <div class="tab-pane fade" id="recordMaintenance" role="tabpanel" aria-labelledby="sellWatch-tab">
             <br>
+            <h1 style="text-align: center;">Record Maintenance</h1>
             <div class="jumbotron" style="display:block;">
               <div class="container">
-                <h2>Record maintenance</h2>
-                <br>
                 <div class="maintenanceManufacturerId">
-                  <p> <b>Of whose manufacturer is the watch to maintain?</b></p>
-                  <div class="maintenance-manufacturer-id">
-                    <p>
-                      <select class="form-control">
-                        <option disabled="" selected="" value="disabled">Loading...</option>
-                      </select>
-                    </p>
-                  </div>
+                  <p> <b>Enter maintenance details.</b></p>
                 </div>
+                <div class="maintenance-manufacturer-id" style="display:flex; align-items:baseline">
+                  <label style="width:120px;">Manufacturer </label>
+                  <select class="form-control" style="width:200px">
+                    <option disabled="" selected="" value="disabled">Loading...</option>
+                  </select>
+                </div>
+                <br>
                 <div class="maintenance-watchid-id">
-                  <p> Enter watchid-id
-                    <input>
-                  </p>
+                  <label style="width:116px;"> Watch ID </label>
+                  <input style="align-items:baseline">
                 </div>
+                <br>
                 <div class="maintenance-info-id">
-                  <p> Maintenance:
-                    <input style="height:90px">
-                  </p>
+                  <label style="width:116px;">Maintenance </label>
+                  <input style="height:100px">
                 </div>
+                <br>
                 <button class="btn btn-primary add-maintenance">Add Event</button>
               </div>
             </div>
@@ -178,8 +177,7 @@
 
           <div class="tab-pane fade" id="transactions" role="tabpanel" aria-labelledby="transactions-tab">
             <br>
-            <p>View transactions by transaction type </p>
-            <br>
+            <h1 style="text-align: center;">Transactions</h1>
             <ul class="nav nav-tabs" id="transactionsTypeTab" role="tablist">
               <li class="nav-item ">
                 <a class="nav-link" id="myWatches-created-tab" data-toggle="tab" href="#myWatches" role="tab"
