@@ -345,33 +345,47 @@ app.post('/api/manufacturerData', function (req, res) {
                         })
                         .then(() => {
                             //get EarnPoints transactions from the network
-                            network.getVerifiedRetailersByManufacturer(manufacturerName)
-                                .then((getVerifiedRetailersResults) => {
+                            network.getStolenWatches(manufacturerName)
+                                .then((getStolenWatchesResults) => {
                                     //return error if error in response
-                                    if (typeof getVerifiedRetailersResults === 'object' && 'error' in getVerifiedRetailersResults && getVerifiedRetailersResults.error !== null) {
+                                    if (typeof getStolenWatchesResults === 'object' && 'error' in getStolenWatchesResults && getStolenWatchesResults.error !== null) {
                                         res.json({
-                                            error: getVerifiedRetailersResults.error
+                                            error: getStolenWatchesResults.error
                                         });
                                     } else {
                                         //else add transaction data to return object
-                                        returnData.getVerifiedRetailersResults = getVerifiedRetailersResults;
+                                        returnData.getStolenWatchesResults = getStolenWatchesResults;
                                     }
-                                })
-                                .then(() => {
+                                }).then(() => {
                                     //get EarnPoints transactions from the network
-                                    network.countAllManufacturers(manufacturerName)
-                                        .then((countManufacturersResults) => {
+                                    network.getVerifiedRetailersByManufacturer(manufacturerName)
+                                        .then((getVerifiedRetailersResults) => {
                                             //return error if error in response
-                                            if (typeof countManufacturersResults === 'object' && 'error' in countManufacturersResults && countManufacturersResults.error !== null) {
+                                            if (typeof getVerifiedRetailersResults === 'object' && 'error' in getVerifiedRetailersResults && getVerifiedRetailersResults.error !== null) {
                                                 res.json({
-                                                    error: countManufacturersResults.error
+                                                    error: getVerifiedRetailersResults.error
                                                 });
                                             } else {
                                                 //else add transaction data to return object
-                                                returnData.countManufacturersResults = countManufacturersResults;
-                                                //return returnData
-                                                res.json(returnData);
+                                                returnData.getVerifiedRetailersResults = getVerifiedRetailersResults;
                                             }
+                                        })
+                                        .then(() => {
+                                            //get EarnPoints transactions from the network
+                                            network.countAllManufacturers(manufacturerName)
+                                                .then((countManufacturersResults) => {
+                                                    //return error if error in response
+                                                    if (typeof countManufacturersResults === 'object' && 'error' in countManufacturersResults && countManufacturersResults.error !== null) {
+                                                        res.json({
+                                                            error: countManufacturersResults.error
+                                                        });
+                                                    } else {
+                                                        //else add transaction data to return object
+                                                        returnData.countManufacturersResults = countManufacturersResults;
+                                                        //return returnData
+                                                        res.json(returnData);
+                                                    }
+                                                });
                                         });
                                 });
                         });
@@ -440,33 +454,48 @@ app.post('/api/retailerData', function (req, res) {
                         })
                         .then(() => {
                             //get EarnPoints transactions from the network
-                            network.getVerifiedRetailersByRetailer(retailerName, retailerName)
-                                .then((getManufacturersByVerifiedRetailerResults) => {
+                            network.getStolenWatches(retailerName)
+                                .then((getStolenWatchesResults) => {
                                     //return error if error in response
-                                    if (typeof getManufacturersByVerifiedRetailerResults === 'object' && 'error' in getManufacturersByVerifiedRetailerResults && getManufacturersByVerifiedRetailerResults.error !== null) {
+                                    if (typeof getStolenWatchesResults === 'object' && 'error' in getStolenWatchesResults && getStolenWatchesResults.error !== null) {
                                         res.json({
-                                            error: getManufacturersByVerifiedRetailerResults.error
+                                            error: getStolenWatchesResults.error
                                         });
                                     } else {
                                         //else add transaction data to return object
-                                        returnData.getManufacturersByVerifiedRetailerResults = getManufacturersByVerifiedRetailerResults;
+                                        returnData.getStolenWatchesResults = getStolenWatchesResults;
                                     }
                                 })
                                 .then(() => {
                                     //get EarnPoints transactions from the network
-                                    network.countAllRetailers(retailerName)
-                                        .then((countRetailersResults) => {
+                                    network.getVerifiedRetailersByRetailer(retailerName, retailerName)
+                                        .then((getManufacturersByVerifiedRetailerResults) => {
                                             //return error if error in response
-                                            if (typeof countRetailersResults === 'object' && 'error' in countRetailersResults && countRetailersResults.error !== null) {
+                                            if (typeof getManufacturersByVerifiedRetailerResults === 'object' && 'error' in getManufacturersByVerifiedRetailerResults && getManufacturersByVerifiedRetailerResults.error !== null) {
                                                 res.json({
-                                                    error: countRetailersResults.error
+                                                    error: getManufacturersByVerifiedRetailerResults.error
                                                 });
                                             } else {
                                                 //else add transaction data to return object
-                                                returnData.countRetailersResults = countRetailersResults;
-                                                //return returnData
-                                                res.json(returnData);
+                                                returnData.getManufacturersByVerifiedRetailerResults = getManufacturersByVerifiedRetailerResults;
                                             }
+                                        })
+                                        .then(() => {
+                                            //get EarnPoints transactions from the network
+                                            network.countAllRetailers(retailerName)
+                                                .then((countRetailersResults) => {
+                                                    //return error if error in response
+                                                    if (typeof countRetailersResults === 'object' && 'error' in countRetailersResults && countRetailersResults.error !== null) {
+                                                        res.json({
+                                                            error: countRetailersResults.error
+                                                        });
+                                                    } else {
+                                                        //else add transaction data to return object
+                                                        returnData.countRetailersResults = countRetailersResults;
+                                                        //return returnData
+                                                        res.json(returnData);
+                                                    }
+                                                });
                                         });
                                 });
                         });

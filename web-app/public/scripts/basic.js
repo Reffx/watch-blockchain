@@ -3,10 +3,14 @@
 let apiUrl2 = location.protocol + '//' + location.host + '/api/';
 
 //check user input and call server
-$('.search-watch').click(function(formUserId) {
-    
+$('.search-watch').click(function() {
+    let formUserId;
+
     if ($('.memberName input').val() != ""){
         formUserId = $('.memberName input').val();
+    }
+    if ($('.retailerName input').val() != ""){
+        formUserId = $('.retailerName input').val();
     }
 
     //select logic
@@ -71,8 +75,12 @@ $('.search-watch').click(function(formUserId) {
 //check user input and call server
 $('.search-retailer').click(function searchRetailer() {
     let formUserId;
+
     if ($('.memberName input').val() != ""){
         formUserId = $('.memberName input').val();
+    }
+    if ($('.retailerName input').val() != ""){
+        formUserId = $('.retailerName input').val();
     }
 
     //select logic
@@ -138,10 +146,13 @@ $('.search-retailer').click(function searchRetailer() {
 
 //check user input and call server
 $('.search-manufacturer').click(function searchManufacturer() {
-    
     let formUserId;
+
     if ($('.memberName input').val() != ""){
         formUserId = $('.memberName input').val();
+    }
+    if ($('.retailerName input').val() != ""){
+        formUserId = $('.retailerName input').val();
     }
 
     //select logic

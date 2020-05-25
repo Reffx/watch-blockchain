@@ -114,6 +114,27 @@ function updateRetailer() {
                     return str;
                 });
 
+                //update use points transaction
+                $('.get-myWatches-transactions').html(function () {
+                    let str = '';
+                    let stolenDisplay = '';
+                    let stolenDisplay2 = '';
+                    let stolenWatches = data.getStolenWatchesResults.stolenWatchesList;
+                    let transactionData = data.getMyWatchesResults;
+                    console.log(data.getMyWatchesResults);
+                    for (let i = 0; i < transactionData.length; i++) {
+                        if (stolenWatches.indexOf(transactionData[i].watchId) === -1) {
+                            stolenDisplay = "block";
+                            stolenDisplay2 = "none";
+                        } else {
+                            stolenDisplay = "none";
+                            stolenDisplay2 = "block";
+                        }
+                        str = str + '<p class="myWatch' + i + '" style="margin-bottom:0px;">manufacturer: ' + transactionData[i].manufacturer + '<br />Watch ID: ' + transactionData[i].watchId + '</p> <button class="btn btn-primary" style="margin-top:5px; margin-bottom:5px;" onclick="specificWatchTransactions(' + i + ')">Show transactions</button> <button class="btn btn-primary" style="margin-top:5px; margin-bottom:5px;" onclick="specificVerifiedRetailers(\'' + transactionData[i].manufacturer + '\')">Show verified retailers</button> <button  class="btn btn-primary" style="margin-top:5px; background:red; border:none; margin-bottom:5px; display:' + stolenDisplay + ';" onclick="reportStolen(\'' + transactionData[i].watchId + '\')">Report as stolen</button> <button  class="btn btn-primary" style="margin-top:5px; background:green; border:none; margin-bottom:5px; display:' + stolenDisplay2 + ';" onclick="reportAsFound(\'' + transactionData[i].watchId + '\')">Report as found</button> <br> <hr>';
+                    }
+                    return str;
+                });
+
                 //remove login section
                 document.getElementById('loginSection').style.display = 'none';
                 //display transaction section
@@ -147,7 +168,7 @@ $('.add-maintenance').click(function () {
     }
 
     //create json data
-    let inputData = '{' + '"retailerName" : "' + formRetailerName + '", ' + '"watchId" : "' + formWatchId + '", ' + '"manufacturerName" : "' + formManufacturerName + '", ' + '"maintenanceInfo" : "' + formInfo + '"}';
+    let inputData = '{' + '"executorName" : "' + formRetailerName + '", ' + '"watchId" : "' + formWatchId + '", ' + '"manufacturerName" : "' + formManufacturerName + '", ' + '"maintenanceInfo" : "' + formInfo + '"}';
     console.log(inputData);
 
     //make ajax call
@@ -169,8 +190,7 @@ $('.add-maintenance').click(function () {
                 alert(data.error);
                 return;
             } else {
-                //update member page and notify successful transaction
-                // createWatch();
+                //update retailer page and notify successful transaction
                 alert('Transaction successful');
                 updateRetailer();
             }
@@ -232,8 +252,7 @@ $('.sell-watch').click(function() {
                 alert(data.error);
                 return;
             } else {
-                //update member page and notify successful transaction
-                // createWatch();
+                //update retailer page and notify successful transaction
                 alert('Transaction successful');
                 updateRetailer();
             }
@@ -248,3 +267,234 @@ $('.sell-watch').click(function() {
         }
     });
 });
+
+//might be moved trough refactoring to basic.js
+function specificVerifiedRetailers(manufacturerName) {
+
+    //create json data
+    let inputData = '{' + '"manufacturerName" : "' + manufacturerName + '"}';
+    console.log(inputData);
+
+    //make ajax call
+    $.ajax({
+        type: 'POST',
+        url: apiUrl + 'verifiedRetailers',
+        data: inputData,
+        dataType: 'json',
+        contentType: 'application/json',
+        beforeSend: function () {
+            //display loading
+            document.getElementById('loader').style.display = 'block';
+        },
+        success: function (data) {
+
+            //remove loader
+            document.getElementById('loader').style.display = 'none';
+
+            //check data for error
+            if (data.error) {
+                alert(data.error);
+                return;
+            } else {
+
+                //update use points transaction
+                $('.get-myWatches-all-transactions').html(function () {
+                    let str = '';
+                    let transactionData = data.getVerifiedRetailersResults.retailerList;
+                    console.log(data.getMyWatchesResults);
+                    if (transactionData.length === 0) {
+                        str = str + '<h3>' + manufacturerName + ' has no verified retailers. ' + ' </h3> <br>';
+                    } else {
+                        str = str + '<h3>Retailers verified by ' + manufacturerName + '</h3> <br>';
+                        str = str + '<p class="retailers">';
+                        for (let i = 0; i < transactionData.length; i++) {
+                            str = str + '<button class="btn" style="background:black; color:white; margin:5px;" onclick="getRetailerInfo(\'' + transactionData[i] + '\')">' + transactionData[i] + "</button>";
+                        }
+                        str = str + '</p>';    
+                    }
+                    return str;
+                });
+            }
+
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            //reload on error
+            alert('Error: Try again');
+            console.log(errorThrown);
+            console.log(textStatus);
+            console.log(jqXHR);
+        },
+        complete: function () {
+
+        }
+    });
+
+}
+
+//might be moved trough refactoring to basic.js
+function specificWatchTransactions(y) {
+
+    //get user input data
+    let name = $('.retailerName input').val();
+
+    //create json data
+    let inputData = '{' + '"name" : "' + name + '"}';
+    console.log(inputData);
+
+    //make ajax call
+    $.ajax({
+        type: 'POST',
+        url: apiUrl + 'allMyWatchesTransactions',
+        data: inputData,
+        dataType: 'json',
+        contentType: 'application/json',
+        beforeSend: function () {
+            //display loading
+            document.getElementById('loader').style.display = 'block';
+        },
+        success: function (data) {
+
+            //remove loader
+            document.getElementById('loader').style.display = 'none';
+
+            //check data for error
+            if (data.error) {
+                alert(data.error);
+                return;
+            } else {
+
+                //update use points transaction
+                $('.get-myWatches-all-transactions').html(function () {
+                    let str = '';
+                    let transactionData = data.getMyWatchesAllTransactionsResults[y];
+                    console.log(data.getMyWatchesResults);
+
+                    str = str + '<h3>All transactions of watch ' + transactionData[0].watchId + '</h3>';
+
+                    for (let i = 0; i < transactionData.length; i++) {
+                        str = str + '<p>timeStamp: ' + transactionData[i].timestamp + '<br />info: ' + transactionData[i].info + '<br />owner: ' + transactionData[i].owner + '<br />Manufacturer: ' + transactionData[i].manufacturer + '<br />WatchId: ' + transactionData[i].watchId + '<br />model: ' + transactionData[i].model + '<br />color: ' + transactionData[i].color + '<br />transactionType: ' + transactionData[i].transactionType + '<br />transactionExecutor: ' + transactionData[i].transaction_executor + '<br />InformationVerification: ' + transactionData[i].verified_information + '<br />transactionID: ' + transactionData[i].transactionId + '</p><br>';
+
+
+                    }
+                    return str;
+                });
+            }
+
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            //reload on error
+            alert('Error: Try again');
+            console.log(errorThrown);
+            console.log(textStatus);
+            console.log(jqXHR);
+        },
+        complete: function () {
+
+        }
+    });
+}
+
+//might be moved to basic.js through refactoring
+function reportStolen(watchId) {
+
+    let formRetailerName = $('.retailerName input').val();
+
+    //create json data
+    let inputData = '{' + '"executorName" : "' + formRetailerName + '", ' + '"watchId" : "' + watchId + '"}';
+    console.log(inputData);
+
+    //make ajax call
+    $.ajax({
+        type: 'POST',
+        url: apiUrl + 'reportStolen',
+        data: inputData,
+        dataType: 'json',
+        contentType: 'application/json',
+        beforeSend: function () {
+            //display loading
+            document.getElementById('loader').style.display = 'block';
+        },
+        success: function (data) {
+
+            //remove loader
+            document.getElementById('loader').style.display = 'none';
+
+            //check data for error
+            if (data.error) {
+                alert(data.error);
+                return;
+            } else {
+                // createWatch();
+                alert('Transaction successful');
+                updateRetailer();
+            }
+
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            //reload on error
+            alert('Error: Try again');
+            console.log(errorThrown);
+            console.log(textStatus);
+            console.log(jqXHR);
+        },
+        complete: function () {
+
+        }
+    });
+}
+
+function reportAsFound(watchId) {
+
+    let formRetailerName = $('.retailerName input').val();
+
+    //create json data
+    let inputData = '{' + '"executorName" : "' + formRetailerName + '", ' + '"watchId" : "' + watchId + '"}';
+    console.log(inputData);
+
+    //make ajax call
+    $.ajax({
+        type: 'POST',
+        url: apiUrl + 'reportFound',
+        data: inputData,
+        dataType: 'json',
+        contentType: 'application/json',
+        beforeSend: function () {
+            //display loading
+            document.getElementById('loader').style.display = 'block';
+        },
+        success: function (data) {
+
+            //remove loader
+            document.getElementById('loader').style.display = 'none';
+
+            //check data for error
+            if (data.error) {
+                alert(data.error);
+                return;
+            } else {
+                // createWatch();
+                alert('Transaction successful');
+                updateRetailer();
+            }
+
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            //reload on error
+            alert('Error: Try again');
+            console.log(errorThrown);
+            console.log(textStatus);
+            console.log(jqXHR);
+        },
+        complete: function () {
+
+        }
+    });
+}
+
+//might be moved to basics.js by refactoring
+function getRetailerInfo(name) {
+    var txt = document.getElementById("searchRetailerInput");
+    txt.value = name;
+    document.getElementById("searchRetailerButton").click();
+    $("#searchRetailer-tab").trigger("click");
+}
