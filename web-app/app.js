@@ -312,6 +312,9 @@ app.post('/api/manufacturerData', function (req, res) {
                 //else add manufacturer data to return object
                 returnData.name = manufacturer.name;
                 returnData.email = manufacturer.email;
+                returnData.address = manufacturer.address
+                returnData.zipCode = manufacturer.zipCode;
+                returnData.phoneNumber = manufacturer.phoneNumber;
             }
 
         })

@@ -48,15 +48,15 @@
     <div class="container">
       <h2>Manufacturer Sign In</h2>
       <br>
-      <div class="manufacturerName">
-        <p> Enter Manufacturer name
-          <input>
+      <div class="manufacturerName" style="display:flex;">
+        <p style="width: 180px;"> Enter manufacturer name
         </p>
+        <input style="height: 25px;">
       </div>
-      <div class="password">
-        <p> Enter password
-          <input>
+      <div class="password" style="display: flex;">
+        <p style="width: 180px;"> Enter password
         </p>
+        <input style="height: 25px;">
       </div>
       <button class="btn btn-primary sign-in-manufacturer">SIGN IN</button>
     </div>
@@ -116,7 +116,8 @@
         <div class="tab-content" id="myTabContent">
           <div class="tab-pane fade show active" id="dashboard" role="tabpanel" aria-labelledby="dashboard-tab">
             <br>
-            <h3>Points Usage</h3>
+            <h1 style="text-align: center;">Dashboard</h1>
+            <br>
             <div class="dashboards"></div>
           </div>
 
@@ -147,60 +148,61 @@
           </div>
 
           <div class="tab-pane fade" id="sellWatch" role="tabpanel" aria-labelledby="sellWatch-tab">
-              <br>
-              <h2>Sell watch</h2>
-              <div class="jumbotron" style="display:block;">
-                <div class="container">
-                  <br>
-                  <div class="maintenanceManufacturerId-2">
-                    <p> <b>Watch certificate transfer </b></p>
-                  </div>
-                  <div class="sell-myWatch-id" style="display:flex; align-items:baseline">
-                    <label style="width:100px;">Watch </label>
-                    <select class="form-control" style="width:200px">
-                      <option disabled="" selected="" value="disabled">Loading...</option>
-                    </select>
-                  </div>
-                  <br>
-                  <div class="newOwner-id" style="display:flex; flex-wrap: wrap; flex-direction: column;">
-                    <div>
-                      <label style="width:96px;"> Buyer </label>
-                      <input style="align-items:baseline">
-                    </div>
-                  </div>
-                  <br>
-                  <button class="btn btn-primary sell-watch">transfer certificate</button>
+            <br>
+            <h1>Sell watch</h1>
+            <br>
+            <div class="jumbotron" style="display:block;">
+              <div class="container">
+                <br>
+                <div class="maintenanceManufacturerId-2">
+                  <p> <b>Watch certificate transfer </b></p>
                 </div>
+                <div class="sell-myWatch-id" style="display:flex; align-items:baseline">
+                  <label style="width:100px;">Watch </label>
+                  <select class="form-control" style="width:200px">
+                    <option disabled="" selected="" value="disabled">Loading...</option>
+                  </select>
+                </div>
+                <br>
+                <div class="newOwner-id" style="display:flex; flex-wrap: wrap; flex-direction: column;">
+                  <div>
+                    <label style="width:96px;"> Buyer </label>
+                    <input style="align-items:baseline">
+                  </div>
+                </div>
+                <br>
+                <button class="btn btn-primary sell-watch">transfer certificate</button>
               </div>
             </div>
+          </div>
 
           <div class="tab-pane fade" id="verifyRetailers" role="tabpanel" aria-labelledby="verifyRetailers-tab">
             <br>
             <div class="row" style="justify-content: center;">
-                <div class="col-lg-6 text-center">
-                  <div class="jumbotron" style="display:block;">
-                    <h2>Verify Retailer!!!</h2>
-                    <br>
-                    <div class="verify-retailer-id">
-                      <p> Enter retailer name!
-                        <input>
-                      </p>
-                    </div>
-                    <button class="btn btn-primary verify-retailer">Verify!</button>
+              <div class="col-lg-6 text-center">
+                <div class="jumbotron" style="display:block;">
+                  <h2>Verify Retailer!!!</h2>
+                  <br>
+                  <div class="verify-retailer-id">
+                    <p> Enter retailer name!
+                      <input>
+                    </p>
                   </div>
+                  <button class="btn btn-primary verify-retailer">Verify!</button>
                 </div>
-                <div class="col-lg-6 text-center">
-                  <div class="jumbotron" style="display:block;">
-                    <h2>Unverify Retailer!!!</h2>
-                    <br>
-                    <div class="unverify-retailer-id">
-                      <p> Enter retailer name!
-                        <input>
-                      </p>
-                    </div>
-                    <button class="btn btn-primary unverify-retailer">Unverify!</button>
+              </div>
+              <div class="col-lg-6 text-center">
+                <div class="jumbotron" style="display:block;">
+                  <h2>Unverify Retailer!!!</h2>
+                  <br>
+                  <div class="unverify-retailer-id">
+                    <p> Enter retailer name!
+                      <input>
+                    </p>
                   </div>
+                  <button class="btn btn-primary unverify-retailer">Unverify!</button>
                 </div>
+              </div>
             </div>
             <div class="verifiedRetailersBox"></div>
 
@@ -209,20 +211,24 @@
 
           <div class="tab-pane fade" id="transactions" role="tabpanel" aria-labelledby="transactions-tab">
             <br>
-            <p>View transactions by transaction type </p>
+            <h1 style="text-align: center;">Transactions</h1>
             <br>
             <ul class="nav nav-tabs" id="transactionsTypeTab" role="tablist">
               <li class="nav-item ">
-                <a class="nav-link active" id="points-allocated-tab" data-toggle="tab" href="#points-allocated"
-                  role="tab" aria-controls="points-allocated" aria-selected="true">Points Allocated</a>
-              </li>
-              <li class="nav-item ">
-                <a class="nav-link" id="points-redeemed-tab" data-toggle="tab" href="#points-redeemed" role="tab"
-                  aria-controls="points-redeemed" aria-selected="false">Points Redeemed</a>
-              </li>
-              <li class="nav-item ">
                 <a class="nav-link" id="myWatches-created-tab" data-toggle="tab" href="#myWatches" role="tab"
-                  aria-controls="myWatches" aria-selected="false">My Watches</a>
+                  aria-controls="myWatches" aria-selected="false">My watches</a>
+              </li>
+              <li class="nav-item ">
+                <a class="nav-link" id="searchWatch-tab" data-toggle="tab" href="#searchWatch" role="tab"
+                  aria-controls="searchWatch" aria-selected="false">Search watch</a>
+              </li>
+              <li class="nav-item ">
+                <a class="nav-link" id="searchRetailer-tab" data-toggle="tab" href="#searchRetailer" role="tab"
+                  aria-controls="searchRetailer" aria-selected="false">Search retailer</a>
+              </li>
+              <li class="nav-item ">
+                <a class="nav-link" id="searchManufacturer-tab" data-toggle="tab" href="#searchManufacturer" role="tab"
+                  aria-controls="searchManufacturer" aria-selected="false">Search manufacturer</a>
               </li>
               <li class="nav-item ">
                 <a class="nav-link" id="watches-created-tab" data-toggle="tab" href="#watches-created" role="tab"
@@ -231,29 +237,82 @@
             </ul>
 
             <div class="tab-content" id="myTabContent">
-              <div class="tab-pane fade show active" id="points-allocated" role="tabpanel"
-                aria-labelledby="points-allocated-tab">
-                <br>
-                <h4>Points Allocated Transactions</h4>
-                <br>
-                <div class="points-allocated-transactions"> </div>
-                <br><br>
-              </div>
-
-              <div class="tab-pane fade " id="points-redeemed" role="tabpanel" aria-labelledby="points-redeemed-tab">
-                <br>
-                <h4>Points Redeemed Transactions</h4>
-                <br>
-                <div class="points-redeemed-transactions"> </div>
-                <br><br>
-              </div>
 
               <div class="tab-pane fade " id="myWatches" role="tabpanel" aria-labelledby="myWatches-created-tab">
                 <br>
-                <h4>My Watches</h4>
+                <h1 style="text-align: center;">My Watches</h1>
                 <br>
-                <div class="get-myWatches-transactions"> </div>
-                <br><br>
+                <div class="myWatchesContainer">
+                  <div style="padding:20px">
+                    <div class="get-myWatches-transactions" style="width:200px;"> </div>
+                  </div>
+                  <div style="background:#e9ecef; width:100%;  border-radius:0.3rem; padding:20px;">
+                    <div class="get-myWatches-all-transactions"></div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="tab-pane fade " id="searchWatch" role="tabpanel" aria-labelledby="searchWatch-tab">
+                <br>
+                <h1 style="text-align: center;">Search watch</h1>
+                <br>
+                <div class="jumbotron" style="display:block;">
+                  <div class="container">
+                    <div class="searchWatchManufacturerName-id"
+                      style="display:flex; flex-wrap: wrap; flex-direction: column;">
+                      <div>
+                        <label style="width:96px;"> Manufacturer </label>
+                        <input style="align-items:baseline">
+                      </div>
+                    </div>
+                    <div class="searchWatchWatchId-id" style="display:flex; flex-wrap: wrap; flex-direction: column;">
+                      <div>
+                        <label style="width:96px;"> Watch ID </label>
+                        <input style="align-items:baseline">
+                      </div>
+                    </div>
+                    <button class="btn btn-primary search-watch">search</button>
+                  </div>
+                </div>
+                <div class="get-searchWatches-transactions"></div>
+              </div>
+
+              <div class="tab-pane fade " id="searchRetailer" role="tabpanel" aria-labelledby="searchRetailer-tab">
+                <br>
+                <h1 style="text-align: center;">Search retailer</h1>
+                <br>
+                <div class="jumbotron" style="display:block;">
+                  <div class="container">
+                    <div class="searchRetailerName-id" style="display:flex; flex-wrap: wrap; flex-direction: column;">
+                      <div>
+                        <label style="width:96px;"> Retailer </label>
+                        <input id="searchRetailerInput" style="align-items:baseline">
+                      </div>
+                    </div>
+                    <button class="btn btn-primary search-retailer" id="searchRetailerButton">search</button>
+                  </div>
+                </div>
+                <div class="get-searchRetailer-transactions"></div>
+              </div>
+
+              <div class="tab-pane fade " id="searchManufacturer" role="tabpanel"
+                aria-labelledby="searchManufacturer-tab">
+                <br>
+                <h1 style="text-align: center;">Search manufacturer</h1>
+                <br>
+                <div class="jumbotron" style="display:block;">
+                  <div class="container">
+                    <div class="searchManufacturerName-id"
+                      style="display:flex; flex-wrap: wrap; flex-direction: column;">
+                      <div>
+                        <label style="width:96px;"> Manufacturer </label>
+                        <input id="searchManufacturerInput" style="align-items:baseline">
+                      </div>
+                    </div>
+                    <button class="btn btn-primary search-manufacturer" id="searchManufacturerButton">search</button>
+                  </div>
+                </div>
+                <div class="get-searchManufacturer-transactions"></div>
               </div>
 
               <div class="tab-pane fade " id="watches-created" role="tabpanel" aria-labelledby="watches-created-tab">
@@ -266,6 +325,7 @@
 
             </div>
           </div>
+
 
         </div>
       </div>
@@ -288,3 +348,4 @@
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"
   integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous"></script>
 <script src="/scripts/manufacturer.js"></script>
+<script src="/scripts/basic.js"></script>

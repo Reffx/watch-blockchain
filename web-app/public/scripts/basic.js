@@ -12,6 +12,9 @@ $('.search-watch').click(function() {
     if ($('.retailerName input').val() != ""){
         formUserId = $('.retailerName input').val();
     }
+    if ($('.manufacturerName input').val() != ""){
+        formUserId = $('.manufacturerName input').val();
+    }
 
     //select logic
     let formManufacturerName = $('.searchWatchManufacturerName-id input').val();
@@ -81,6 +84,9 @@ $('.search-retailer').click(function searchRetailer() {
     }
     if ($('.retailerName input').val() != ""){
         formUserId = $('.retailerName input').val();
+    }
+    if ($('.manufacturerName input').val() != ""){
+        formUserId = $('.manufacturerName input').val();
     }
 
     //select logic
@@ -153,6 +159,9 @@ $('.search-manufacturer').click(function searchManufacturer() {
     }
     if ($('.retailerName input').val() != ""){
         formUserId = $('.retailerName input').val();
+    }
+    if ($('.manufacturerName input').val() != ""){
+        formUserId = $('.manufacturerName input').val();
     }
 
     //select logic
