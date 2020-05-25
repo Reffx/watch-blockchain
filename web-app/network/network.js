@@ -211,12 +211,11 @@ module.exports = {
             // Get the contract from the network.
             const contract = network.getContract('anticounterfeiting');
 
-            let countR = await contract.evaluateTransaction('CountAllRetailers');
-            countR = JSON.parse(countR.toString());
-            countR = "R" + (countR + 1);
+            // let countR = await contract.evaluateTransaction('CountAllRetailers');
+            // countR = JSON.parse(countR.toString());
+            // countR = "R" + (countR + 1);
 
             let retailer = {};
-            retailer.id = countR;
             retailer.name = retailerName;
             retailer.password = password;
             retailer.email = email;
@@ -436,12 +435,11 @@ module.exports = {
             let manufacturer = await contract.submitTransaction('GetLatestManufacturerInfo', manufacturerName);
             manufacturer = JSON.parse(manufacturer.toString());
             console.log(manufacturer);
-            let latestManufacturerInfo = manufacturer[0];
 
             // Disconnect from the gateway.
             await gateway2.disconnect();
 
-            return latestManufacturerInfo;
+            return manufacturer;
         }
         catch (err) {
             //print and return error
@@ -479,12 +477,11 @@ module.exports = {
             let retailer = await contract.submitTransaction('GetLatestRetailerInfo', retailerName);
             retailer = JSON.parse(retailer.toString());
             console.log(retailer);
-            let latestRetailerInfo = retailer[0];
 
             // Disconnect from the gateway.
             await gateway2.disconnect();
 
-            return latestRetailerInfo;
+            return retailer;
         }
         catch (err) {
             //print and return error
@@ -564,6 +561,8 @@ module.exports = {
                 newWatch.manufacturer = cardId;
                 newWatch.watchId = watchId;
                 newWatch.model = model;
+                newTransaction.transaction_executor = cardId;
+                newTransaction.verified_information = "verified transaction!";
                 newWatch.color = color;
                 // Submit the specified transaction.
                 // createWatch transaction 
@@ -649,7 +648,7 @@ module.exports = {
 
             // Submit the specified transaction.
             // changeCarOwner transaction - requires 2 args , ex: ('changeCarOwner', 'CAR10', 'Dave')
-            response = await contract.submitTransaction('AddMaintenanceEvent', watchId, manufacturerName, maintenanceInfo);
+            response = await contract.submitTransaction('AddMaintenanceEvent', retailerName, watchId, manufacturerName, maintenanceInfo);
             console.log('Transaction has been submitted');
 
             // Disconnect from the gateway.
@@ -821,7 +820,7 @@ module.exports = {
         }
     },
 
-    // query all cars transaction
+    // 
     getMyWatches: async function (userId) {
         let response = {};
 
@@ -858,7 +857,7 @@ module.exports = {
         }
     },
 
-    // query all cars transaction
+    // 
     getWatchSearch: async function (userId, manufacturerName, watchId) {
         let response = {};
 
@@ -895,7 +894,7 @@ module.exports = {
         }
     },
 
-    // query all cars transaction
+    // 
     getRetailerSearch: async function (userId, retailerName) {
         let response = {};
 
@@ -932,7 +931,44 @@ module.exports = {
         }
     },
 
-    // query all cars transaction
+    // 
+    getManufacturerSearch: async function (userId, ManufacturerName) {
+        let response = {};
+
+        // Create a new file system based wallet for managing identities.
+        const walletPath = path.join(process.cwd(), '/wallet');
+        const wallet = new FileSystemWallet(walletPath);
+        console.log(`Wallet path: ${walletPath}`);
+
+        try {
+            // Create a new gateway for connecting to our peer node.
+            const gateway2 = new Gateway();
+            await gateway2.connect(ccp, { wallet, identity: userId, discovery: gatewayDiscovery });
+
+            // Get the network (channel) our contract is deployed to.
+            const network = await gateway2.getNetwork('mychannel');
+
+            // Get the contract from the network.
+            const contract = network.getContract('anticounterfeiting');
+
+            console.log(`\nGet watches transactions state for ${userId}`);
+            let result = await contract.evaluateTransaction('GetLatestManufacturerInfo', ManufacturerName);
+            result = JSON.parse(result.toString());
+            console.log(result);
+            if (result === 0) {return []}
+            // Disconnect from the gateway.
+            await gateway2.disconnect();
+
+            return result;
+
+        } catch (error) {
+            console.error(`Failed to evaluate transaction: ${error}`);
+            response.error = error.message;
+            return response;
+        }
+    },
+
+    // 
     getMyWatchesAllTransactions: async function (userId) {
         let response = {};
 
@@ -969,7 +1005,7 @@ module.exports = {
         }
     },
 
-    // query all cars transaction
+    // 
     queryAllWatches: async function (cardId) {
         let response = {};
 
@@ -1006,7 +1042,7 @@ module.exports = {
         }
     },
 
-    // query all cars transaction
+    // 
     countAllManufacturers: async function (cardId) {
 
         let response = {};
@@ -1043,7 +1079,7 @@ module.exports = {
         }
     },
 
-    // query all cars transaction
+    // 
     countAllRetailers: async function (cardId) {
 
         let response = {};

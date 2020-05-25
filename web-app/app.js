@@ -220,7 +220,6 @@ app.post('/api/memberData', function (req, res) {
                 returnData.lastName = member.lastName;
                 returnData.phoneNumber = member.phoneNumber;
                 returnData.email = member.email;
-                returnData.points = member.points;
             }
         })
         .then(() => {
@@ -388,7 +387,10 @@ app.post('/api/retailerData', function (req, res) {
             } else {
                 //else add manufacturer data to return object
                 returnData.name = retailer.name;
+                returnData.address = retailer.address
+                returnData.zipCode = retailer.zipCode;
                 returnData.email = retailer.email;
+                returnData.phoneNumber = retailer.phoneNumber;
             }
 
         })
@@ -560,6 +562,13 @@ app.post('/api/searchWatch', (req, res) => {
 
 app.post('/api/searchRetailer', (req, res) => {
     network.getRetailerSearch(req.body.userId, req.body.retailerName)
+        .then((response) => {
+            res.send(response);
+        });
+});
+
+app.post('/api/searchManufacturer', (req, res) => {
+    network.getManufacturerSearch(req.body.userId, req.body.manufacturerName)
         .then((response) => {
             res.send(response);
         });

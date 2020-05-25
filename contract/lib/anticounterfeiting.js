@@ -73,16 +73,16 @@ class AntiCounterfeiting extends Contract {
     async GetLatestManufacturerInfo(ctx, manufacturerName) {
         let transactions = await ctx.stub.getState(manufacturerName);
         if (transactions.length != 0) {
-        transactions = JSON.parse(transactions);
+            transactions = JSON.parse(transactions);
 
-        let manuInformation = [];
-        for (let c of transactions) {
-            manuInformation.push(c);
-        }
+            let manuInformation = [];
+            for (let c of transactions) {
+                manuInformation.push(c);
+            }
 
-        manuInformation = manuInformation[manuInformation.length - 1];
-        return JSON.stringify(manuInformation);
-    } else return JSON.stringify(0);
+            manuInformation = manuInformation[manuInformation.length - 1];
+            return JSON.stringify(manuInformation);
+        } else return JSON.stringify(0);
     }
 
     // Get latest information about retailer
@@ -301,6 +301,8 @@ class AntiCounterfeiting extends Contract {
             newTransaction.manufacturer = oldTransaction[0].manufacturer;
             newTransaction.model = oldTransaction[0].model;
             newTransaction.color = oldTransaction[0].color;
+            newTransaction.transaction_executor = oldOwner;
+            newTransaction.verified_information = "verified transaction!";
             newTransaction.owner = newOwner;
             newTransaction.transactionType = "newWatchOwner";
             newTransaction.timestamp = new Date((ctx.stub.txTimestamp.seconds.low * 1000)).toGMTString();
@@ -317,7 +319,7 @@ class AntiCounterfeiting extends Contract {
         return JSON.stringify(newTransaction);
     }
 
-    async AddMaintenanceEvent(ctx, watchId, manufacturerName, maintenanceInfo) {
+    async AddMaintenanceEvent(ctx, retailerName, watchId, manufacturerName, maintenanceInfo) {
         console.info('============= START : addMaintenance ===========');
         //get chain for all Watches key
         let allWatchesTransaction = await ctx.stub.getState(allWatchesTransactionKey);
@@ -326,6 +328,15 @@ class AntiCounterfeiting extends Contract {
         // get chain for specific watch
         let transactions = await ctx.stub.getState(manufacturerName + "-" + watchId);
         transactions = JSON.parse(transactions);
+
+        let verifiedInformation = 'not verified ✕';
+        let verifiedRetailersTrans = await this.GetVerifyRetailersByManufacturer(ctx, manufacturerName);
+        if (verifiedRetailersTrans.length != 0) {
+            verifiedRetailersTrans = JSON.parse(verifiedRetailersTrans);
+            if (verifiedRetailersTrans.retailerList.indexOf(retailerName) != -1) {
+                verifiedInformation = 'verified transaction!'
+            }
+        }
 
         //logic
         let allRecentWatchesTransactions = [];
@@ -342,6 +353,8 @@ class AntiCounterfeiting extends Contract {
         newTransaction.model = oldTransaction.model;
         newTransaction.color = oldTransaction.color;
         newTransaction.owner = oldTransaction.owner;
+        newTransaction.transaction_executor = retailerName;
+        newTransaction.verified_information = verifiedInformation;
         newTransaction.transactionType = "maintenanceEvent";
         newTransaction.info = maintenanceInfo;
         newTransaction.timestamp = new Date((ctx.stub.txTimestamp.seconds.low * 1000)).toGMTString();
