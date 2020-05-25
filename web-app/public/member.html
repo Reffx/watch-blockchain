@@ -117,9 +117,8 @@
           <div class="tab-content" id="myTabContent">
             <div class="tab-pane fade show active" id="dashboard" role="tabpanel" aria-labelledby="dashboard-tab">
               <br>
-              <h2>Dashboard</h2>
+              <h1 style="text-align: center;">Dashboard</h1>
               <div class="dashboards"></div>
-
             </div>
 
             <div class="tab-pane fade" id="sellWatch" role="tabpanel" aria-labelledby="sellWatch-tab">
@@ -152,8 +151,7 @@
 
             <div class="tab-pane fade" id="transactions" role="tabpanel" aria-labelledby="transactions-tab">
               <br>
-              <p>View transactions by transaction type </p>
-              <br>
+              <h1 style="text-align: center;">Transactions</h1>
               <ul class="nav nav-tabs" id="transactionsTypeTab" role="tablist">
                 <li class="nav-item ">
                   <a class="nav-link" id="myWatches-created-tab" data-toggle="tab" href="#myWatches" role="tab"
@@ -166,6 +164,10 @@
                 <li class="nav-item ">
                   <a class="nav-link" id="searchRetailer-tab" data-toggle="tab" href="#searchRetailer" role="tab"
                     aria-controls="searchRetailer" aria-selected="false">Search retailer</a>
+                </li>
+                <li class="nav-item ">
+                  <a class="nav-link" id="searchManufacturer-tab" data-toggle="tab" href="#searchManufacturer"
+                    role="tab" aria-controls="searchManufacturer" aria-selected="false">Search manufacturer</a>
                 </li>
                 <li class="nav-item ">
                   <a class="nav-link" id="watches-created-tab" data-toggle="tab" href="#watches-created" role="tab"
@@ -230,6 +232,26 @@
                     </div>
                   </div>
                   <div class="get-searchRetailer-transactions"></div>
+                </div>
+
+                <div class="tab-pane fade " id="searchManufacturer" role="tabpanel"
+                  aria-labelledby="searchManufacturer-tab">
+                  <br>
+                  <h1 style="text-align: center;">Search manufacturer</h1>
+                  <br>
+                  <div class="jumbotron" style="display:block;">
+                    <div class="container">
+                      <div class="searchManufacturerName-id"
+                        style="display:flex; flex-wrap: wrap; flex-direction: column;">
+                        <div>
+                          <label style="width:96px;"> Manufacturer </label>
+                          <input id="searchManufacturerInput" style="align-items:baseline">
+                        </div>
+                      </div>
+                      <button class="btn btn-primary search-manufacturer" id="searchManufacturerButton">search</button>
+                    </div>
+                  </div>
+                  <div class="get-searchManufacturer-transactions"></div>
                 </div>
 
                 <div class="tab-pane fade " id="watches-created" role="tabpanel" aria-labelledby="watches-created-tab">
