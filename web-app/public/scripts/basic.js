@@ -50,7 +50,7 @@ $('.search-watch').click(function(formUserId) {
                         str = str + '<h3>All transactions of watch ' + transactionData[0].watchId + '</h3>';
                     }
                     for (let i = 0; i < transactionData.length; i++) {
-                        str = str + '<p class="myWatch' + i + '">timeStamp: ' + transactionData[i].timestamp + '<br />owner: ' + transactionData[i].owner + '<br />manufacturer: ' + transactionData[i].manufacturer + '<br />WatchId: ' + transactionData[i].watchId + '<br />model: ' + transactionData[i].model + '<br />color: ' + transactionData[i].color + '<br />transactionType: ' + transactionData[i].transactionType + '<br />transactionID: ' + transactionData[i].transactionId + '</p><br>';
+                        str = str + '<p>timeStamp: ' + transactionData[i].timestamp + '<br />info: ' + transactionData[i].info + '<br />owner: ' + transactionData[i].owner + '<br />Manufacturer: ' + transactionData[i].manufacturer + '<br />WatchId: ' + transactionData[i].watchId + '<br />model: ' + transactionData[i].model + '<br />color: ' + transactionData[i].color + '<br />transactionType: ' + transactionData[i].transactionType + '<br />transactionExecutor: ' + transactionData[i].transaction_executor + '<br />InformationVerification: ' + transactionData[i].verified_information +'<br />transactionID: ' + transactionData[i].transactionId + '</p><br>';
                     }
                     str = str + '</div>'
                     return str;

@@ -249,22 +249,38 @@ app.post('/api/memberData', function (req, res) {
                                 //else add transaction data to return object
                                 returnData.getMyWatchesResults = getMyWatchesResults;
                             }
-                        }).then(() => {
-                            //get manufacturers to transact with from the network
-                            network.allManufacturersInfo(memberName)
-                                .then((manufacturersInfo) => {
+                        })
+                        .then(() => {
+                            //get EarnPoints transactions from the network
+                            network.getStolenWatches(memberName)
+                                .then((getStolenWatchesResults) => {
                                     //return error if error in response
-                                    if (typeof manufacturersInfo === 'object' && 'error' in manufacturersInfo && manufacturersInfo.error !== null) {
+                                    if (typeof getStolenWatchesResults === 'object' && 'error' in getStolenWatchesResults && getStolenWatchesResults.error !== null) {
                                         res.json({
-                                            error: manufacturersInfo.error
+                                            error: getStolenWatchesResults.error
                                         });
                                     } else {
-                                        //else add manufacturers data to return object
-                                        returnData.manufacturersData = manufacturersInfo;
+                                        //else add transaction data to return object
+                                        returnData.getStolenWatchesResults = getStolenWatchesResults;
                                     }
+                                })
+                                .then(() => {
+                                    //get manufacturers to transact with from the network
+                                    network.allManufacturersInfo(memberName)
+                                        .then((manufacturersInfo) => {
+                                            //return error if error in response
+                                            if (typeof manufacturersInfo === 'object' && 'error' in manufacturersInfo && manufacturersInfo.error !== null) {
+                                                res.json({
+                                                    error: manufacturersInfo.error
+                                                });
+                                            } else {
+                                                //else add manufacturers data to return object
+                                                returnData.manufacturersData = manufacturersInfo;
+                                            }
 
-                                    //return returnData
-                                    res.json(returnData);
+                                            //return returnData
+                                            res.json(returnData);
+                                        });
                                 });
                         });
                 });
@@ -533,7 +549,7 @@ app.post('/api/changeWatchOwner', (req, res) => {
 });
 
 app.post('/api/addMaintenance', (req, res) => {
-    network.addMaintenance(req.body.retailerName, req.body.watchId, req.body.manufacturerName, req.body.maintenanceInfo)
+    network.addMaintenance(req.body.executorName, req.body.watchId, req.body.manufacturerName, req.body.maintenanceInfo)
         .then((response) => {
             res.send(response);
         });
@@ -569,6 +585,20 @@ app.post('/api/searchRetailer', (req, res) => {
 
 app.post('/api/searchManufacturer', (req, res) => {
     network.getManufacturerSearch(req.body.userId, req.body.manufacturerName)
+        .then((response) => {
+            res.send(response);
+        });
+});
+
+app.post('/api/reportStolen', (req, res) => {
+    network.reportStolen(req.body.executorName, req.body.watchId)
+        .then((response) => {
+            res.send(response);
+        });
+});
+
+app.post('/api/reportFound', (req, res) => {
+    network.reportFound(req.body.executorName, req.body.watchId)
         .then((response) => {
             res.send(response);
         });

@@ -561,8 +561,8 @@ module.exports = {
                 newWatch.manufacturer = cardId;
                 newWatch.watchId = watchId;
                 newWatch.model = model;
-                newTransaction.transaction_executor = cardId;
-                newTransaction.verified_information = "verified transaction!";
+                newWatch.transaction_executor = cardId;
+                newWatch.verified_information = "verified transaction!";
                 newWatch.color = color;
                 // Submit the specified transaction.
                 // createWatch transaction 
@@ -627,7 +627,7 @@ module.exports = {
     },
 
     // change watch owner transaction
-    addMaintenance: async function (retailerName, watchId, manufacturerName, maintenanceInfo) {
+    addMaintenance: async function (executorName, watchId, manufacturerName, maintenanceInfo) {
         let response = {};
         try {
 
@@ -638,7 +638,7 @@ module.exports = {
 
             // Create a new gateway for connecting to our peer node.
             const gateway = new Gateway();
-            await gateway.connect(ccp, { wallet, identity: retailerName, discovery: gatewayDiscovery });
+            await gateway.connect(ccp, { wallet, identity: executorName, discovery: gatewayDiscovery });
 
             // Get the network (channel) our contract is deployed to.
             const network = await gateway.getNetwork('mychannel');
@@ -648,7 +648,7 @@ module.exports = {
 
             // Submit the specified transaction.
             // changeCarOwner transaction - requires 2 args , ex: ('changeCarOwner', 'CAR10', 'Dave')
-            response = await contract.submitTransaction('AddMaintenanceEvent', retailerName, watchId, manufacturerName, maintenanceInfo);
+            response = await contract.submitTransaction('AddMaintenanceEvent', executorName, watchId, manufacturerName, maintenanceInfo);
             console.log('Transaction has been submitted');
 
             // Disconnect from the gateway.
@@ -1114,7 +1114,121 @@ module.exports = {
             response.error = error.message;
             return response;
         }
-    }
+    },
+
+    // change watch owner transaction
+    reportStolen: async function (executorName, watchId) {
+        let response = {};
+        try {
+
+            // Create a new file system based wallet for managing identities.
+            const walletPath = path.join(process.cwd(), '/wallet');
+            const wallet = new FileSystemWallet(walletPath);
+            console.log(`Wallet path: ${walletPath}`);
+
+            // Create a new gateway for connecting to our peer node.
+            const gateway = new Gateway();
+            await gateway.connect(ccp, { wallet, identity: executorName, discovery: gatewayDiscovery });
+
+            // Get the network (channel) our contract is deployed to.
+            const network = await gateway.getNetwork('mychannel');
+
+            // Get the contract from the network.
+            const contract = network.getContract('anticounterfeiting');
+
+            // Submit the specified transaction.
+            await contract.submitTransaction('ReportStolen',  executorName, watchId);
+            console.log('Transaction has been submitted');
+
+            // Disconnect from the gateway.
+            await gateway.disconnect();
+
+            response.msg = 'ReportStolen Transaction has been submitted';
+            return response;
+
+        } catch (error) {
+            console.error(`Failed to submit transaction: ${error}`);
+            response.error = error.message;
+            return response;
+        }
+    },
+
+    // change watch owner transaction
+    reportFound: async function (executorName, watchId) {
+        let response = {};
+        try {
+
+            // Create a new file system based wallet for managing identities.
+            const walletPath = path.join(process.cwd(), '/wallet');
+            const wallet = new FileSystemWallet(walletPath);
+            console.log(`Wallet path: ${walletPath}`);
+
+            // Create a new gateway for connecting to our peer node.
+            const gateway = new Gateway();
+            await gateway.connect(ccp, { wallet, identity: executorName, discovery: gatewayDiscovery });
+
+            // Get the network (channel) our contract is deployed to.
+            const network = await gateway.getNetwork('mychannel');
+
+            // Get the contract from the network.
+            const contract = network.getContract('anticounterfeiting');
+
+            // Submit the specified transaction.
+            await contract.submitTransaction('RemoveStolenWatch',  executorName, watchId);
+            console.log('Transaction has been submitted');
+
+            // Disconnect from the gateway.
+            await gateway.disconnect();
+
+            response.msg = 'RemoveStolenWatch Transaction has been submitted';
+            return response;
+
+        } catch (error) {
+            console.error(`Failed to submit transaction: ${error}`);
+            response.error = error.message;
+            return response;
+        }
+    },
+
+     // query all Retailers that are verified by a specific manufacturer
+     getStolenWatches: async function (executorName) {
+        let response = {};
+
+        // Create a new file system based wallet for managing identities.
+        const walletPath = path.join(process.cwd(), '/wallet');
+        const wallet = new FileSystemWallet(walletPath);
+        console.log(`Wallet path: ${walletPath}`);
+
+        try {
+            // Create a new gateway for connecting to our peer node.
+            const gateway2 = new Gateway();
+            await gateway2.connect(ccp, { wallet, identity: executorName, discovery: gatewayDiscovery });
+
+            // Get the network (channel) our contract is deployed to.
+            const network = await gateway2.getNetwork('mychannel');
+
+            // Get the contract from the network.
+            const contract = network.getContract('anticounterfeiting');
+
+            console.log(`\nGet all retailers that are verified by ${executorName}`);
+            let result = await contract.evaluateTransaction('GetStolenWatches', executorName);
+            if (result.length != 0) {
+                result = JSON.parse(result.toString());
+                console.log(result);
+            } else {
+                result = [];
+            }
+            // Disconnect from the gateway.
+            await gateway2.disconnect();
+
+            return result;
+
+        } catch (error) {
+            console.error(`Failed to evaluate transaction: ${error}`);
+            response.error = error.message;
+            return response;
+        }
+    },
 
 
 };
