@@ -143,7 +143,7 @@ module.exports = {
 * @param {String} email Retailer Id as identifier on network
 * @param {String} name Retailer name
 */
-    registerRetailer: async function (retailerName, password, email, phoneNumber, address, zipCode, place) {
+    registerRetailer: async function (retailerName, password, email, phoneNumber, address, zipCode, place, country) {
 
         // Create a new file system based wallet for managing identities.
         const walletPath = path.join(process.cwd(), '/wallet');
@@ -223,6 +223,7 @@ module.exports = {
             retailer.address = address;
             retailer.zipCode = zipCode;
             retailer.place = place;
+            retailer.country = country;
 
             // Submit the specified transaction.
             console.log('\nSubmit Create Retailer transaction.');
@@ -255,7 +256,7 @@ module.exports = {
   * @param {String} email Manufacturer Id as identifier on network
   * @param {String} name Manufacturer name
   */
-    registerManufacturer: async function (manufacturerName, password, email, phoneNumber, address, zipCode, place) {
+    registerManufacturer: async function (manufacturerName, password, email, phoneNumber, address, zipCode, place, country) {
 
         // Create a new file system based wallet for managing identities.
         const walletPath = path.join(process.cwd(), '/wallet');
@@ -338,6 +339,7 @@ module.exports = {
             manufacturer.address = address;
             manufacturer.zipCode = zipCode;
             manufacturer.place = place;
+            manufacturer.country = country;
 
             // Submit the specified transaction.
             console.log('\nSubmit Create Manufacturer transaction.');

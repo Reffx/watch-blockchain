@@ -113,6 +113,7 @@ app.post('/api/registerRetailer', function (req, res) {
     let address = req.body.address;
     let zipCode = req.body.zipCode;
     let place = req.body.place;
+    let country = req.body.country;
 
     //print variables
     console.log('Using param - name: ' + name + ' email: ' + email);
@@ -128,7 +129,7 @@ app.post('/api/registerRetailer', function (req, res) {
                 return;
             } else {
                 //else register manufacturer on the network
-                network.registerRetailer(name, password, email, phoneNumber, address, zipCode, place)
+                network.registerRetailer(name, password, email, phoneNumber, address, zipCode, place, country)
                     .then((response) => {
                         //return error if error in response
                         if (typeof response === 'object' && 'error' in response && response.error !== null) {
@@ -158,6 +159,7 @@ app.post('/api/registerManufacturer', function (req, res) {
     let address = req.body.address;
     let zipCode = req.body.zipCode;
     let place = req.body.place;
+    let country = req.body.country;
 
     //print variables
     console.log('Using param - name: ' + name + ' email: ' + email);
@@ -173,7 +175,7 @@ app.post('/api/registerManufacturer', function (req, res) {
                 return;
             } else {
                 //else register manufacturer on the network
-                network.registerManufacturer(name, password, email, phoneNumber, address, zipCode, place)
+                network.registerManufacturer(name, password, email, phoneNumber, address, zipCode, place, country)
                     .then((response) => {
                         //return error if error in response
                         if (typeof response === 'object' && 'error' in response && response.error !== null) {
@@ -314,6 +316,7 @@ app.post('/api/manufacturerData', function (req, res) {
                 returnData.email = manufacturer.email;
                 returnData.address = manufacturer.address
                 returnData.zipCode = manufacturer.zipCode;
+                returnData.country = manufacturer.country;
                 returnData.phoneNumber = manufacturer.phoneNumber;
             }
 
@@ -423,6 +426,7 @@ app.post('/api/retailerData', function (req, res) {
                 returnData.address = retailer.address
                 returnData.zipCode = retailer.zipCode;
                 returnData.email = retailer.email;
+                returnData.country = retailer.country;
                 returnData.phoneNumber = retailer.phoneNumber;
             }
 

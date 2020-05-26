@@ -70,9 +70,10 @@ $('.register-retailer').click(function() {
     let formAddress = $('.address input').val();
     let formZipCode = $('.zipCode input').val();
     let formPlace = $('.place input').val();
+    let formCountry = $('.country input').val();
 
     //create json data
-    let inputData = '{' + '"name" : "' + formName + '", ' + '"password" : "' + formPassword + '", ' + '"email" : "' + formEmail + '", ' + '"phonenumber" : "' + formPhoneNumber + '", ' + '"address" : "' + formAddress + '", ' + '"zipCode" : "' + formZipCode + '", ' + '"place" : "' + formPlace + '"}';
+    let inputData = '{' + '"name" : "' + formName + '", ' + '"password" : "' + formPassword + '", ' + '"email" : "' + formEmail + '", ' + '"phonenumber" : "' + formPhoneNumber + '", ' + '"address" : "' + formAddress + '", ' + '"zipCode" : "' + formZipCode + '", ' + '"place" : "' + formPlace + '"country" : "' + formCountry + '"}';
     console.log(inputData);
 
     registerRetailer(inputData);
@@ -132,9 +133,10 @@ $('.register-manufacturer').click(function() {
     let formAddress = $('.address input').val();
     let formZipCode = $('.zipCode input').val();
     let formPlace = $('.place input').val();
+    let formCountry = $('.country input').val();
 
     //create json data
-    let inputData = '{' + '"name" : "' + formName + '", ' + '"password" : "' + formPassword + '", ' + '"email" : "' + formEmail + '", ' + '"phonenumber" : "' + formPhoneNumber + '", ' + '"address" : "' + formAddress + '", ' + '"zipCode" : "' + formZipCode + '", ' + '"place" : "' + formPlace + '"}';
+    let inputData = '{' + '"name" : "' + formName + '", ' + '"password" : "' + formPassword + '", ' + '"email" : "' + formEmail + '", ' + '"phonenumber" : "' + formPhoneNumber + '", ' + '"address" : "' + formAddress + '", ' + '"zipCode" : "' + formZipCode + '", ' + '"place" : "' + formPlace + '"country" : "' + formCountry + '"}';
     console.log(inputData);
 
     registerManufacturer(inputData);

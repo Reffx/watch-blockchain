@@ -394,7 +394,7 @@ $('.add-maintenance').click(function () {
 });
 
 
-
+//might be moved to basic.js through refactoring
 function reportStolen(watchId) {
 
     let formMemberName = $('.memberName input').val();
