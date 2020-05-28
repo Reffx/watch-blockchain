@@ -584,7 +584,16 @@ app.post('/api/changeWatchOwner', (req, res) => {
         });
 });
 
-app.post('/api/addMaintenance', (req, res) => {
+//currently both access same maintenance function, can further be optimised 
+app.post('/api/addVerifiedMaintenance', (req, res) => {
+    network.addMaintenance(req.body.executorName, req.body.watchId, req.body.manufacturerName, req.body.maintenanceInfo)
+        .then((response) => {
+            res.send(response);
+        });
+});
+
+//currently both access same maintenance function, can further be optimised 
+app.post('/api/addUnverifiedMaintenance', (req, res) => {
     network.addMaintenance(req.body.executorName, req.body.watchId, req.body.manufacturerName, req.body.maintenanceInfo)
         .then((response) => {
             res.send(response);

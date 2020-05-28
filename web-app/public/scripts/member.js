@@ -360,7 +360,7 @@ $('.add-maintenance').click(function () {
     //make ajax call
     $.ajax({
         type: 'POST',
-        url: apiUrl + 'addMaintenance',
+        url: apiUrl + 'addUnverifiedMaintenance',
         data: inputData,
         dataType: 'json',
         contentType: 'application/json',

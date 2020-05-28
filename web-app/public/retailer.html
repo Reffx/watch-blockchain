@@ -72,8 +72,7 @@
           <tr>
             <td>
               <div style="padding-right: 20px">
-                <h2>name:</h2>
-                <h2>id:</h2>
+                <h1>Retailer</h1>
               </div>
             </td>
             <td>
@@ -101,6 +100,10 @@
           <li class="nav-item tab-width">
             <a class="nav-link" id="recordMaintenance-tab" data-toggle="tab" href="#recordMaintenance" role="tab"
               aria-controls="recordMaintenance" aria-selected="false">Add verified maintenance</a>
+          </li>
+          <li class="nav-item tab-width">
+            <a class="nav-link" id="recordUnverifiedMaintenance-tab" data-toggle="tab" href="#recordUnverifiedMaintenance" role="tab"
+              aria-controls="recordUnverifiedMaintenance" aria-selected="false">Add unverified maintenance</a>
           </li>
           <li class="nav-item tab-width">
             <a class="nav-link" id="transactions-tab" data-toggle="tab" href="#transactions" role="tab"
@@ -171,6 +174,31 @@
                 </div>
                 <br>
                 <button class="btn btn-primary add-maintenance">Add Event</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="tab-pane fade" id="recordUnverifiedMaintenance" role="tabpanel" aria-labelledby="sellWatch-tab">
+            <br>
+            <h1 style="text-align: center;">Record Maintenance</h1>
+            <div class="jumbotron" style="display:block;">
+              <div class="container">
+                <div class="unverifiedMaintenanceManufacturerId">
+                  <p> <b>Enter maintenance details.</b></p>
+                </div>
+                <div class="add-unverified-maintenance-id" style="display:flex; align-items:baseline">
+                  <label style="width:120px;">Select watch </label>
+                  <select class="form-control" style="width:200px">
+                    <option disabled="" selected="" value="disabled">Loading...</option>
+                  </select>
+                </div>
+                <br>
+                <div class="unverified-maintenance-info-id">
+                  <label style="width:116px;">Maintenance </label>
+                  <input style="height:100px">
+                </div>
+                <br>
+                <button class="btn btn-primary add-unverified-maintenance">Add unverified Maintenance</button>
               </div>
             </div>
           </div>

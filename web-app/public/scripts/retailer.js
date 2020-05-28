@@ -36,8 +36,7 @@ function updateRetailer() {
 
                 //update heading
                 $('.heading').html(function () {
-                    let str = '<h2><b> ' + data.name + ' </b></h2>';
-                    str = str + '<h2><b> ' + data.email + ' </b></h2>';
+                    let str = '<h1><b> ' + data.name + ' </b></h1>';
 
                     return str;
                 });
@@ -90,6 +89,16 @@ function updateRetailer() {
                     for (let i = 0; i < transactionData.length; i++) {
                         str = str + '<option manufacturer-id=' + transactionData[i] + '> ' + transactionData[i] + '</option>';
                     }
+                    }
+                    return str;
+                });
+
+                //update manufacturers dropdown for earn points transaction
+                $('.add-unverified-maintenance-id select').html(function () {
+                    let str = '<option value="" disabled="" selected="">select</option>';
+                    let transactionData = data.getMyWatchesResults;
+                    for (let i = 0; i < transactionData.length; i++) {
+                        str = str + '<option add-unverified-maintenance-option-id=' + transactionData[i].manufacturer + "*+$+*" + transactionData[i].watchId + '> ' + transactionData[i].manufacturer + ": " + transactionData[i].watchId + '</option>';
                     }
                     return str;
                 });
@@ -176,7 +185,7 @@ $('.add-maintenance').click(function () {
     //make ajax call
     $.ajax({
         type: 'POST',
-        url: apiUrl + 'addMaintenance',
+        url: apiUrl + 'addVerifiedMaintenance',
         data: inputData,
         dataType: 'json',
         contentType: 'application/json',
@@ -193,6 +202,67 @@ $('.add-maintenance').click(function () {
                 return;
             } else {
                 //update retailer page and notify successful transaction
+                alert('Transaction successful');
+                updateRetailer();
+            }
+
+
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            alert('Error: Try again');
+            console.log(errorThrown);
+            console.log(textStatus);
+            console.log(jqXHR);
+        }
+    });
+});
+
+//check user input and call server
+$('.add-unverified-maintenance').click(function () {
+
+    //get user input data
+    //select logic
+    let formManufacturerAndWatchId = $('.add-unverified-maintenance-id select').find(':selected').attr('add-unverified-maintenance-option-id');
+    if (!formManufacturerAndWatchId) {
+        alert('Select watch first');
+        return;
+    }
+    let res = formManufacturerAndWatchId.split("*+$+*");
+
+    let formRetailerName = $('.retailerName input').val();
+    let formInfo = $('.unverified-maintenance-info-id input').val();
+    let formManufacturerName = res[0];
+    let formWatchId = res[1];
+    if (!formManufacturerName) {
+        alert('Select manufacturer first');
+        return;
+    }
+
+    //create json data
+    let inputData = '{' + '"executorName" : "' + formRetailerName + '", ' + '"watchId" : "' + formWatchId + '", ' + '"manufacturerName" : "' + formManufacturerName + '", ' + '"maintenanceInfo" : "' + formInfo + '"}';
+    console.log(inputData);
+
+    //make ajax call
+    $.ajax({
+        type: 'POST',
+        url: apiUrl + 'addUnverifiedMaintenance',
+        data: inputData,
+        dataType: 'json',
+        contentType: 'application/json',
+        beforeSend: function () {
+            //display loading
+            document.getElementById('loader').style.display = 'block';
+        },
+        success: function (data) {
+
+            document.getElementById('loader').style.display = 'none';
+            //check data for error
+            if (data.error) {
+                alert(data.error);
+                return;
+            } else {
+                //update member page and notify successful transaction
+                // createWatch();
                 alert('Transaction successful');
                 updateRetailer();
             }
