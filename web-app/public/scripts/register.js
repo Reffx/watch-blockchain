@@ -73,7 +73,7 @@ $('.register-retailer').click(function() {
     let formCountry = $('.country input').val();
 
     //create json data
-    let inputData = '{' + '"name" : "' + formName + '", ' + '"password" : "' + formPassword + '", ' + '"email" : "' + formEmail + '", ' + '"phonenumber" : "' + formPhoneNumber + '", ' + '"address" : "' + formAddress + '", ' + '"zipCode" : "' + formZipCode + '", ' + '"place" : "' + formPlace + '"country" : "' + formCountry + '"}';
+    let inputData = '{' + '"name" : "' + formName + '", ' + '"password" : "' + formPassword + '", ' + '"email" : "' + formEmail + '", ' + '"phonenumber" : "' + formPhoneNumber + '", ' + '"address" : "' + formAddress + '", ' + '"zipCode" : "' + formZipCode + '", ' + '"place" : "' + formPlace + '", ' +  '"country" : "' + formCountry + '"}';
     console.log(inputData);
 
     registerRetailer(inputData);
@@ -136,7 +136,7 @@ $('.register-manufacturer').click(function() {
     let formCountry = $('.country input').val();
 
     //create json data
-    let inputData = '{' + '"name" : "' + formName + '", ' + '"password" : "' + formPassword + '", ' + '"email" : "' + formEmail + '", ' + '"phonenumber" : "' + formPhoneNumber + '", ' + '"address" : "' + formAddress + '", ' + '"zipCode" : "' + formZipCode + '", ' + '"place" : "' + formPlace + '"country" : "' + formCountry + '"}';
+    let inputData = '{' + '"name" : "' + formName + '", ' + '"password" : "' + formPassword + '", ' + '"email" : "' + formEmail + '", ' + '"phonenumber" : "' + formPhoneNumber + '", ' + '"address" : "' + formAddress + '", ' + '"zipCode" : "' + formZipCode + '", ' + '"place" : "' + formPlace + '", ' + '"country" : "' + formCountry + '"}';
     console.log(inputData);
 
     registerManufacturer(inputData);

@@ -49,6 +49,8 @@ function updateRetailer() {
                     str = str + '<h3>Account information</h3>';
                     str = str + '<h5>' + data.name + '</h5>';
                     str = str + '<h5>' + data.address + " " + data.zipCode + '</h5>';
+                    str = str + '<h5>' + data.place + '</h5>';
+                    str = str + '<h5>' + data.country + '</h5>';
                     str = str + '<br>';
                     str = str + '<h5>' + data.email + ' </h5>';
                     str = str + '<h5>' + data.phoneNumber + ' </h5>';
