@@ -3,16 +3,16 @@
 let apiUrl2 = location.protocol + '//' + location.host + '/api/';
 
 //check user input and call server
-$('.search-watch').click(function() {
+$('.search-watch').click(function () {
     let formUserId;
 
-    if ($('.memberName input').val() != ""){
+    if (typeof $('.memberName input').val() != 'undefined') {
         formUserId = $('.memberName input').val();
     }
-    if ($('.retailerName input').val() != ""){
+    if (typeof $('.retailerName input').val() != 'undefined') {
         formUserId = $('.retailerName input').val();
     }
-    if ($('.manufacturerName input').val() != ""){
+    if (typeof $('.manufacturerName input').val() != 'undefined') {
         formUserId = $('.manufacturerName input').val();
     }
 
@@ -57,9 +57,33 @@ $('.search-watch').click(function() {
                         str = str + '<h3>All transactions of watch ' + transactionData[0].watchId + '</h3>';
                     }
                     for (let i = 0; i < transactionData.length; i++) {
-                        str = str + '<p>timeStamp: ' + transactionData[i].timestamp + '<br />info: ' + transactionData[i].info + '<br />owner: ' + transactionData[i].owner + '<br />Manufacturer: ' + transactionData[i].manufacturer + '<br />WatchId: ' + transactionData[i].watchId + '<br />model: ' + transactionData[i].model + '<br />color: ' + transactionData[i].color + '<br />transactionType: ' + transactionData[i].transactionType + '<br />transactionExecutor: ' + transactionData[i].transaction_executor + '<br />InformationVerification: ' + transactionData[i].verified_information +'<br />transactionID: ' + transactionData[i].transactionId + '</p><br>';
+                        if (transactionData[i].transactionType === 'newWatchOwner') {
+                            str = str + '<p>timeStamp: ' + transactionData[i].timestamp + '<br />';
+                            str = str + 'info: ' + transactionData[i].info + '<br />';
+                            str = str + 'owner: ' + transactionData[i].owner + '<br />';
+                            str = str + 'Manufacturer: ' + transactionData[i].manufacturer + '<br />';
+                            str = str + 'WatchId: ' + transactionData[i].watchId + '<br />';
+                            str = str + 'attribut1: ' + transactionData[i].attribut1 + '<br />';
+                            str = str + 'attribut2: ' + transactionData[i].attribut2 + '<br />';
+                            str = str + 'attribut3: ' + transactionData[i].attribut3 + '<br />';
+                            str = str + 'attribut4: ' + transactionData[i].attribut4 + '<br />';
+                            str = str + 'attribut5: ' + transactionData[i].attribut5 + '<br />';
+                            str = str + 'transactionType: ' + transactionData[i].transactionType + '<br />';
+                            str = str + 'transactionExecutor: ' + transactionData[i].transaction_executor + '<br />';
+                            str = str + 'InformationVerification: ' + transactionData[i].verified_information + '<br />';
+                            str = str + 'transactionID: ' + transactionData[i].transactionId + '</p><br>';
+                        } else {
+                            str = str + '<p>timeStamp: ' + transactionData[i].timestamp + '<br />';
+                            str = str + 'info: ' + transactionData[i].info + '<br />';
+                            str = str + 'owner: ' + transactionData[i].owner + '<br />';
+                            str = str + 'manufacturer: ' + transactionData[i].manufacturer + '<br />';
+                            str = str + 'watch ID: ' + transactionData[i].watchId + '<br />';
+                            str = str + 'transactionType: ' + transactionData[i].transactionType + '<br />';
+                            str = str + 'transactionExecutor: ' + transactionData[i].transaction_executor + '<br />';
+                            str = str + 'InformationVerification: ' + transactionData[i].verified_information + '<br />';
+                            str = str + 'transactionID: ' + transactionData[i].transactionId + '</p><br>';
+                        }
                     }
-                    str = str + '</div>'
                     return str;
                 });
             }
@@ -79,13 +103,13 @@ $('.search-watch').click(function() {
 $('.search-retailer').click(function searchRetailer() {
     let formUserId;
 
-    if ($('.memberName input').val() != ""){
+    if (typeof $('.memberName input').val() != 'undefined') {
         formUserId = $('.memberName input').val();
     }
-    if ($('.retailerName input').val() != ""){
+    if (typeof $('.retailerName input').val() != 'undefined') {
         formUserId = $('.retailerName input').val();
     }
-    if ($('.manufacturerName input').val() != ""){
+    if (typeof $('.manufacturerName input').val() != 'undefined') {
         formUserId = $('.manufacturerName input').val();
     }
 
@@ -127,12 +151,12 @@ $('.search-retailer').click(function searchRetailer() {
                     } else {
                         str = '<div style="background:#e9ecef; width:100%;  border-radius:0.3rem; padding:20px;">'
                         str = str + '<h3>Information about ' + transactionData.name + '</h3>';
-                        str = str + '<p>'+ transactionData.name +'</p>';
-                        str = str + '<p> '+ transactionData.address +'</p>';
-                        str = str + '<p> '+ transactionData.zipCode + " " + transactionData.place +'</p>';
+                        str = str + '<p>' + transactionData.name + '</p>';
+                        str = str + '<p> ' + transactionData.address + '</p>';
+                        str = str + '<p> ' + transactionData.zipCode + " " + transactionData.place + '</p>';
                         str = str + '<br>';
-                        str = str + '<p> '+ transactionData.email +'</p>';
-                        str = str + '<p> '+ transactionData.phoneNumber +'</p>';
+                        str = str + '<p> ' + transactionData.email + '</p>';
+                        str = str + '<p> ' + transactionData.phoneNumber + '</p>';
                     }
                     str = str + '</div>'
                     return str;
@@ -154,13 +178,13 @@ $('.search-retailer').click(function searchRetailer() {
 $('.search-manufacturer').click(function searchManufacturer() {
     let formUserId;
 
-    if ($('.memberName input').val() != ""){
+    if (typeof $('.memberName input').val() != 'undefined') {
         formUserId = $('.memberName input').val();
     }
-    if ($('.retailerName input').val() != ""){
+    if (typeof $('.retailerName input').val() != 'undefined') {
         formUserId = $('.retailerName input').val();
     }
-    if ($('.manufacturerName input').val() != ""){
+    if (typeof $('.manufacturerName input').val() != 'undefined') {
         formUserId = $('.manufacturerName input').val();
     }
 
@@ -202,12 +226,12 @@ $('.search-manufacturer').click(function searchManufacturer() {
                     } else {
                         str = '<div style="background:#e9ecef; width:100%;  border-radius:0.3rem; padding:20px;">'
                         str = str + '<h3>Information about ' + transactionData.name + '</h3>';
-                        str = str + '<p>'+ transactionData.name +'</p>';
-                        str = str + '<p> '+ transactionData.address +'</p>';
-                        str = str + '<p> '+ transactionData.zipCode + " " + transactionData.place +'</p>';
+                        str = str + '<p>' + transactionData.name + '</p>';
+                        str = str + '<p> ' + transactionData.address + '</p>';
+                        str = str + '<p> ' + transactionData.zipCode + " " + transactionData.place + '</p>';
                         str = str + '<br>';
-                        str = str + '<p> '+ transactionData.email +'</p>';
-                        str = str + '<p> '+ transactionData.phoneNumber +'</p>';
+                        str = str + '<p> ' + transactionData.email + '</p>';
+                        str = str + '<p> ' + transactionData.phoneNumber + '</p>';
                     }
                     str = str + '</div>'
                     return str;
