@@ -536,7 +536,7 @@ module.exports = {
     },
 
     // create car transaction
-    createWatch: async function (watchId, model, color, cardId) {
+    createWatch: async function (watchId, cardId, attribut1, attribut2, attribut3, attribut4, attribut5, model, color, ) {
         let response = {};
         let result = {};
         try {
@@ -561,6 +561,12 @@ module.exports = {
                 let newWatch = {};
                 newWatch.owner = cardId;
                 newWatch.manufacturer = cardId;
+                newWatch.info = "Watch with ID " + watchId + " created by manufacturer " + cardId;
+                newWatch.attribut1 = attribut1;
+                newWatch.attribut2 = attribut2;
+                newWatch.attribut3 = attribut3;
+                newWatch.attribut4 = attribut4;
+                newWatch.attribut5 = attribut5;
                 newWatch.watchId = watchId;
                 newWatch.model = model;
                 newWatch.transaction_executor = cardId;

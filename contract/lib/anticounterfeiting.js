@@ -301,6 +301,11 @@ class AntiCounterfeiting extends Contract {
         if (oldTransaction[0].owner === oldOwner) {
             newTransaction.watchId = oldTransaction[0].watchId;
             newTransaction.manufacturer = oldTransaction[0].manufacturer;
+            newTransaction.attribut1 = oldTransaction[0].attribut1;
+            newTransaction.attribut2 = oldTransaction[0].attribut2;
+            newTransaction.attribut3 = oldTransaction[0].attribut3;
+            newTransaction.attribut4 = oldTransaction[0].attribut4;
+            newTransaction.attribut5 = oldTransaction[0].attribut5;
             newTransaction.model = oldTransaction[0].model;
             newTransaction.color = oldTransaction[0].color;
             newTransaction.transaction_executor = oldOwner;
@@ -352,6 +357,11 @@ class AntiCounterfeiting extends Contract {
         let newTransaction = {};
         newTransaction.watchId = oldTransaction.watchId;
         newTransaction.manufacturer = oldTransaction.manufacturer;
+        newTransaction.attribut1 = oldTransaction.attribut1;
+        newTransaction.attribut2 = oldTransaction.attribut2;
+        newTransaction.attribut3 = oldTransaction.attribut3;
+        newTransaction.attribut4 = oldTransaction.attribut4;
+        newTransaction.attribut5 = oldTransaction.attribut5;
         newTransaction.model = oldTransaction.model;
         newTransaction.color = oldTransaction.color;
         newTransaction.owner = oldTransaction.owner;
