@@ -317,6 +317,7 @@ app.post('/api/manufacturerData', function (req, res) {
                 returnData.address = manufacturer.address
                 returnData.zipCode = manufacturer.zipCode;
                 returnData.country = manufacturer.country;
+                returnData.place = manufacturer.place;
                 returnData.phoneNumber = manufacturer.phoneNumber;
             }
 
@@ -426,6 +427,7 @@ app.post('/api/retailerData', function (req, res) {
                 returnData.address = retailer.address
                 returnData.zipCode = retailer.zipCode;
                 returnData.email = retailer.email;
+                returnData.place = retailer.place;
                 returnData.country = retailer.country;
                 returnData.phoneNumber = retailer.phoneNumber;
             }
@@ -571,7 +573,7 @@ app.post('/api/verifiedRetailers', function (req, res) {
 
 app.post('/api/createWatch', (req, res) => {
     console.log(req.body);
-    network.createWatch(req.body.watchId, req.body.model, req.body.color, req.body.owner)
+    network.createWatch(req.body.watchId, req.body.owner, req.body.attribut1, req.body.attribut2, req.body.attribut3, req.body.attribut4, req.body.attribut5, req.body.model, req.body.color)
         .then((response) => {
             res.send(response);
         });
