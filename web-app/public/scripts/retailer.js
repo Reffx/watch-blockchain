@@ -421,68 +421,6 @@ function specificVerifiedRetailers(manufacturerName) {
 
 }
 
-//might be moved trough refactoring to basic.js
-function specificWatchTransactions(y) {
-
-    //get user input data
-    let name = $('.retailerName input').val();
-
-    //create json data
-    let inputData = '{' + '"name" : "' + name + '"}';
-    console.log(inputData);
-
-    //make ajax call
-    $.ajax({
-        type: 'POST',
-        url: apiUrl + 'allMyWatchesTransactions',
-        data: inputData,
-        dataType: 'json',
-        contentType: 'application/json',
-        beforeSend: function () {
-            //display loading
-            document.getElementById('loader').style.display = 'block';
-        },
-        success: function (data) {
-
-            //remove loader
-            document.getElementById('loader').style.display = 'none';
-
-            //check data for error
-            if (data.error) {
-                alert(data.error);
-                return;
-            } else {
-
-                //update use points transaction
-                $('.get-myWatches-all-transactions').html(function () {
-                    let str = '';
-                    let transactionData = data.getMyWatchesAllTransactionsResults[y];
-                    console.log(data.getMyWatchesResults);
-
-                    str = str + '<h3>All transactions of watch ' + transactionData[0].watchId + '</h3>';
-
-                    for (let i = 0; i < transactionData.length; i++) {
-                        str = str + '<p>timeStamp: ' + transactionData[i].timestamp + '<br />info: ' + transactionData[i].info + '<br />owner: ' + transactionData[i].owner + '<br />Manufacturer: ' + transactionData[i].manufacturer + '<br />WatchId: ' + transactionData[i].watchId + '<br />model: ' + transactionData[i].model + '<br />color: ' + transactionData[i].color + '<br />transactionType: ' + transactionData[i].transactionType + '<br />transactionExecutor: ' + transactionData[i].transaction_executor + '<br />InformationVerification: ' + transactionData[i].verified_information + '<br />transactionID: ' + transactionData[i].transactionId + '</p><br>';
-
-
-                    }
-                    return str;
-                });
-            }
-
-        },
-        error: function (jqXHR, textStatus, errorThrown) {
-            //reload on error
-            alert('Error: Try again');
-            console.log(errorThrown);
-            console.log(textStatus);
-            console.log(jqXHR);
-        },
-        complete: function () {
-
-        }
-    });
-}
 
 //might be moved to basic.js through refactoring
 function reportStolen(watchId) {
