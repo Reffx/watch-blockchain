@@ -122,7 +122,7 @@ function updateMember() {
                     let stolenWatches = [];
                     if (data.getStolenWatchesResults.length != 0) {
                         stolenWatches = data.getStolenWatchesResults.stolenWatchesList;
-                    } 
+                    }
                     let transactionData = data.getMyWatchesResults;
                     console.log(data.getMyWatchesResults);
                     for (let i = 0; i < transactionData.length; i++) {
@@ -266,9 +266,28 @@ function specificWatchTransactions(y) {
                     str = str + '<h3>All transactions of watch ' + transactionData[0].watchId + '</h3>';
 
                     for (let i = 0; i < transactionData.length; i++) {
-                        str = str + '<p>timeStamp: ' + transactionData[i].timestamp + '<br />info: ' + transactionData[i].info + '<br />owner: ' + transactionData[i].owner + '<br />Manufacturer: ' + transactionData[i].manufacturer + '<br />WatchId: ' + transactionData[i].watchId + '<br />transactionType: ' + transactionData[i].transactionType + '<br />transactionExecutor: ' + transactionData[i].transaction_executor + '<br />InformationVerification: ' + transactionData[i].verified_information + '<br />transactionID: ' + transactionData[i].transactionId + '</p><br>';
-
-
+                        if (transactionData[i].transactionType === 'newWatchOwner') {
+                            str = str + printNewWatchOwnerTransaction(transactionData[i]);
+                        } else if (transactionData[i].transactionType === 'maintenanceEvent') {
+                            str = str + printMaintenanceEventTransaction(transactionData[i]);
+                        } else {
+                            str = str + '<p>timeStamp: ' + transactionData[i].timestamp + '<br />';
+                            str = str + 'info: ' + transactionData[i].info + '<br />';
+                            str = str + 'owner: ' + transactionData[i].owner + '<br />';
+                            str = str + 'Manufacturer: ' + transactionData[i].manufacturer + '<br />';
+                            str = str + 'WatchId: ' + transactionData[i].watchId + '<br />';
+                            str = str + 'attribut1: ' + transactionData[i].attribut1 + '<br />';
+                            str = str + 'attribut2: ' + transactionData[i].attribut2 + '<br />';
+                            str = str + 'attribut3: ' + transactionData[i].attribut3 + '<br />';
+                            str = str + 'attribut4: ' + transactionData[i].attribut4 + '<br />';
+                            str = str + 'attribut5: ' + transactionData[i].attribut5 + '<br />';
+                            str = str + 'model: ' + transactionData[i].model + '<br />';
+                            str = str + 'color: ' + transactionData[i].color + '<br />';
+                            str = str + 'transactionType: ' + transactionData[i].transactionType + '<br />';
+                            str = str + 'transactionExecutor: ' + transactionData[i].transaction_executor + '<br />';
+                            str = str + 'InformationVerification: ' + transactionData[i].verified_information + '<br />';
+                            str = str + 'transactionID: ' + transactionData[i].transactionId + '</p><br>';
+                        }
                     }
                     return str;
                 });
@@ -508,3 +527,4 @@ function reportAsFound(watchId) {
         }
     });
 }
+

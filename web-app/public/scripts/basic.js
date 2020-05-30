@@ -248,3 +248,36 @@ $('.search-manufacturer').click(function searchManufacturer() {
         }
     });
 });
+
+//used functions by member.js
+function printNewWatchOwnerTransaction(trans) {
+    let str = '';
+    str = str + '<p>timeStamp: ' + trans.timestamp + '<br />';
+    str = str + 'info: ' + trans.info + '<br />';
+    str = str + 'owner: ' + trans.owner + '<br />';
+    str = str + 'Manufacturer: ' + trans.manufacturer + '<br />';
+    str = str + 'WatchId: ' + trans.watchId + '<br />';
+    if (trans.attribut1 != '') { str = str + 'attribut1: ' + trans.attribut1 + '<br />'; }
+    if (trans.attribut2 != '') { str = str + 'attribut2: ' + trans.attribut2 + '<br />'; }
+    if (trans.attribut3 != '') { str = str + 'attribut3: ' + trans.attribut3 + '<br />'; }
+    if (trans.attribut4 != '') { str = str + 'attribut4: ' + trans.attribut4 + '<br />'; }
+    if (trans.attribut5 != '') { str = str + 'attribut5: ' + trans.attribut5 + '<br />'; }
+    str = str + 'transactionType: ' + trans.transactionType + '<br />';
+    str = str + 'transactionExecutor: ' + trans.transaction_executor + '<br />';
+    str = str + 'InformationVerification: ' + trans.verified_information + '<br />';
+    str = str + 'transactionID: ' + trans.transactionId + '</p><br>';
+    return str;
+};
+
+function printMaintenanceEventTransaction(trans) {
+    let str = '';
+    str = str + '<p>timeStamp: ' + trans.timestamp + '<br />';
+    str = str + 'info: ' + trans.info + '<br />';
+    str = str + 'owner: ' + trans.owner + '<br />';
+    str = str + 'Manufacturer: ' + trans.manufacturer + '<br />';
+    str = str + 'transactionType: ' + trans.transactionType + '<br />';
+    str = str + 'transactionExecutor: ' + trans.transaction_executor + '<br />';
+    str = str + 'InformationVerification: ' + trans.verified_information + '<br />';
+    str = str + 'transactionID: ' + trans.transactionId + '</p><br>';
+    return str;
+};
