@@ -76,7 +76,7 @@ function updateRetailer() {
                     console.log(data.getMyWatchesResults);
 
                     for (let i = 0; i < transactionData.length; i++) {
-                        str = str + '<p>timeStamp: ' + transactionData[i].timestamp + '<br />owner: ' + transactionData[i].owner + '<br />manufacturer: ' + transactionData[i].manufacturer + '<br />WatchId: ' + transactionData[i].watchId + '<br />model: ' + transactionData[i].model + '<br />color: ' + transactionData[i].color +  '<br />transactionType: ' + transactionData[i].transactionType + '<br />transactionID: ' + transactionData[i].transactionId + '</p><br>';
+                        str = str + '<p>timeStamp: ' + transactionData[i].timestamp + '<br />owner: ' + transactionData[i].owner + '<br />manufacturer: ' + transactionData[i].manufacturer + '<br />WatchId: ' + transactionData[i].watchId + '<br />transactionType: ' + transactionData[i].transactionType + '<br />transactionID: ' + transactionData[i].transactionId + '</p><br>';
                     }
                     return str;
                 });
@@ -130,8 +130,6 @@ function updateRetailer() {
                         str = str + 'attribut3: ' + transactionData[i].attribut3 + '<br />';
                         str = str + 'attribut4: ' + transactionData[i].attribut4 + '<br />';
                         str = str + 'attribut5: ' + transactionData[i].attribut5 + '<br />';
-                        str = str + 'model: ' + transactionData[i].model + '<br />';
-                        str = str + 'color: ' + transactionData[i].color + '<br />';
                         str = str + 'transactionType: ' + transactionData[i].transactionType + '<br />';
                         str = str + 'transactionExecutor: ' + transactionData[i].transaction_executor + '<br />';
                         str = str + 'InformationVerification: ' + transactionData[i].verified_information + '<br />';

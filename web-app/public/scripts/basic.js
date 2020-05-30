@@ -346,8 +346,6 @@ function specificWatchTransactions(y) {
                             str = str + 'attribut3: ' + transactionData[i].attribut3 + '<br />';
                             str = str + 'attribut4: ' + transactionData[i].attribut4 + '<br />';
                             str = str + 'attribut5: ' + transactionData[i].attribut5 + '<br />';
-                            str = str + 'model: ' + transactionData[i].model + '<br />';
-                            str = str + 'color: ' + transactionData[i].color + '<br />';
                             str = str + 'transactionType: ' + transactionData[i].transactionType + '<br />';
                             str = str + 'transactionExecutor: ' + transactionData[i].transaction_executor + '<br />';
                             str = str + 'InformationVerification: ' + transactionData[i].verified_information + '<br />';

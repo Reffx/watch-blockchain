@@ -179,13 +179,11 @@ $('.create-watch').click(function () {
     let formAttribut3 = $('.attribut3-id input').val();
     let formAttribut4 = $('.attribut4-id input').val();
     let formAttribut5 = $('.attribut5-id input').val();
-    let formModel = 'legacy';
-    let formColor = 'legacy2';
     let formOwner = $('.manufacturerName input').val();
 
 
     //create json data
-    let inputData = '{' + '"watchId" : "' + formWatchId + '", ' + '"attribut1" : "' + formAttribut1 + '", ' + '"attribut2" : "' + formAttribut2 + '", ' + '"attribut3" : "' + formAttribut3 + '", ' + '"attribut4" : "' + formAttribut4 + '", ' + '"attribut5" : "' + formAttribut5 + '", ' + '"model" : "' + formModel + '", ' + '"color" : "' + formColor + '", ' + '"owner" : "' + formOwner + '"}';
+    let inputData = '{' + '"watchId" : "' + formWatchId + '", ' + '"attribut1" : "' + formAttribut1 + '", ' + '"attribut2" : "' + formAttribut2 + '", ' + '"attribut3" : "' + formAttribut3 + '", ' + '"attribut4" : "' + formAttribut4 + '", ' + '"attribut5" : "' + formAttribut5 +  '", ' + '"owner" : "' + formOwner + '"}';
     console.log(inputData);
 
     //make ajax call
