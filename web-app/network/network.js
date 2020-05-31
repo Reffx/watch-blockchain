@@ -536,7 +536,7 @@ module.exports = {
     },
 
     // create car transaction
-    createWatch: async function (watchId, cardId, attribut1, attribut2, attribut3, attribut4, attribut5, model, color, ) {
+    createWatch: async function (watchId, cardId, attribut1, attribut2, attribut3, attribut4, attribut5) {
         let response = {};
         let result = {};
         try {
@@ -568,10 +568,8 @@ module.exports = {
                 newWatch.attribut4 = attribut4;
                 newWatch.attribut5 = attribut5;
                 newWatch.watchId = watchId;
-                newWatch.model = model;
                 newWatch.transaction_executor = cardId;
                 newWatch.verified_information = "verified transaction!";
-                newWatch.color = color;
                 // Submit the specified transaction.
                 // createWatch transaction 
                 result = await contract.submitTransaction('CreateWatch', JSON.stringify(newWatch));
