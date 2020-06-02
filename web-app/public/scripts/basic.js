@@ -282,6 +282,19 @@ function printMaintenanceEventTransaction(trans) {
     return str;
 };
 
+function printStolenEventTransaction(trans) {
+    let str = '';
+    str = str + '<p>timeStamp: ' + trans.timestamp + '<br />';
+    str = str + 'info: ' + trans.info + '<br />';
+    str = str + 'owner: ' + trans.owner + '<br />';
+    str = str + 'Manufacturer: ' + trans.manufacturer + '<br />';
+    str = str + 'transactionType: ' + trans.transactionType + '<br />';
+    str = str + 'transactionExecutor: ' + trans.transaction_executor + '<br />';
+    str = str + 'InformationVerification: ' + trans.verified_information + '<br />';
+    str = str + 'transactionID: ' + trans.transactionId + '</p><br>';
+    return str;
+};
+
 function specificWatchTransactions(y) {
     //get user input data
     let name;
