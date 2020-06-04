@@ -28,7 +28,7 @@ class AntiCounterfeiting extends Contract {
     // Add a member on the ledger
     async CreateMember(ctx, member) {
         member = JSON.parse(member);
-        //test
+
         let memberInformation = [];
         memberInformation.push(member);
 
@@ -40,7 +40,7 @@ class AntiCounterfeiting extends Contract {
     // Add a manufacturer on the ledger, and add it to the all-manufacturers list
     async CreateManufacturer(ctx, manufacturer) {
         manufacturer = JSON.parse(manufacturer);
-        //test
+
         let manufacturerInformation = [];
         manufacturerInformation.push(manufacturer);
 
@@ -54,10 +54,10 @@ class AntiCounterfeiting extends Contract {
         return JSON.stringify(manufacturer);
     }
 
-    // Add a retailer on the ledger, and add it to the all-manufacturers list
+    // Add a retailer on the ledger, and add it to the all-retailer list
     async CreateRetailer(ctx, retailer) {
         retailer = JSON.parse(retailer);
-        //test
+
         let retailerInformation = [];
         retailerInformation.push(retailer);
 
@@ -299,7 +299,7 @@ class AntiCounterfeiting extends Contract {
 
         let newTransaction = {};
         if (oldTransaction[0].owner === oldOwner) {
-            newTransaction.info = "This watch changed its owner from " + oldOwner + " to " + newOwner + "." ;
+            newTransaction.info = "This watch changed its owner from " + oldOwner + " to " + newOwner + ".";
             newTransaction.watchId = oldTransaction[0].watchId;
             newTransaction.manufacturer = oldTransaction[0].manufacturer;
             newTransaction.attribut1 = oldTransaction[0].attribut1;
@@ -348,9 +348,12 @@ class AntiCounterfeiting extends Contract {
         let allRecentWatchesTransactions = [];
 
         for (let transaction of transactions) {
-            allRecentWatchesTransactions.push(transaction);
+            if (transaction.transactionType === "newWatchOwner") {
+                allRecentWatchesTransactions.push(transaction);
+            }
         }
 
+        //get Information of last Transaction that watchowner was changed
         let oldTransaction = allRecentWatchesTransactions[allRecentWatchesTransactions.length - 1];
 
         let newTransaction = {};
@@ -376,6 +379,51 @@ class AntiCounterfeiting extends Contract {
         await ctx.stub.putState(manufacturerName + "-" + watchId, Buffer.from(JSON.stringify(transactions)));
         await ctx.stub.putState(allWatchesTransactionKey, Buffer.from(JSON.stringify(allWatchesTransaction)));
         console.info('============= END : addMaintenance ===========');
+        return JSON.stringify(newTransaction);
+    }
+
+    //teeeeeeest neeeded 
+    async AddStolenEvent(ctx, executorName, watchId, manufacturerName, stolenInfo) {
+        console.info('============= START : addReportSTolen ===========');
+        //get chain for all Watches key
+        let allWatchesTransaction = await ctx.stub.getState(allWatchesTransactionKey);
+        allWatchesTransaction = JSON.parse(allWatchesTransaction);
+
+        // get chain for specific watch
+        let transactions = await ctx.stub.getState(manufacturerName + "-" + watchId);
+        transactions = JSON.parse(transactions);
+
+        //logic
+        let allRecentWatchesOwnerChangedTransactions = [];
+
+        for (let transaction of transactions) {
+            if (transaction.transactionType === "newWatchOwner") {
+                allRecentWatchesOwnerChangedTransactions.push(transaction);
+            }
+        }
+
+        //get Information of last Transaction that watchowner was changed
+        let oldOwnerChangedTransaction = allRecentWatchesOwnerChangedTransactions[allRecentWatchesOwnerChangedTransactions.length - 1];
+
+        let newTransaction = {};
+
+        newTransaction.info = stolenInfo;
+        newTransaction.watchId = watchId;
+        newTransaction.manufacturer = manufacturerName;
+        newTransaction.verifiedInformation = 'verified transaction!';
+        newTransaction.owner = oldOwnerChangedTransaction.owner;
+        newTransaction.transaction_executor = executorName;
+        newTransaction.timestamp = new Date((ctx.stub.txTimestamp.seconds.low * 1000)).toGMTString();
+        newTransaction.transactionId = ctx.stub.txId;
+
+        //push new Transaction to chain
+        transactions.push(newTransaction);
+        allWatchesTransaction.push(newTransaction);
+
+        //submit new chain
+        await ctx.stub.putState(manufacturerName + "-" + watchId, Buffer.from(JSON.stringify(transactions)));
+        await ctx.stub.putState(allWatchesTransactionKey, Buffer.from(JSON.stringify(allWatchesTransaction)));
+        console.info('============= END : addReportStolen ===========');
         return JSON.stringify(newTransaction);
     }
 
@@ -588,6 +636,22 @@ class AntiCounterfeiting extends Contract {
             }
             let lastStolenWatchesTransaction = stolenWatchesTransactions[stolenWatchesTransactions.length - 1];
             return JSON.stringify(lastStolenWatchesTransaction);
+        }
+    }
+
+    //TEeeeeeeeeeesest neeeeeeeeeeded
+    async IsWatchStolen(ctx, executorName, watchId) {
+        let transactions = await ctx.stub.getState(allStolenWatchesTransaction);
+        if (transactions.length != 0) {
+            transactions = JSON.parse(transactions);
+            let stolenWatchesTransactions = [];
+            for (let transaction of transactions) {
+                stolenWatchesTransactions.push(transaction);
+            }
+            let lastStolenWatchesTransaction = stolenWatchesTransactions[stolenWatchesTransactions.length - 1];
+            if (lastStolenWatchesTransaction.indexOf(watchId) === -1) {
+                return JSON.stringify(0);
+            } else return JSON.stringify(1);
         }
     }
 
