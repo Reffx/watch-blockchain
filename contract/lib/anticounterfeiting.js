@@ -410,7 +410,8 @@ class AntiCounterfeiting extends Contract {
         newTransaction.info = stolenInfo;
         newTransaction.watchId = watchId;
         newTransaction.manufacturer = manufacturerName;
-        newTransaction.verifiedInformation = 'verified transaction!';
+        newTransaction.verified_information = 'verified transaction!';
+        newTransaction.transactionType = "StolenWatchReport"
         newTransaction.owner = oldOwnerChangedTransaction.owner;
         newTransaction.transaction_executor = executorName;
         newTransaction.timestamp = new Date((ctx.stub.txTimestamp.seconds.low * 1000)).toGMTString();
