@@ -100,13 +100,14 @@ function updateManufacturer() {
                 //update use points transaction
                 $('.verifiedRetailersBox').html(function () {
                     let str = '';
+                    str = str + '<h2>Verified retailers by ' + data.name +' </h2> <br>'
                     let transactionData = data.getVerifiedRetailersResults;
                     console.log(data.getVerifiedRetailersResults);
                     if (transactionData.length != 0) {
                         for (let i = 0; i < transactionData.retailerList.length; i++) {
-                            str = str + '<p>Your verified Retailers: ' + transactionData.retailerList[i] + '<br /></p><br>';
+                            str = str + '<button class="btn" style="background:black; color:white; margin:5px;" onclick="getRetailerInfo(\'' + transactionData.retailerList[i] + '\')">' + transactionData.retailerList[i] + "</button>";
                         }
-                    }
+                    }   
                     return str;
                 });
 
@@ -535,5 +536,6 @@ function getRetailerInfo(name) {
     var txt = document.getElementById("searchRetailerInput");
     txt.value = name;
     document.getElementById("searchRetailerButton").click();
+    $("#transactions-tab").trigger("click");
     $("#searchRetailer-tab").trigger("click");
 }
