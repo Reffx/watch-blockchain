@@ -71,12 +71,6 @@
         <table>
           <tr>
             <td>
-              <div style="padding-right: 20px">
-                <h2>name:</h2>
-                <h2>mail:</h2>
-              </div>
-            </td>
-            <td>
               <div class="heading"> </div>
             </td>
           </tr>
@@ -108,15 +102,13 @@
           </li>
           <li class="nav-item tab-width">
             <a class="nav-link" id="transactions-tab" data-toggle="tab" href="#transactions" role="tab"
-              aria-controls="transactions" aria-selected="false">Transactions</a>
+              aria-controls="transactions" aria-selected="false">Further Information</a>
           </li>
         </ul>
       </div>
       <div class="row">
         <div class="tab-content" id="myTabContent">
           <div class="tab-pane fade show active" id="dashboard" role="tabpanel" aria-labelledby="dashboard-tab">
-            <br>
-            <h1 style="text-align: center;">Dashboard</h1>
             <br>
             <div class="dashboards"></div>
           </div>
@@ -174,9 +166,9 @@
             <br>
             <div class="jumbotron" style="display:block;">
               <div class="container">
-                  <h2>Transfer Certificate</h2>
-                  <p>Select a watch and enter the name of the new owner.</p>
-                  <br>
+                <h2>Transfer Certificate</h2>
+                <p>Select a watch and enter the name of the new owner.</p>
+                <br>
                 <div class="sell-myWatch-id" style="display:flex; align-items:baseline">
                   <label style="width:100px;">Watch </label>
                   <select class="form-control" style="width:200px">
@@ -186,7 +178,7 @@
                 <br>
                 <div class="newOwner-id" style="display:flex; flex-wrap: wrap; flex-direction: column;">
                   <div>
-                    <label style="width:96px;"> Buyer </label>
+                    <label style="width:96px;"> New Owner </label>
                     <input style="align-items:baseline">
                   </div>
                 </div>
@@ -210,7 +202,7 @@
                     </p>
                   </div>
                   <br>
-                  <button class="btn btn-primary verify-retailer">Verify!</button>
+                  <button class="btn btn-primary verify-retailer">verify</button>
                 </div>
               </div>
               <div class="col-lg-6">
@@ -224,7 +216,7 @@
                     </p>
                   </div>
                   <br>
-                  <button class="btn btn-primary unverify-retailer">Unverify!</button>
+                  <button class="btn btn-primary unverify-retailer">unverify</button>
                 </div>
               </div>
             </div>
@@ -235,24 +227,24 @@
 
           <div class="tab-pane fade" id="transactions" role="tabpanel" aria-labelledby="transactions-tab">
             <br>
-            <h1 style="text-align: center;">Transactions</h1>
+            <h1 style="text-align: center;">Data Requests</h1>
             <br>
             <ul class="nav nav-tabs" id="transactionsTypeTab" role="tablist">
               <li class="nav-item ">
                 <a class="nav-link" id="myWatches-created-tab" data-toggle="tab" href="#myWatches" role="tab"
-                  aria-controls="myWatches" aria-selected="false">My watches</a>
+                  aria-controls="myWatches" aria-selected="false">My Watches</a>
               </li>
               <li class="nav-item ">
                 <a class="nav-link" id="searchWatch-tab" data-toggle="tab" href="#searchWatch" role="tab"
-                  aria-controls="searchWatch" aria-selected="false">Search watch</a>
+                  aria-controls="searchWatch" aria-selected="false">Search Watch</a>
               </li>
               <li class="nav-item ">
                 <a class="nav-link" id="searchRetailer-tab" data-toggle="tab" href="#searchRetailer" role="tab"
-                  aria-controls="searchRetailer" aria-selected="false">Search retailer</a>
+                  aria-controls="searchRetailer" aria-selected="false">Search Retailer</a>
               </li>
               <li class="nav-item ">
                 <a class="nav-link" id="searchManufacturer-tab" data-toggle="tab" href="#searchManufacturer" role="tab"
-                  aria-controls="searchManufacturer" aria-selected="false">Search manufacturer</a>
+                  aria-controls="searchManufacturer" aria-selected="false">Search Manufacturer</a>
               </li>
               <li class="nav-item ">
                 <a class="nav-link" id="watches-created-tab" data-toggle="tab" href="#watches-created" role="tab"

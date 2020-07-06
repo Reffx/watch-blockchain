@@ -47,10 +47,11 @@ function updateManufacturer() {
                 $('.dashboards').html(function () {
                     let str = '';
                     str = str + '<div class="jumbotron" style="display:block;">';
+                    str = str + "<h1>Dashboard</h1><br>";
                     str = str + '<h3>Account information</h3>';
                     str = str + '<h5>' + data.name + '</h5>';
-                    str = str + '<h5>' + data.address + " " + data.zipCode + '</h5>';
-                    str = str + '<h5>' + data.place + '</h5>';
+                    str = str + '<h5>' + data.address  + '</h5>';
+                    str = str + '<h5>' + data.zipCode + " " + data.place + '</h5>';
                     str = str + '<h5>' + data.country + '</h5>';
                     str = str + '<br>';
                     str = str + '<h5>' + data.email + ' </h5>';

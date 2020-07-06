@@ -95,19 +95,20 @@
           </li>
           <li class="nav-item tab-width">
             <a class="nav-link" id="sellWatch-tab" data-toggle="tab" href="#sellWatch" role="tab"
-              aria-controls="sellWatch2" aria-selected="false">Sell Watch</a>
+              aria-controls="sellWatch2" aria-selected="false">Transfer Certificate</a>
           </li>
           <li class="nav-item tab-width">
             <a class="nav-link" id="recordMaintenance-tab" data-toggle="tab" href="#recordMaintenance" role="tab"
-              aria-controls="recordMaintenance" aria-selected="false">Add verified maintenance</a>
+              aria-controls="recordMaintenance" aria-selected="false">Add Verified Maintenance</a>
           </li>
           <li class="nav-item tab-width">
-            <a class="nav-link" id="recordUnverifiedMaintenance-tab" data-toggle="tab" href="#recordUnverifiedMaintenance" role="tab"
-              aria-controls="recordUnverifiedMaintenance" aria-selected="false">Add unverified maintenance</a>
+            <a class="nav-link" id="recordUnverifiedMaintenance-tab" data-toggle="tab"
+              href="#recordUnverifiedMaintenance" role="tab" aria-controls="recordUnverifiedMaintenance"
+              aria-selected="false">Add Unverified Maintenance</a>
           </li>
           <li class="nav-item tab-width">
             <a class="nav-link" id="transactions-tab" data-toggle="tab" href="#transactions" role="tab"
-              aria-controls="transactions" aria-selected="false">Transactions</a>
+              aria-controls="transactions" aria-selected="false">Further Information</a>
           </li>
         </ul>
       </div>
@@ -122,13 +123,11 @@
 
           <div class="tab-pane fade" id="sellWatch" role="tabpanel" aria-labelledby="sellWatch-tab">
             <br>
-            <h1 style="text-align: center;">Sell watch</h1>
             <div class="jumbotron" style="display:block;">
               <div class="container">
+                <h2>Transfer Certificate</h2>
+                <p>Select a watch and enter the name of the new owner.</p>
                 <br>
-                <div class="maintenanceManufacturerId-2">
-                  <p> <b>Enter certificate transfer details.</b></p>
-                </div>
                 <div class="sell-myWatch-id" style="display:flex; align-items:baseline">
                   <label style="width:100px;">Watch </label>
                   <select class="form-control" style="width:200px">
@@ -138,7 +137,7 @@
                 <br>
                 <div class="newOwner-id" style="display:flex; flex-wrap: wrap; flex-direction: column;">
                   <div>
-                    <label style="width:96px;"> Buyer </label>
+                    <label style="width:96px;"> New Owner </label>
                     <input style="align-items:baseline">
                   </div>
                 </div>
@@ -150,12 +149,11 @@
 
           <div class="tab-pane fade" id="recordMaintenance" role="tabpanel" aria-labelledby="sellWatch-tab">
             <br>
-            <h1 style="text-align: center;">Record Maintenance</h1>
             <div class="jumbotron" style="display:block;">
               <div class="container">
-                <div class="maintenanceManufacturerId">
-                  <p> <b>Enter maintenance details.</b></p>
-                </div>
+                <h2>Record Maintenance</h2>
+                <p>Enter maintenance details.</p>
+                <br>
                 <div class="maintenance-manufacturer-id" style="display:flex; align-items:baseline">
                   <label style="width:120px;">Manufacturer </label>
                   <select class="form-control" style="width:200px">
@@ -164,7 +162,7 @@
                 </div>
                 <br>
                 <div class="maintenance-watchid-id">
-                  <label style="width:116px;"> Watch ID </label>
+                  <label style="width:116px;"> Watch-ID </label>
                   <input style="align-items:baseline">
                 </div>
                 <br>
@@ -173,19 +171,18 @@
                   <input style="height:100px">
                 </div>
                 <br>
-                <button class="btn btn-primary add-maintenance">Add Event</button>
+                <button class="btn btn-primary add-maintenance">add maintenance</button>
               </div>
             </div>
           </div>
 
           <div class="tab-pane fade" id="recordUnverifiedMaintenance" role="tabpanel" aria-labelledby="sellWatch-tab">
             <br>
-            <h1 style="text-align: center;">Record Maintenance</h1>
             <div class="jumbotron" style="display:block;">
               <div class="container">
-                <div class="unverifiedMaintenanceManufacturerId">
-                  <p> <b>Enter maintenance details.</b></p>
-                </div>
+                <h2>Record Maintenance</h2>
+                <p>Enter maintenance details.</p>
+                <br>
                 <div class="add-unverified-maintenance-id" style="display:flex; align-items:baseline">
                   <label style="width:120px;">Select watch </label>
                   <select class="form-control" style="width:200px">
@@ -198,31 +195,31 @@
                   <input style="height:100px">
                 </div>
                 <br>
-                <button class="btn btn-primary add-unverified-maintenance">Add unverified Maintenance</button>
+                <button class="btn btn-primary add-unverified-maintenance">add maintenance</button>
               </div>
             </div>
           </div>
 
           <div class="tab-pane fade" id="transactions" role="tabpanel" aria-labelledby="transactions-tab">
             <br>
-            <h1 style="text-align: center;">Transactions</h1>
+            <h1 style="text-align: center;">Data Requests</h1>
             <br>
             <ul class="nav nav-tabs" id="transactionsTypeTab" role="tablist">
               <li class="nav-item ">
                 <a class="nav-link" id="myWatches-created-tab" data-toggle="tab" href="#myWatches" role="tab"
-                  aria-controls="myWatches" aria-selected="false">My watches</a>
+                  aria-controls="myWatches" aria-selected="false">My Watches</a>
               </li>
               <li class="nav-item ">
                 <a class="nav-link" id="searchWatch-tab" data-toggle="tab" href="#searchWatch" role="tab"
-                  aria-controls="searchWatch" aria-selected="false">Search watch</a>
+                  aria-controls="searchWatch" aria-selected="false">Search Watch</a>
               </li>
               <li class="nav-item ">
                 <a class="nav-link" id="searchRetailer-tab" data-toggle="tab" href="#searchRetailer" role="tab"
-                  aria-controls="searchRetailer" aria-selected="false">Search retailer</a>
+                  aria-controls="searchRetailer" aria-selected="false">Search Retailer</a>
               </li>
               <li class="nav-item ">
                 <a class="nav-link" id="searchManufacturer-tab" data-toggle="tab" href="#searchManufacturer" role="tab"
-                  aria-controls="searchManufacturer" aria-selected="false">Search manufacturer</a>
+                  aria-controls="searchManufacturer" aria-selected="false">Search Manufacturer</a>
               </li>
               <li class="nav-item ">
                 <a class="nav-link" id="watches-created-tab" data-toggle="tab" href="#watches-created" role="tab"
