@@ -83,17 +83,17 @@ function updateManufacturer() {
                         str = str + '<p>timeStamp: ' + transactionData[i].timestamp + '<br />';
                         str = str + 'info: ' + transactionData[i].info + '<br />';
                         str = str + 'owner: ' + transactionData[i].owner + '<br />';
-                        str = str + 'Manufacturer: ' + transactionData[i].manufacturer + '<br />';
-                        str = str + 'WatchId: ' + transactionData[i].watchId + '<br />';
+                        str = str + 'manufacturer: ' + transactionData[i].manufacturer + '<br />';
+                        str = str + 'watch-ID: ' + transactionData[i].watchId + '<br />';
                         str = str + 'attribut1: ' + transactionData[i].attribut1 + '<br />';
                         str = str + 'attribut2: ' + transactionData[i].attribut2 + '<br />';
                         str = str + 'attribut3: ' + transactionData[i].attribut3 + '<br />';
                         str = str + 'attribut4: ' + transactionData[i].attribut4 + '<br />';
                         str = str + 'attribut5: ' + transactionData[i].attribut5 + '<br />';
-                        str = str + 'transactionType: ' + transactionData[i].transactionType + '<br />';
-                        str = str + 'transactionExecutor: ' + transactionData[i].transaction_executor + '<br />';
-                        str = str + 'InformationVerification: ' + transactionData[i].verified_information + '<br />';
-                        str = str + 'transactionID: ' + transactionData[i].transactionId + '</p><br>';
+                        str = str + 'transaction-type: ' + transactionData[i].transactionType + '<br />';
+                        str = str + 'transaction-executor: ' + transactionData[i].transaction_executor + '<br />';
+                        str = str + 'information-verification: ' + transactionData[i].verified_information + '<br />';
+                        str = str + 'transaction-ID: ' + transactionData[i].transactionId + '</p><br>';
                     }
                     return str;
                 });
