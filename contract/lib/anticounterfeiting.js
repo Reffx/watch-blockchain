@@ -325,6 +325,58 @@ class AntiCounterfeiting extends Contract {
         return JSON.stringify(newTransaction);
     }
 
+    async ShowSellInterest(ctx, watchId, manufacturerName, owner, interestInformation) {
+        console.info('============= START : showSellInterest ===========');
+        //get chain for all Watches key
+        let allWatchesTransaction = await ctx.stub.getState(allWatchesTransactionKey);
+        allWatchesTransaction = JSON.parse(allWatchesTransaction);
+
+        // get chain for specific watch
+        let transactions = await ctx.stub.getState(manufacturerName + "-" + watchId);
+        transactions = JSON.parse(transactions);
+
+        //logic
+        let allRecentWatchesTransactions = [];
+
+        for (let transaction of transactions) {
+            if (transaction.transactionType === "newWatchOwner") {
+                allRecentWatchesTransactions.push(transaction);
+            }
+        }
+
+        let oldTransaction = [];
+        if (allRecentWatchesTransactions[allRecentWatchesTransactions.length - 1].owner === owner) {
+            oldTransaction.push(allRecentWatchesTransactions[allRecentWatchesTransactions.length - 1]);
+        } else JSON.stringify(0);
+
+        let newTransaction = {};
+        if (oldTransaction[0].owner === owner) {
+            newTransaction.info = "This watch has a sales interest: " + interestInformation + ".";
+            newTransaction.watchId = oldTransaction[0].watchId;
+            newTransaction.manufacturer = oldTransaction[0].manufacturer;
+            newTransaction.attribut1 = oldTransaction[0].attribut1;
+            newTransaction.attribut2 = oldTransaction[0].attribut2;
+            newTransaction.attribut3 = oldTransaction[0].attribut3;
+            newTransaction.attribut4 = oldTransaction[0].attribut4;
+            newTransaction.attribut5 = oldTransaction[0].attribut5;
+            newTransaction.transaction_executor = owner;
+            newTransaction.verified_information = "verified transaction!";
+            newTransaction.owner = owner;
+            newTransaction.transactionType = "SalesInterest";
+            newTransaction.timestamp = new Date((ctx.stub.txTimestamp.seconds.low * 1000)).toGMTString();
+            newTransaction.transactionId = ctx.stub.txId;
+            //push new Transaction to chain
+            transactions.push(newTransaction);
+            allWatchesTransaction.push(newTransaction);
+        }
+
+        //submit new chain
+        await ctx.stub.putState(manufacturerName + "-" + watchId, Buffer.from(JSON.stringify(transactions)));
+        await ctx.stub.putState(allWatchesTransactionKey, Buffer.from(JSON.stringify(allWatchesTransaction)));
+        console.info('============= END : showSellInterest ===========');
+        return JSON.stringify(newTransaction);
+    }
+
     async AddMaintenanceEvent(ctx, executorName, watchId, manufacturerName, maintenanceInfo) {
         console.info('============= START : addMaintenance ===========');
         //get chain for all Watches key
