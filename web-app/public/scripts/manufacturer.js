@@ -127,6 +127,16 @@ function updateManufacturer() {
                     return str;
                 });
 
+                 //update manufacturers dropdown for earn points transaction
+                 $('.showInterest-myWatch-id select').html(function () {
+                    let str = '<option value="" disabled="" selected="">select</option>';
+                    let transactionData = data.getMyWatchesResults;
+                    for (let i = 0; i < transactionData.length; i++) {
+                        str = str + '<option showInterest-my-watch-option-id=' + transactionData[i].manufacturer + "*+$+*" + transactionData[i].watchId + '> ' + transactionData[i].manufacturer + ": " + transactionData[i].watchId + '</option>';
+                    }
+                    return str;
+                });
+
                 //update use points transaction
                 $('.get-myWatches-transactions').html(function () {
                     let str = '';
@@ -272,6 +282,63 @@ $('.sell-watch').click(function () {
                 // createWatch();
                 alert('Transaction successful');
                 updateManufacturer();
+            }
+
+
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            alert('Error: Try again');
+            console.log(errorThrown);
+            console.log(textStatus);
+            console.log(jqXHR);
+        }
+    });
+});
+
+//check user input and call server
+$('.show-interest').click(function () {
+
+    //select logic
+    let formManufacturerAndWatchId = $('.showInterest-myWatch-id select').find(':selected').attr('showInterest-my-watch-option-id');
+    if (!formManufacturerAndWatchId) {
+        alert('Select watch first');
+        return;
+    }
+    let res = formManufacturerAndWatchId.split("*+$+*");
+
+    let formExecutorName = $('.manufacturerName input').val();
+    let formManufacturerName = res[0];
+    let formWatchId = res[1];
+    let formInterestInformation = $('.showInterestInformation-id input').val();
+
+
+    //create json data
+    let inputData = '{' + '"watchId" : "' + formWatchId + '", ' + '"manufacturerName" : "' + formManufacturerName + '", ' + '"owner" : "' + formExecutorName + '", ' + '"interestInformation" : "' + formInterestInformation + '"}';
+    console.log(inputData);
+
+    //make ajax call
+    $.ajax({
+        type: 'POST',
+        url: apiUrl + 'showSellInterest',
+        data: inputData,
+        dataType: 'json',
+        contentType: 'application/json',
+        beforeSend: function () {
+            //display loading
+            document.getElementById('loader').style.display = 'block';
+        },
+        success: function (data) {
+
+            document.getElementById('loader').style.display = 'none';
+            //check data for error
+            if (data.error) {
+                alert(data.error);
+                return;
+            } else {
+                //update member page and notify successful transaction
+                // createWatch();
+                alert('Transaction successful');
+                updateMember();
             }
 
 
