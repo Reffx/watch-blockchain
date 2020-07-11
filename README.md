@@ -7,7 +7,10 @@ to be defined...
 
 ## Architecture Flow
 
-to be defined...
+<p align="center">
+  <img src="https://user-images.githubusercontent.com/22227408/87222110-5a2f6e00-c371-11ea-90ac-7d7b06bd2d09.png">
+</p>
+
 
 
 ## Included Components
