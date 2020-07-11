@@ -105,10 +105,15 @@ function updateManufacturer() {
                     let transactionData = data.getVerifiedRetailersResults;
                     console.log(data.getVerifiedRetailersResults);
                     if (transactionData.length != 0) {
+                        if (transactionData.retailerList.length === 0){
+                            str = str + '<p>This manufacturer does not have any verified retailers.</p>';
+                        }
                         for (let i = 0; i < transactionData.retailerList.length; i++) {
                             str = str + '<button class="btn" style="background:black; color:white; margin:5px;" onclick="getRetailerInfo(\'' + transactionData.retailerList[i] + '\')">' + transactionData.retailerList[i] + "</button>";
                         }
-                    }   
+                    }   else {
+                        str = str + '<p>This manufacturer does not have any verified retailers.</p>';
+                    }
                     return str;
                 });
 
