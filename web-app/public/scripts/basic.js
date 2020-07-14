@@ -146,7 +146,7 @@ $('.search-retailer').click(function searchRetailer() {
                     let str = '';
                     let transactionData = data;
                     console.log(data.getMyWatchesResults);
-                    if (transactionData.length === 0) {
+                    if (transactionData.length === 0 || transactionData.userType != "retailer") {
                         str = '<h3>No retailer with this name found!</h3>';
                     } else {
                         str = '<div style="background:#e9ecef; width:100%;  border-radius:0.3rem; padding:20px;">'
@@ -221,7 +221,7 @@ $('.search-manufacturer').click(function searchManufacturer() {
                     let str = '';
                     let transactionData = data;
                     console.log(data.getMyWatchesResults);
-                    if (transactionData.length === 0) {
+                    if (transactionData.length === 0 || transactionData.userType != "manufacturer") {
                         str = '<h3>No manufacturer with this name found!</h3>';
                     } else {
                         str = '<div style="background:#e9ecef; width:100%;  border-radius:0.3rem; padding:20px;">'
