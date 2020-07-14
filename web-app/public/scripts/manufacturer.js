@@ -370,6 +370,10 @@ $('.verify-retailer').click(function () {
     let inputData = '{' + '"retailerName" : "' + formVerifyRetailer + '", ' + '"manufacturerName" : "' + formManufacturerName + '"}';
     console.log(inputData);
 
+    if (formVerifyRetailer.length < 1) {
+        alert("Enter a retailer!");
+    } else {
+
     //make ajax call
     $.ajax({
         type: 'POST',
@@ -390,7 +394,6 @@ $('.verify-retailer').click(function () {
                 return;
             } else {
                 //update member page and notify successful transaction
-                // createWatch();
                 alert('Transaction successful');
                 updateManufacturer();
             }
@@ -403,6 +406,7 @@ $('.verify-retailer').click(function () {
             console.log(jqXHR);
         }
     });
+    }
 });
 
 //check user input and call server
@@ -415,6 +419,11 @@ $('.unverify-retailer').click(function () {
     //create json data
     let inputData = '{' + '"retailerName" : "' + formVerifyRetailer + '", ' + '"manufacturerName" : "' + formManufacturerName + '"}';
     console.log(inputData);
+
+    if (formVerifyRetailer.length < 1) {
+        alert("Enter a retailer!");
+    } else {
+
 
     //make ajax call
     $.ajax({
@@ -436,7 +445,6 @@ $('.unverify-retailer').click(function () {
                 return;
             } else {
                 //update member page and notify successful transaction
-                // createWatch();
                 alert('Transaction successful');
                 updateManufacturer();
             }
@@ -449,7 +457,7 @@ $('.unverify-retailer').click(function () {
             console.log(jqXHR);
         }
     });
-
+    }
 });
 
 //might be moved trough refactoring to basic.js
@@ -592,7 +600,6 @@ function reportAsFound(watchId) {
                 alert(data.error);
                 return;
             } else {
-                // createWatch();
                 alert('Transaction successful');
                 updateManufacturer();
             }

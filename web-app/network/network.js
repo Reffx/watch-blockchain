@@ -744,12 +744,17 @@ module.exports = {
 
             // Get the contract from the network.
             const contract = network.getContract('anticounterfeiting');
+            
+            let retailer = await contract.evaluateTransaction('GetLatestRetailerInfo', retailerName);
+            retailer = JSON.parse(retailer.toString());
 
+            if (retailer.userType === "retailer"){
             // Submit the specified transaction.
-            // changeCarOwner transaction - requires 2 args , ex: ('changeCarOwner', 'CAR10', 'Dave')
             await contract.submitTransaction('AddVerifiedRetailer', manufacturerName, retailerName);
             console.log('Transaction has been submitted');
-
+            } else { 
+                response.error = ("Not a retailer!");
+            };
             // Disconnect from the gateway.
             await gateway.disconnect();
 
