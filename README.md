@@ -53,8 +53,8 @@ You will need to follow the requirements for the [IBM Blockchain Platform Extens
 Clone this repository in a folder your choice:
 
 ```bash
-git clone https://github.com/IBM/customer-loyalty-program-hyperledger-fabric-VSCode.git
-cd customer-loyalty-program-hyperledger-fabric-VSCode
+git clone https://github.com/Reffx/watch-blockchain.git
+cd watch-blockchain
 ```
 
 
@@ -139,10 +139,10 @@ After the install is complete, you should get a message `Successfully installed 
   <img width="500" src="https://user-images.githubusercontent.com/8854447/72641101-53322080-3937-11ea-89f8-4db2f23a8b27.png">
 </p>
 
-Once instantiation of the contract completes, you should get the message `Successfully instantiated smart contract` and you should see `customerloyalty@0.0.1` under `Instantiated` under `FABRIC ENVIRONMENTS`.
+Once instantiation of the contract completes, you should get the message `Successfully instantiated smart contract` and you should see `anticounterfeiting@2.5.1` under `Instantiated` under `FABRIC ENVIRONMENTS`.
 
 <p align="center">
-  <img width="300" src="https://user-images.githubusercontent.com/8854447/72648095-1d496800-3948-11ea-9619-d2c5eab47a02.png">
+  <img width="300" src="https://user-images.githubusercontent.com/22227408/87459481-bc0b0480-c60b-11ea-8f04-10b001331f00.png">
 </p>
 
 
