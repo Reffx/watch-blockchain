@@ -112,7 +112,7 @@ After the install is complete, you should get a message `Successfully installed 
 * The extension will then ask you which contract and version to instantiate — choose `customerloyalty@0.0.1 Installed`.
 
 <p align="center">
-  <img width="500" src="https://user-images.githubusercontent.com/8854447/72647057-998e7c00-3945-11ea-8c2a-efa9a81320ff.png">
+  <img width="500" src="https://user-images.githubusercontent.com/22227408/87457850-5ddd2200-c609-11ea-80e8-69435b59a1d7.png">
 </p>
 
 * The extension will then ask you which function to call on instantiate — type in `instantiate`
