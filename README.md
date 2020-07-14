@@ -2,7 +2,11 @@
 
 ## Anti Counterfeigt Program
 
-to be defined...
+The anti-counterfeiting program allows manufacturers to create digital signatures of watches. These watches can then be transferred to other users such as retailers or private individuals. All events are stored as transactions in the blockchain. The traceability of the watches ensures that they are originals. 
+
+Retailers can be verified by manufacturers to perform verified maintenance on the watches. A retailer not verified by the manufacturer cnot perform transactions on the manufacturers' watches. However, retailers and private individuals are free to enter non-verified maintenance on the watches. 
+
+The application offers the possibility to track the life cycle of your own watches. However, it is also possible to view the transaction history of third-party watches if the manufacturer name and the corresponding serial number are known. This enables the possibility to check watches for authenticity before a purchase. The transaction type "ShowSalesInterest" ensures that the person who wants to sell the watch is also in possession of the digital signature.
 
 
 ## Architecture Flow
@@ -33,8 +37,9 @@ Follow these steps to set up and run this code pattern.
 
 ### Prerequisites
 
-You will need to follow the requirements for the [IBM Blockchain Platform Extension for VS Code](https://github.com/IBM-Blockchain/blockchain-vscode-extension/blob/master/README.md#requirements):
+You will need the following requirements:
 
+- [IBM Blockchain Platform Extension for VS Code v1.0.16](https://github.com/IBM-Blockchain/blockchain-vscode-extension/blob/master/README.md#requirements)
 - [VSCode version 1.38.0 or greater](https://code.visualstudio.com)
 - [Node v8.x or v10.x and npm v6.x or greater](https://nodejs.org/en/download/)
 - [Docker version v17.06.2-ce or greater](https://www.docker.com/get-docker)
@@ -53,8 +58,8 @@ You will need to follow the requirements for the [IBM Blockchain Platform Extens
 Clone this repository in a folder your choice:
 
 ```bash
-git clone https://github.com/IBM/customer-loyalty-program-hyperledger-fabric-VSCode.git
-cd customer-loyalty-program-hyperledger-fabric-VSCode
+git clone https://github.com/Reffx/watch-blockchain.git
+cd watch-blockchain
 ```
 
 
@@ -73,7 +78,7 @@ Press the `F1` key to see the different VS code options. Choose `IBM Blockchain 
 Click the `IBM Blockchain Platform` extension button on the left. This will show the packaged contracts on top and the blockchain connections on the bottom.
 
 <p align="center">
-  <img height="500" src="https://user-images.githubusercontent.com/8854447/72647360-64365e00-3946-11ea-81de-f023ac83aaa2.png">
+  <img height="500" src="https://user-images.githubusercontent.com/22227408/87458479-58cca280-c60a-11ea-93e9-3116ce5caf73.png">
 </p>
 
 
@@ -82,7 +87,7 @@ Click the `IBM Blockchain Platform` extension button on the left. This will show
 You should see `FABRIC ENVIRONMENTS` on the left side of the editor. Under this section, you should see `Local Fabric`. Click it to start the Local Fabric.
 
 <p align="center">
-  <img height="500" src="https://user-images.githubusercontent.com/8854447/72647777-5208ef80-3947-11ea-89f3-1aedc042f7b7.png">
+  <img height="500" src="https://user-images.githubusercontent.com/22227408/87458885-eb6d4180-c60a-11ea-8cb1-937a2e3fd35a.png">
 </p>
 
 The extension will now provision the Docker containers that will act as nodes in your network. Once the provisioning is finished and the network is up and running, you will see the options to install and instantiate the smart contract, the `Channels` information, the `Nodes` and the organization msps under `Organizations`. You are now ready to install the smart contract.
@@ -95,24 +100,24 @@ The extension will now provision the Docker containers that will act as nodes in
 * In the `FABRIC ENVIRONMENTS` section near the bottom, click on `Smart Contracts` > `Installed` > `+ Install`.  You will see a pop-up similar to the graphic below. 
 
 <p align="center">
-  <img width="500" src="https://user-images.githubusercontent.com/8854447/72647002-75329f80-3945-11ea-910d-ba0d03582e20.png">
+  <img width="500" src="https://user-images.githubusercontent.com/22227408/87457850-5ddd2200-c609-11ea-80e8-69435b59a1d7.png">
 </p>
 
-* Then select the packaged contract: `customerloyalty@0.0.1 Packaged`  **Note** The 0.0.1 comes from your `package.json` line:  `"version": "0.0.1"`
+* Then select the packaged contract: `anticounterfeiting@2.5.1 Packaged`  **Note** The 2.5.1 comes from your `package.json` line:  `"version": "2.5.1"`
 
 After the install is complete, you should get a message `Successfully installed on peer peer0.org1.example.com`.  You should also see that the contract is listed under `Installed` under `FABRIC ENVIRONMENTS`.
 
 <p align="center">
-  <img width="300" src="https://user-images.githubusercontent.com/8854447/72647027-87acd900-3945-11ea-9b9c-b08b4df7e0db.png">
+  <img width="300" src="https://user-images.githubusercontent.com/22227408/87458295-0e4b2600-c60a-11ea-8276-0064a020bb22.png">
 </p>
 
 
 * Under **Smart Contracts** you will see a section that says **Instantiated**. Click on `+ Instantiate` under it.
 
-* The extension will then ask you which contract and version to instantiate — choose `customerloyalty@0.0.1 Installed`.
+* The extension will then ask you which contract and version to instantiate — choose `anticounterfeiting@2.5.1 Installed`.
 
 <p align="center">
-  <img width="500" src="https://user-images.githubusercontent.com/8854447/72647057-998e7c00-3945-11ea-8c2a-efa9a81320ff.png">
+  <img width="500" src="https://user-images.githubusercontent.com/22227408/87459201-620a3f00-c60b-11ea-97b7-6ad873ef8c87.png">
 </p>
 
 * The extension will then ask you which function to call on instantiate — type in `instantiate`
@@ -139,10 +144,10 @@ After the install is complete, you should get a message `Successfully installed 
   <img width="500" src="https://user-images.githubusercontent.com/8854447/72641101-53322080-3937-11ea-89f8-4db2f23a8b27.png">
 </p>
 
-Once instantiation of the contract completes, you should get the message `Successfully instantiated smart contract` and you should see `customerloyalty@0.0.1` under `Instantiated` under `FABRIC ENVIRONMENTS`.
+Once instantiation of the contract completes, you should get the message `Successfully instantiated smart contract` and you should see `anticounterfeiting@2.5.1` under `Instantiated` under `FABRIC ENVIRONMENTS`.
 
 <p align="center">
-  <img width="300" src="https://user-images.githubusercontent.com/8854447/72648095-1d496800-3948-11ea-9619-d2c5eab47a02.png">
+  <img width="300" src="https://user-images.githubusercontent.com/22227408/87459481-bc0b0480-c60b-11ea-8f04-10b001331f00.png">
 </p>
 
 
