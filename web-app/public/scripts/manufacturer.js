@@ -50,7 +50,7 @@ function updateManufacturer() {
                     str = str + "<h1>Dashboard</h1><br>";
                     str = str + '<h3>Account information</h3>';
                     str = str + '<h5>' + data.name + '</h5>';
-                    str = str + '<h5>' + data.address  + '</h5>';
+                    str = str + '<h5>' + data.address + '</h5>';
                     str = str + '<h5>' + data.zipCode + " " + data.place + '</h5>';
                     str = str + '<h5>' + data.country + '</h5>';
                     str = str + '<br>';
@@ -101,17 +101,17 @@ function updateManufacturer() {
                 //update use points transaction
                 $('.verifiedRetailersBox').html(function () {
                     let str = '';
-                    str = str + '<h2>Verified retailers by ' + data.name +' </h2> <br>'
+                    str = str + '<h2>Verified retailers by ' + data.name + ' </h2> <br>'
                     let transactionData = data.getVerifiedRetailersResults;
                     console.log(data.getVerifiedRetailersResults);
                     if (transactionData.length != 0) {
-                        if (transactionData.retailerList.length === 0){
+                        if (transactionData.retailerList.length === 0) {
                             str = str + '<p>This manufacturer does not have any verified retailers.</p>';
                         }
                         for (let i = 0; i < transactionData.retailerList.length; i++) {
                             str = str + '<button class="btn" style="background:black; color:white; margin:5px;" onclick="getRetailerInfo(\'' + transactionData.retailerList[i] + '\')">' + transactionData.retailerList[i] + "</button>";
                         }
-                    }   else {
+                    } else {
                         str = str + '<p>This manufacturer does not have any verified retailers.</p>';
                     }
                     return str;
@@ -127,8 +127,8 @@ function updateManufacturer() {
                     return str;
                 });
 
-                 //update manufacturers dropdown for earn points transaction
-                 $('.showInterest-myWatch-id select').html(function () {
+                //update manufacturers dropdown for earn points transaction
+                $('.showInterest-myWatch-id select').html(function () {
                     let str = '<option value="" disabled="" selected="">select</option>';
                     let transactionData = data.getMyWatchesResults;
                     for (let i = 0; i < transactionData.length; i++) {
@@ -145,8 +145,9 @@ function updateManufacturer() {
                     let stolenWatches = [];
                     if (data.getStolenWatchesResults.length != 0) {
                         stolenWatches = data.getStolenWatchesResults.stolenWatchesList;
-                    } 
+                    }
                     let transactionData = data.getMyWatchesResults;
+                    if (transactionData.length === 0) { str = str + '<p>No watches owned.</p>' };
                     console.log(data.getMyWatchesResults);
                     for (let i = 0; i < transactionData.length; i++) {
                         if (stolenWatches.indexOf(transactionData[i].watchId) === -1) {
@@ -189,6 +190,7 @@ $('.sign-in-manufacturer').click(function () {
 //check user input and call server
 $('.create-watch').click(function () {
 
+
     //get user input data
     let formWatchId = $('.watchid-id input').val();
     let formAttribut1 = $('.attribut1-id input').val();
@@ -199,44 +201,49 @@ $('.create-watch').click(function () {
     let formOwner = $('.manufacturerName input').val();
 
 
-    //create json data
-    let inputData = '{' + '"watchId" : "' + formWatchId + '", ' + '"attribut1" : "' + formAttribut1 + '", ' + '"attribut2" : "' + formAttribut2 + '", ' + '"attribut3" : "' + formAttribut3 + '", ' + '"attribut4" : "' + formAttribut4 + '", ' + '"attribut5" : "' + formAttribut5 +  '", ' + '"owner" : "' + formOwner + '"}';
-    console.log(inputData);
+    if (formWatchId.length < 3) {
+        alert("The Watch-ID needs to be at least 3 digits long!");
+    } else {
 
-    //make ajax call
-    $.ajax({
-        type: 'POST',
-        url: apiUrl + 'createWatch',
-        data: inputData,
-        dataType: 'json',
-        contentType: 'application/json',
-        beforeSend: function () {
-            //display loading
-            document.getElementById('loader').style.display = 'block';
-        },
-        success: function (data) {
+        //create json data
+        let inputData = '{' + '"watchId" : "' + formWatchId + '", ' + '"attribut1" : "' + formAttribut1 + '", ' + '"attribut2" : "' + formAttribut2 + '", ' + '"attribut3" : "' + formAttribut3 + '", ' + '"attribut4" : "' + formAttribut4 + '", ' + '"attribut5" : "' + formAttribut5 + '", ' + '"owner" : "' + formOwner + '"}';
+        console.log(inputData);
 
-            document.getElementById('loader').style.display = 'none';
-            //check data for error
-            if (data.error) {
-                alert(data.error);
-                return;
-            } else {
-                //update member page and notify successful transaction
-                // createWatch();
-                alert('Transaction successful');
-                updateManufacturer();
+        //make ajax call
+        $.ajax({
+            type: 'POST',
+            url: apiUrl + 'createWatch',
+            data: inputData,
+            dataType: 'json',
+            contentType: 'application/json',
+            beforeSend: function () {
+                //display loading
+                document.getElementById('loader').style.display = 'block';
+            },
+            success: function (data) {
+
+                document.getElementById('loader').style.display = 'none';
+                //check data for error
+                if (data.error) {
+                    alert(data.error);
+                    return;
+                } else {
+                    //update member page and notify successful transaction
+                    // createWatch();
+                    alert('Transaction successful');
+                    updateManufacturer();
+                }
+
+
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                alert('Error: Try again');
+                console.log(errorThrown);
+                console.log(textStatus);
+                console.log(jqXHR);
             }
-
-
-        },
-        error: function (jqXHR, textStatus, errorThrown) {
-            alert('Error: Try again');
-            console.log(errorThrown);
-            console.log(textStatus);
-            console.log(jqXHR);
-        }
-    });
+        });
+    }
 });
 
 //check user input and call server

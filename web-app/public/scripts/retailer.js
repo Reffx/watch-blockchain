@@ -70,26 +70,14 @@ function updateRetailer() {
                     return str;
                 });
 
-                //update use points transaction
-                $('.get-myWatches-transactions').html(function () {
-                    let str = '';
-                    let transactionData = data.getMyWatchesResults;
-                    console.log(data.getMyWatchesResults);
-
-                    for (let i = 0; i < transactionData.length; i++) {
-                        str = str + '<p>timeStamp: ' + transactionData[i].timestamp + '<br />owner: ' + transactionData[i].owner + '<br />manufacturer: ' + transactionData[i].manufacturer + '<br />WatchId: ' + transactionData[i].watchId + '<br />transactionType: ' + transactionData[i].transactionType + '<br />transactionID: ' + transactionData[i].transactionId + '</p><br>';
-                    }
-                    return str;
-                });
-
                 //update manufacturers dropdown for earn points transaction
-                $('.maintenance-manufacturer-id select').html(function() {
+                $('.maintenance-manufacturer-id select').html(function () {
                     let str = '<option value="" disabled="" selected="">select</option>';
-                    if (data.getManufacturersByVerifiedRetailerResults.length != 0){
-                    let transactionData = data.getManufacturersByVerifiedRetailerResults.manufacturerList;
-                    for (let i = 0; i < transactionData.length; i++) {
-                        str = str + '<option manufacturer-id=' + transactionData[i] + '> ' + transactionData[i] + '</option>';
-                    }
+                    if (data.getManufacturersByVerifiedRetailerResults.length != 0) {
+                        let transactionData = data.getManufacturersByVerifiedRetailerResults.manufacturerList;
+                        for (let i = 0; i < transactionData.length; i++) {
+                            str = str + '<option manufacturer-id=' + transactionData[i] + '> ' + transactionData[i] + '</option>';
+                        }
                     }
                     return str;
                 });
@@ -105,17 +93,17 @@ function updateRetailer() {
                 });
 
                 //update manufacturers dropdown for earn points transaction
-                $('.sell-myWatch-id select').html(function() {
+                $('.sell-myWatch-id select').html(function () {
                     let str = '<option value="" disabled="" selected="">select</option>';
                     let transactionData = data.getMyWatchesResults;
                     for (let i = 0; i < transactionData.length; i++) {
-                        str = str + '<option sell-my-watch-id=' +transactionData[i].manufacturer + "*+$+*" + transactionData[i].watchId + '> ' + transactionData[i].manufacturer + ": " + transactionData[i].watchId + '</option>';
+                        str = str + '<option sell-my-watch-id=' + transactionData[i].manufacturer + "*+$+*" + transactionData[i].watchId + '> ' + transactionData[i].manufacturer + ": " + transactionData[i].watchId + '</option>';
                     }
                     return str;
                 });
 
-                 //update manufacturers dropdown for earn points transaction
-                 $('.showInterest-myWatch-id select').html(function () {
+                //update manufacturers dropdown for earn points transaction
+                $('.showInterest-myWatch-id select').html(function () {
                     let str = '<option value="" disabled="" selected="">select</option>';
                     let transactionData = data.getMyWatchesResults;
                     for (let i = 0; i < transactionData.length; i++) {
@@ -159,6 +147,7 @@ function updateRetailer() {
                         stolenWatches = data.getStolenWatchesResults.stolenWatchesList;
                     } 
                     let transactionData = data.getMyWatchesResults;
+                    if (transactionData.length === 0) {str = str + '<p>No watches owned.</p>' };
                     console.log(data.getMyWatchesResults);
                     for (let i = 0; i < transactionData.length; i++) {
                         if (stolenWatches.indexOf(transactionData[i].watchId) === -1) {
@@ -199,6 +188,7 @@ $('.add-maintenance').click(function () {
     let formRetailerName = $('.retailerName input').val();
     let formWatchId = $('.maintenance-watchid-id input').val();
     let formInfo = $('.maintenance-info-id input').val();
+    let checkBox = document.getElementById("myCheck");
     let formManufacturerName = $('.maintenance-manufacturer-id select').find(':selected').attr('manufacturer-id');
     if (!formManufacturerName) {
         alert('Select manufacturer first');
@@ -206,7 +196,7 @@ $('.add-maintenance').click(function () {
     }
 
     //create json data
-    let inputData = '{' + '"executorName" : "' + formRetailerName + '", ' + '"watchId" : "' + formWatchId + '", ' + '"manufacturerName" : "' + formManufacturerName + '", ' + '"maintenanceInfo" : "' + formInfo + '"}';
+    let inputData = '{' + '"executorName" : "' + formRetailerName + '", ' + '"watchId" : "' + formWatchId + '", ' + '"manufacturerName" : "' + formManufacturerName + '", ' + '"maintenanceInfo" : "' + formInfo + '", ' + '"authenticityChecked" : "' + checkBox.checked + '"}';
     console.log(inputData);
 
     //make ajax call
@@ -304,16 +294,16 @@ $('.add-unverified-maintenance').click(function () {
         }
     });
 });
-    
+
 
 //check user input and call server
-$('.sign-in-retailer').click(function() {
+$('.sign-in-retailer').click(function () {
     updateRetailer();
 });
 
 //check user input and call server
-$('.sell-watch').click(function() {
-    
+$('.sell-watch').click(function () {
+
     //select logic
     let formManufacturerAndWatchId = $('.sell-myWatch-id select').find(':selected').attr('sell-my-watch-id');
     if (!formManufacturerAndWatchId) {
@@ -466,7 +456,7 @@ function specificVerifiedRetailers(manufacturerName) {
                         for (let i = 0; i < transactionData.length; i++) {
                             str = str + '<button class="btn" style="background:black; color:white; margin:5px;" onclick="getRetailerInfo(\'' + transactionData[i] + '\')">' + transactionData[i] + "</button>";
                         }
-                        str = str + '</p>';    
+                        str = str + '</p>';
                     }
                     return str;
                 });
