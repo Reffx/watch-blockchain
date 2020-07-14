@@ -33,8 +33,9 @@ Follow these steps to set up and run this code pattern.
 
 ### Prerequisites
 
-You will need to follow the requirements for the [IBM Blockchain Platform Extension for VS Code](https://github.com/IBM-Blockchain/blockchain-vscode-extension/blob/master/README.md#requirements):
+You will need the following requirements:
 
+- [IBM Blockchain Platform Extension for VS Code v1.0.16](https://github.com/IBM-Blockchain/blockchain-vscode-extension/blob/master/README.md#requirements)
 - [VSCode version 1.38.0 or greater](https://code.visualstudio.com)
 - [Node v8.x or v10.x and npm v6.x or greater](https://nodejs.org/en/download/)
 - [Docker version v17.06.2-ce or greater](https://www.docker.com/get-docker)
