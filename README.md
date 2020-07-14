@@ -109,10 +109,10 @@ After the install is complete, you should get a message `Successfully installed 
 
 * Under **Smart Contracts** you will see a section that says **Instantiated**. Click on `+ Instantiate` under it.
 
-* The extension will then ask you which contract and version to instantiate — choose `customerloyalty@0.0.1 Installed`.
+* The extension will then ask you which contract and version to instantiate — choose `anticounterfeiting@2.5.1 Installed`.
 
 <p align="center">
-  <img width="500" src="">
+  <img width="500" src="https://user-images.githubusercontent.com/22227408/87459201-620a3f00-c60b-11ea-97b7-6ad873ef8c87.png">
 </p>
 
 * The extension will then ask you which function to call on instantiate — type in `instantiate`
