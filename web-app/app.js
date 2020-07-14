@@ -595,7 +595,7 @@ app.post('/api/showSellInterest', (req, res) => {
 
 //currently both access same maintenance function, can further be optimised 
 app.post('/api/addVerifiedMaintenance', (req, res) => {
-    network.addMaintenance(req.body.executorName, req.body.watchId, req.body.manufacturerName, req.body.maintenanceInfo)
+    network.addMaintenance(req.body.executorName, req.body.watchId, req.body.manufacturerName, req.body.maintenanceInfo, req.body.authenticityChecked)
         .then((response) => {
             res.send(response);
         });
@@ -603,7 +603,7 @@ app.post('/api/addVerifiedMaintenance', (req, res) => {
 
 //currently both access same maintenance function, can further be optimised 
 app.post('/api/addUnverifiedMaintenance', (req, res) => {
-    network.addMaintenance(req.body.executorName, req.body.watchId, req.body.manufacturerName, req.body.maintenanceInfo)
+    network.addMaintenance(req.body.executorName, req.body.watchId, req.body.manufacturerName, req.body.maintenanceInfo, req.body.authenticityChecked)
         .then((response) => {
             res.send(response);
         });

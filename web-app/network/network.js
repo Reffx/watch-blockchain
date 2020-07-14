@@ -326,10 +326,6 @@ module.exports = {
             // Get the contract from the network.
             const contract = network.getContract('anticounterfeiting');
 
-            //   let countM = await contract.evaluateTransaction('CountAllManufacturers');
-            //   countM = JSON.parse(countM.toString());
-            //   countM = "M" + (countM+1);
-
             let manufacturer = {};
             //    manufacturer.id = countM;
             manufacturer.name = manufacturerName;
@@ -373,6 +369,7 @@ module.exports = {
   * @param {String} memberName of member
   */
     memberData: async function (memberName) {
+        let response = {};
 
         // Create a new file system based wallet for managing identities.
         const walletPath = path.join(process.cwd(), '/wallet');
@@ -380,6 +377,7 @@ module.exports = {
         console.log(`Wallet path: ${walletPath}`);
 
         try {
+
             // Create a new gateway for connecting to our peer node.
             const gateway2 = new Gateway();
             await gateway2.connect(ccp, { wallet, identity: memberName, discovery: gatewayDiscovery });
@@ -395,7 +393,13 @@ module.exports = {
             member = JSON.parse(member.toString());
             console.log(member);
             let latestMemberInfo = member[0];
-
+            
+            if (latestMemberInfo.userType != "member"){
+                let err = 'This member is not registered!';
+                console.log(err);
+                response.error = err;
+                return response;
+            }
             // Disconnect from the gateway.
             await gateway2.disconnect();
 
@@ -411,12 +415,12 @@ module.exports = {
 
     },
 
-    /*
+/*
   * Get Manufacturer data
   * @param {String} manufacturerId Manufacturer Id of manufacturer
   */
     manufacturerData: async function (manufacturerName) {
-        //todo: check pw before
+        let response = {};
 
         // Create a new file system based wallet for managing identities.
         const walletPath = path.join(process.cwd(), '/wallet');
@@ -437,7 +441,13 @@ module.exports = {
             let manufacturer = await contract.submitTransaction('GetLatestManufacturerInfo', manufacturerName);
             manufacturer = JSON.parse(manufacturer.toString());
             console.log(manufacturer);
-
+            if (manufacturer.userType != "manufacturer"){
+                let err = 'This manufacturer is not registered!';
+                console.log(err);
+                response.error = err;
+                return response;
+            }
+            
             // Disconnect from the gateway.
             await gateway2.disconnect();
 
@@ -454,11 +464,11 @@ module.exports = {
     },
 
     /*
-* Get Retailer data
-* @param {String} retailerId retailer Id of retailerName
-*/
+    * Get Retailer data
+    * @param {String} retailerId retailer Id of retailerName
+    */
     retailerData: async function (retailerName) {
-        //todo: check pw before
+        let response = {};
 
         // Create a new file system based wallet for managing identities.
         const walletPath = path.join(process.cwd(), '/wallet');
@@ -479,6 +489,12 @@ module.exports = {
             let retailer = await contract.submitTransaction('GetLatestRetailerInfo', retailerName);
             retailer = JSON.parse(retailer.toString());
             console.log(retailer);
+            if (retailer.userType != "retailer"){
+                let err = 'This retailer is not registered!';
+                console.log(err);
+                response.error = err;
+                return response;
+            }
 
             // Disconnect from the gateway.
             await gateway2.disconnect();
@@ -669,7 +685,7 @@ module.exports = {
     },
 
     // change watch owner transaction
-    addMaintenance: async function (executorName, watchId, manufacturerName, maintenanceInfo) {
+    addMaintenance: async function (executorName, watchId, manufacturerName, maintenanceInfo, autenticityChecked) {
         let response = {};
         try {
 
@@ -688,9 +704,12 @@ module.exports = {
             // Get the contract from the network.
             const contract = network.getContract('anticounterfeiting');
 
+            if (typeof autenticityChecked === 'undefined') {
+                autenticityChecked = 'false';
+            } 
             // Submit the specified transaction.
             // changeCarOwner transaction - requires 2 args , ex: ('changeCarOwner', 'CAR10', 'Dave')
-            response = await contract.submitTransaction('AddMaintenanceEvent', executorName, watchId, manufacturerName, maintenanceInfo);
+            response = await contract.submitTransaction('AddMaintenanceEvent', executorName, watchId, manufacturerName, maintenanceInfo, autenticityChecked);
             console.log('Transaction has been submitted');
 
             // Disconnect from the gateway.
@@ -822,8 +841,8 @@ module.exports = {
         }
     },
 
-     // query all Manufacturers that verified a specific retailer
-     getVerifiedRetailersByRetailer: async function (user, retailerName) {
+    // query all Manufacturers that verified a specific retailer
+    getVerifiedRetailersByRetailer: async function (user, retailerName) {
         let response = {};
 
         // Create a new file system based wallet for managing identities.
@@ -923,7 +942,7 @@ module.exports = {
             let result = await contract.evaluateTransaction('QuerySingleWatch', manufacturerName, watchId);
             result = JSON.parse(result.toString());
             console.log(result);
-            if (result === 0) {return []}
+            if (result === 0) { return [] }
             // Disconnect from the gateway.
             await gateway2.disconnect();
 
@@ -960,7 +979,7 @@ module.exports = {
             let result = await contract.evaluateTransaction('GetLatestRetailerInfo', retailerName);
             result = JSON.parse(result.toString());
             console.log(result);
-            if (result === 0) {return []}
+            if (result === 0) { return [] }
             // Disconnect from the gateway.
             await gateway2.disconnect();
 
@@ -997,7 +1016,7 @@ module.exports = {
             let result = await contract.evaluateTransaction('GetLatestManufacturerInfo', ManufacturerName);
             result = JSON.parse(result.toString());
             console.log(result);
-            if (result === 0) {return []}
+            if (result === 0) { return [] }
             // Disconnect from the gateway.
             await gateway2.disconnect();
 
@@ -1179,7 +1198,7 @@ module.exports = {
             const contract = network.getContract('anticounterfeiting');
 
             // Submit the specified transaction.
-            await contract.submitTransaction('ReportStolen',  executorName, watchId);
+            await contract.submitTransaction('ReportStolen', executorName, watchId);
             console.log('Transaction has been submitted');
 
             // Disconnect from the gateway.
@@ -1216,7 +1235,7 @@ module.exports = {
             const contract = network.getContract('anticounterfeiting');
 
             // Submit the specified transaction.
-            await contract.submitTransaction('RemoveStolenWatch',  executorName, watchId);
+            await contract.submitTransaction('RemoveStolenWatch', executorName, watchId);
             console.log('Transaction has been submitted');
 
             // Disconnect from the gateway.
@@ -1232,8 +1251,8 @@ module.exports = {
         }
     },
 
-     // query all Retailers that are verified by a specific manufacturer
-     getStolenWatches: async function (executorName) {
+    // query all Retailers that are verified by a specific manufacturer
+    getStolenWatches: async function (executorName) {
         let response = {};
 
         // Create a new file system based wallet for managing identities.

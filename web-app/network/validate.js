@@ -23,35 +23,36 @@ module.exports = {
 
     /*
   * Validata member registration fields ensuring the fields meet the criteria
-  * @param {String} cardId
-  * @param {String} accountNumber
+  * @param {String} password
+  * @param {String} memberName
   * @param {String} firstName
   * @param {String} lastName
   * @param {String} phoneNumber
   * @param {String} email
   */
-    validateMemberRegistration: async function (cardId, accountNumber, firstName, lastName, email, phoneNumber) {
+    validateMemberRegistration: async function (memberName, password, firstName, lastName, email, phoneNumber) {
 
         let response = {};
 
+        return response;
         //verify input otherwise return error with an informative message
-        if (accountNumber.length < 6) {
-            response.error = 'Account number must be at least six digits long';
+        if (memberName.length < 6) {
+            response.error = 'Member name must be at least six digits long';
             console.log(response.error);
             return response;
-        } else if (!isInt(accountNumber)) {
-            response.error = 'Account number must be all numbers';
+        } else if (!isInt(memberName)) {
+            response.error = 'Member name  must be all numbers';
             console.log(response.error);
             return response;
-        } else if (accountNumber.length > 25) {
-            response.error = 'Account number must be less than 25 digits';
+        } else if (memberName.length > 25) {
+            response.error = 'Member name  must be less than 25 digits';
             console.log(response.error);
             return response;
-        } else if (cardId.length < 1) {
+        } else if (password.length < 1) {
             response.error = 'Enter access key';
             console.log(response.error);
             return response;
-        } else if (!/^[0-9a-zA-Z]+$/.test(cardId)) {
+        } else if (!/^[0-9a-zA-Z]+$/.test(password)) {
             response.error = 'Card id can be letters and numbers only';
             console.log(response.error);
             return response;
@@ -100,7 +101,8 @@ module.exports = {
     validateInputRegistration: async function (email, name, phoneNumber) {
 
         let response = {};
-
+        //weil nervig atm
+        return response;
         //verify input otherwise return error with an informative message
         if (email.length < 1) {
             response.error = 'Enter email';
@@ -128,19 +130,5 @@ module.exports = {
         }
 
     },
-
-    validatePoints: async function (points) {
-
-        let response = {};
-        //verify input otherwise return error with an informative message
-        if (isNaN(points)) {
-            response.error = 'Points must be number';
-            console.log(response.error);
-            return response;
-        } else {
-            return Math.round(points);
-        }
-
-    }
 
 };

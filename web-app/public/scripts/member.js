@@ -133,6 +133,7 @@ function updateMember() {
                         stolenWatches = data.getStolenWatchesResults.stolenWatchesList;
                     }
                     let transactionData = data.getMyWatchesResults;
+                    if (transactionData.length === 0) {str = str + '<p>No watches owned.</p>' };
                     console.log(data.getMyWatchesResults);
                     for (let i = 0; i < transactionData.length; i++) {
                         if (stolenWatches.indexOf(transactionData[i].watchId) === -1) {
