@@ -14,3 +14,4 @@ composer-logs
 *.card
 
 /web-app/wallet
+README.md
