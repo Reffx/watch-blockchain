@@ -95,7 +95,7 @@ The extension will now provision the Docker containers that will act as nodes in
 * In the `FABRIC ENVIRONMENTS` section near the bottom, click on `Smart Contracts` > `Installed` > `+ Install`.  You will see a pop-up similar to the graphic below. 
 
 <p align="center">
-  <img width="500" src="https://user-images.githubusercontent.com/8854447/72647002-75329f80-3945-11ea-910d-ba0d03582e20.png">
+  <img width="500" src="https://user-images.githubusercontent.com/22227408/87457850-5ddd2200-c609-11ea-80e8-69435b59a1d7.png">
 </p>
 
 * Then select the packaged contract: `customerloyalty@0.0.1 Packaged`  **Note** The 0.0.1 comes from your `package.json` line:  `"version": "0.0.1"`
@@ -112,7 +112,7 @@ After the install is complete, you should get a message `Successfully installed 
 * The extension will then ask you which contract and version to instantiate — choose `customerloyalty@0.0.1 Installed`.
 
 <p align="center">
-  <img width="500" src="https://user-images.githubusercontent.com/22227408/87457850-5ddd2200-c609-11ea-80e8-69435b59a1d7.png">
+  <img width="500" src="">
 </p>
 
 * The extension will then ask you which function to call on instantiate — type in `instantiate`
