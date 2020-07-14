@@ -98,12 +98,12 @@ The extension will now provision the Docker containers that will act as nodes in
   <img width="500" src="https://user-images.githubusercontent.com/22227408/87457850-5ddd2200-c609-11ea-80e8-69435b59a1d7.png">
 </p>
 
-* Then select the packaged contract: `customerloyalty@0.0.1 Packaged`  **Note** The 0.0.1 comes from your `package.json` line:  `"version": "0.0.1"`
+* Then select the packaged contract: `anticounterfeiting@2.5.1 Packaged`  **Note** The 2.5.1 comes from your `package.json` line:  `"version": "2.5.1"`
 
 After the install is complete, you should get a message `Successfully installed on peer peer0.org1.example.com`.  You should also see that the contract is listed under `Installed` under `FABRIC ENVIRONMENTS`.
 
 <p align="center">
-  <img width="300" src="https://user-images.githubusercontent.com/8854447/72647027-87acd900-3945-11ea-9b9c-b08b4df7e0db.png">
+  <img width="300" src="https://user-images.githubusercontent.com/22227408/87458295-0e4b2600-c60a-11ea-8276-0064a020bb22.png">
 </p>
 
 
