@@ -82,7 +82,7 @@ Click the `IBM Blockchain Platform` extension button on the left. This will show
 You should see `FABRIC ENVIRONMENTS` on the left side of the editor. Under this section, you should see `Local Fabric`. Click it to start the Local Fabric.
 
 <p align="center">
-  <img height="500" src="https://user-images.githubusercontent.com/8854447/72647777-5208ef80-3947-11ea-89f3-1aedc042f7b7.png">
+  <img height="500" src="https://user-images.githubusercontent.com/22227408/87458667-992c2080-c60a-11ea-8329-27f601312faa.png)">
 </p>
 
 The extension will now provision the Docker containers that will act as nodes in your network. Once the provisioning is finished and the network is up and running, you will see the options to install and instantiate the smart contract, the `Channels` information, the `Nodes` and the organization msps under `Organizations`. You are now ready to install the smart contract.
