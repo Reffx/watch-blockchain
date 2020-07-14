@@ -2,7 +2,13 @@
 
 ## Anti Counterfeigt Program
 
-to be defined...
+The anti-counterfeiting program allows manufacturers to create digital signatures for watches. These watches can then be transferred to other users such as retailers or private individuals. All events are stored as transactions in the block chain. The traceability of the watches ensures that they are originals. 
+
+This blockchain model for a customer loyalty program enhances the value of points to loyalty program members and brings in new value to the manufacturers by creating trusted transactions. Participants in this network have a more level relation among each other and points are in the centric position to connect all participants. 
+
+Retailers can be verified by manufacturers to perform verified maintenance on the watches. If a retailer is not verified by the manufacturer, they cannot perform transactions on their watches. However, retailers and private individuals are free to enter non-verified maintenance on the watches. 
+
+The application offers the possibility to track the life cycle of your own watches. However, it is also possible to view the transaction history of third-party watches if the manufacturer name and the corresponding serial number are known. This makes it possible to check watches for authenticity before a purchase. The transaction type "ShowSalesInterest" ensures that the person who wants to sell the watch is also in possession of the digital signature.
 
 
 ## Architecture Flow
