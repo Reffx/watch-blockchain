@@ -1,6 +1,6 @@
 {
     "name": "anticounterfeiting",
-    "version": "1.0.8",
+    "version": "2.5.1",
     "description": "anticounterfeiting contract implemented in JavaScript",
     "main": "index.js",
     "engines": {
