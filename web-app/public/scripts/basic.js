@@ -245,7 +245,6 @@ $('.search-manufacturer').click(function searchManufacturer() {
                 });
             }
 
-
         },
         error: function (jqXHR, textStatus, errorThrown) {
             alert('Error: Try again');

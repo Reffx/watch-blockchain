@@ -73,7 +73,9 @@ function updateMember() {
                     let str = '<option value="" disabled="" selected="">select</option>';
                     let transactionData = data.getMyWatchesResults;
                     for (let i = 0; i < transactionData.length; i++) {
-                        str = str + '<option sell-my-watch-option-id=' + transactionData[i].manufacturer + "*+$+*" + transactionData[i].watchId + '> ' + transactionData[i].manufacturer + ": " + transactionData[i].watchId + '</option>';
+                        var manu = transactionData[i].manufacturer.split(' ').join('+');
+                        var wat = transactionData[i].watchId.split(' ').join('+');
+                        str = str + '<option sell-my-watch-option-id=' + manu + "*+$+*" + wat + '> ' + transactionData[i].manufacturer + ": " + transactionData[i].watchId + '</option>';
                     }
                     return str;
                 });
@@ -83,7 +85,9 @@ function updateMember() {
                     let str = '<option value="" disabled="" selected="">select</option>';
                     let transactionData = data.getMyWatchesResults;
                     for (let i = 0; i < transactionData.length; i++) {
-                        str = str + '<option showInterest-my-watch-option-id=' + transactionData[i].manufacturer + "*+$+*" + transactionData[i].watchId + '> ' + transactionData[i].manufacturer + ": " + transactionData[i].watchId + '</option>';
+                        var manu = transactionData[i].manufacturer.split(' ').join('+');
+                        var wat = transactionData[i].watchId.split(' ').join('+');
+                        str = str + '<option showInterest-my-watch-option-id=' + manu + "*+$+*" + wat + '> ' + transactionData[i].manufacturer + ": " + transactionData[i].watchId + '</option>';
                     }
                     return str;
                 });
@@ -143,7 +147,7 @@ function updateMember() {
                             stolenDisplay = "none";
                             stolenDisplay2 = "block";
                         }
-                        str = str + '<p class="myWatch' + i + '" style="margin-bottom:0px;">manufacturer: ' + transactionData[i].manufacturer + '<br />Watch ID: ' + transactionData[i].watchId + '</p> <button class="btn btn-primary" style="margin-top:5px; margin-bottom:5px;" onclick="specificWatchTransactions(' + i + ')">Show transactions</button> <button class="btn btn-primary" style="margin-top:5px; margin-bottom:5px;" onclick="specificVerifiedRetailers(\'' + transactionData[i].manufacturer + '\')">Show verified retailers</button> <button  class="btn btn-primary" style="margin-top:5px; background:red; border:none; margin-bottom:5px; display:' + stolenDisplay + ';" onclick="reportStolen(\'' + transactionData[i].watchId + '\')">Report as stolen</button> <button  class="btn btn-primary" style="margin-top:5px; background:green; border:none; margin-bottom:5px; display:' + stolenDisplay2 + ';" onclick="reportAsFound(\'' + transactionData[i].watchId + '\')">Report as found</button> <br> <hr>';
+                        str = str + '<p class="myWatch' + i + '" style="margin-bottom:0px;">manufacturer: ' + transactionData[i].manufacturer + '<br />Watch ID: ' + transactionData[i].watchId + '</p> <button class="btn btn-primary" style="margin-top:5px; margin-bottom:5px;" onclick="specificWatchTransactions(' + i + ')">show transactions</button> <button class="btn btn-primary" style="margin-top:5px; margin-bottom:5px;" onclick="specificVerifiedRetailers(\'' + transactionData[i].manufacturer + '\')">show verified retailers</button> <button  class="btn btn-primary" style="margin-top:5px; background:red; border:none; margin-bottom:5px; display:' + stolenDisplay + ';" onclick="reportStolen(\'' + transactionData[i].watchId + '\')">report as stolen</button> <button  class="btn btn-primary" style="margin-top:5px; background:green; border:none; margin-bottom:5px; display:' + stolenDisplay2 + ';" onclick="reportAsFound(\'' + transactionData[i].watchId + '\')">Report as found</button> <br> <hr>';
                     }
                     return str;
                 });
@@ -253,8 +257,8 @@ $('.sell-watch').click(function () {
     let res = formManufacturerAndWatchId.split("*+$+*");
 
     let formMemberName = $('.memberName input').val();
-    let formManufacturerName = res[0];
-    let formWatchId = res[1];
+    let formWatchId = res[1].split('+').join(' ');
+    let formManufacturerName = res[0].split('+').join(' ');
     let formOwner = $('.newOwner-id input').val();
 
 
@@ -310,8 +314,8 @@ $('.show-interest').click(function () {
     let res = formManufacturerAndWatchId.split("*+$+*");
 
     let formMemberName = $('.memberName input').val();
-    let formManufacturerName = res[0];
-    let formWatchId = res[1];
+    let formWatchId = res[1].split('+').join(' ');
+    let formManufacturerName = res[0].split('+').join(' ');
     let formInterestInformation = $('.showInterestInformation-id input').val();
 
 
