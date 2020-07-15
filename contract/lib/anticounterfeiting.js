@@ -3,8 +3,6 @@
 const { Contract } = require('fabric-contract-api');
 const allManufacturersKey = 'all-manufacturers';
 const allRetailersKey = 'all-retailers';
-const earnPointsTransactionsKey = 'earn-points-transactions';
-const usePointsTransactionsKey = 'use-points-transactions';
 const allWatchesTransactionKey = 'all-watches-transactions';
 const allStolenWatchesTransaction = 'all-stolen-watches-transactions';
 
@@ -17,8 +15,6 @@ class AntiCounterfeiting extends Contract {
         await ctx.stub.putState('instantiate', Buffer.from('INIT-LEDGER'));
         await ctx.stub.putState(allManufacturersKey, Buffer.from(JSON.stringify([])));
         await ctx.stub.putState(allRetailersKey, Buffer.from(JSON.stringify([])));
-        await ctx.stub.putState(earnPointsTransactionsKey, Buffer.from(JSON.stringify([])));
-        await ctx.stub.putState(usePointsTransactionsKey, Buffer.from(JSON.stringify([])));
         await ctx.stub.putState(allWatchesTransactionKey, Buffer.from(JSON.stringify([])));
         await ctx.stub.putState(allStolenWatchesTransaction, Buffer.from(JSON.stringify([])));
 
@@ -255,12 +251,11 @@ class AntiCounterfeiting extends Contract {
 
     }
 
-    //creats a new watch
+    //create a new watch
     async CreateWatch(ctx, watchInformation) {
         console.info('============= START : Create Watch ===========');
         watchInformation = JSON.parse(watchInformation);
 
-        //let usePointsTransactions = await ctx.stub.getState(showWatchesTransactionKey);
         watchInformation.timestamp = new Date((ctx.stub.txTimestamp.seconds.low * 1000)).toGMTString();
         watchInformation.transactionId = ctx.stub.txId;
         watchInformation.transactionType = "newWatchOwner";
@@ -385,6 +380,7 @@ class AntiCounterfeiting extends Contract {
         return JSON.stringify(newTransaction);
     }
 
+    //add maintenance event
     async AddMaintenanceEvent(ctx, executorName, watchId, manufacturerName, maintenanceInfo, autenticityChecked) {
         console.info('============= START : addMaintenance ===========');
         //get chain for all Watches key
@@ -446,8 +442,7 @@ class AntiCounterfeiting extends Contract {
         return JSON.stringify(newTransaction);
     }
 
-
-
+    //get a single watch
     async QuerySingleWatch(ctx, manufacturerName, watchId) {
         console.info('============= START : Query Single Watch ===========');
         let transactions = await ctx.stub.getState(manufacturerName + "-" + watchId);
@@ -467,6 +462,7 @@ class AntiCounterfeiting extends Contract {
         }
     }
 
+    //check existence of a watch
     async CheckWatchExistence(ctx, manufacturerName, watchId) {
         console.info('============= START : CheckExistence Single Watch ===========');
         let transactions = await ctx.stub.getState(manufacturerName + "-" + watchId);
@@ -493,6 +489,7 @@ class AntiCounterfeiting extends Contract {
 
     }
 
+    //get watches of owner
     async GetMyWatches(ctx, currentOwner) {
         console.info('============= START : Query Single Watch ===========');
         let transactions = await ctx.stub.getState(allWatchesTransactionKey);
@@ -525,6 +522,7 @@ class AntiCounterfeiting extends Contract {
         return JSON.stringify(result);
     }
 
+    //get all transactions of watches
     async GetMyWatchesAllTransactions(ctx, currentOwner) {
         console.info('============= START : Query Single Watch ===========');
         let transactions = await ctx.stub.getState(allWatchesTransactionKey);
@@ -570,6 +568,7 @@ class AntiCounterfeiting extends Contract {
         return JSON.stringify(resultAllTransactions);
     }
 
+    //get all watches
     async QueryAllWatches(ctx) {
         let transactions = await ctx.stub.getState(allWatchesTransactionKey);
         transactions = JSON.parse(transactions);
@@ -581,6 +580,7 @@ class AntiCounterfeiting extends Contract {
 
     }
 
+    //count all manufacturers
     async CountAllManufacturers(ctx) {
         let transactions = await ctx.stub.getState(allManufacturersKey);
         if (transactions.length === 0) {
@@ -597,6 +597,7 @@ class AntiCounterfeiting extends Contract {
         }
     }
 
+    //count all retailers
     async CountAllRetailers(ctx) {
         let transactions = await ctx.stub.getState(allRetailersKey);
         if (transactions.length === 0) {
@@ -613,6 +614,7 @@ class AntiCounterfeiting extends Contract {
         }
     }
 
+    //report a watch to be stolen
     async ReportStolen(ctx, executorName, watchId) {
 
         let transactions = await ctx.stub.getState(allStolenWatchesTransaction);
