@@ -76,7 +76,8 @@ function updateRetailer() {
                     if (data.getManufacturersByVerifiedRetailerResults.length != 0) {
                         let transactionData = data.getManufacturersByVerifiedRetailerResults.manufacturerList;
                         for (let i = 0; i < transactionData.length; i++) {
-                            str = str + '<option manufacturer-id=' + transactionData[i] + '> ' + transactionData[i] + '</option>';
+                            var dat = transactionData[i].split(' ').join('+');
+                            str = str + '<option manufacturer-id=' + dat + '> ' + transactionData[i] + '</option>';
                         }
                     }
                     return str;
@@ -87,7 +88,9 @@ function updateRetailer() {
                     let str = '<option value="" disabled="" selected="">select</option>';
                     let transactionData = data.getMyWatchesResults;
                     for (let i = 0; i < transactionData.length; i++) {
-                        str = str + '<option add-unverified-maintenance-option-id=' + transactionData[i].manufacturer + "*+$+*" + transactionData[i].watchId + '> ' + transactionData[i].manufacturer + ": " + transactionData[i].watchId + '</option>';
+                        var manu = transactionData[i].manufacturer.split(' ').join('+');
+                        var wat = transactionData[i].watchId.split(' ').join('+');
+                        str = str + '<option add-unverified-maintenance-option-id=' + manu + "*+$+*" + wat + '> ' + transactionData[i].manufacturer + ": " + transactionData[i].watchId + '</option>';
                     }
                     return str;
                 });
@@ -193,7 +196,7 @@ $('.add-maintenance').click(function () {
     let formWatchId = $('.maintenance-watchid-id input').val();
     let formInfo = $('.maintenance-info-id input').val();
     let checkBox = document.getElementById("myCheck");
-    let formManufacturerName = $('.maintenance-manufacturer-id select').find(':selected').attr('manufacturer-id');
+    let formManufacturerName = $('.maintenance-manufacturer-id select').find(':selected').attr('manufacturer-id').split('+').join(' ');
     if (!formManufacturerName) {
         alert('Select manufacturer first');
         return;
@@ -252,8 +255,8 @@ $('.add-unverified-maintenance').click(function () {
 
     let formRetailerName = $('.retailerName input').val();
     let formInfo = $('.unverified-maintenance-info-id input').val();
-    let formManufacturerName = res[0];
-    let formWatchId = res[1];
+    let formWatchId = res[1].split('+').join(' ');
+    let formManufacturerName = res[0].split('+').join(' ');
     if (!formManufacturerName) {
         alert('Select manufacturer first');
         return;

@@ -97,7 +97,9 @@ function updateMember() {
                     let str = '<option value="" disabled="" selected="">select</option>';
                     let transactionData = data.getMyWatchesResults;
                     for (let i = 0; i < transactionData.length; i++) {
-                        str = str + '<option add-maintenance-option-id=' + transactionData[i].manufacturer + "*+$+*" + transactionData[i].watchId + '> ' + transactionData[i].manufacturer + ": " + transactionData[i].watchId + '</option>';
+                        var manu = transactionData[i].manufacturer.split(' ').join('+');
+                        var wat = transactionData[i].watchId.split(' ').join('+');
+                        str = str + '<option add-maintenance-option-id=' + manu + "*+$+*" + wat + '> ' + transactionData[i].manufacturer + ": " + transactionData[i].watchId + '</option>';
                     }
                     return str;
                 });
@@ -373,8 +375,8 @@ $('.add-maintenance').click(function () {
 
     let formMemberName = $('.memberName input').val();
     let formInfo = $('.maintenance-info-id input').val();
-    let formManufacturerName = res[0];
-    let formWatchId = res[1];
+    let formWatchId = res[1].split('+').join(' ');
+    let formManufacturerName = res[0].split('+').join(' ');
     if (!formManufacturerName) {
         alert('Select manufacturer first');
         return;
